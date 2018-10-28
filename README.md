@@ -16,4 +16,3 @@ Created for CSE-110 project.
    - Use `git merge <branch B>` to merge branch B into branch A
    - Use `git commit -a` to commit your changes
    - Use `git push origin master` to push these changes to GitHub
-9. Use `git push origin master` to push changes to GitHub
