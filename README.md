@@ -11,9 +11,12 @@ Created for CSE-110 project.
 5. Use `git add <file name>` to add a file to commit.
    - Use `git add .` to add all changed files in current directories and below to commit.
 <<<<<<< HEAD
+<<<<<<< HEAD
 5. Use `git commit -m "<commit message>"` to commit changes.
 6. Use `git push` to push changes to current branch.
 =======
+=======
+>>>>>>> 52b85eed9fd53531dbaf0d6ba64eef3fbba49216
 6. Use `git commit -m "<commit message>"` to commit changes.
 7. Use `git push` to push changes to current branch.
    - Use `git push origin master` if first time pushing from this branch.
@@ -23,5 +26,8 @@ Created for CSE-110 project.
    - Use `git commit -a` to commit your changes.
    - Use `git push origin master` to push these changes to GitHub.
 9. Use `git fetch` to update branch with what is on GitHub.
+<<<<<<< HEAD
 >>>>>>> master
+=======
+>>>>>>> 52b85eed9fd53531dbaf0d6ba64eef3fbba49216
 
