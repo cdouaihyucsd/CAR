@@ -12,7 +12,6 @@ Created for CSE-110 project.
    - Use `git add .` to add all changed files in current directories and below to commit.
 5. Use `git commit -m "<commit message>"` to commit changes.
 6. Use `git push` to push changes to current branch.
-6. Use `git commit -m "<commit message>"` to commit changes.
 7. Use `git push` to push changes to current branch.
    - Use `git push origin master` if first time pushing from this branch.
 8. Use the following to merge two branches: 
