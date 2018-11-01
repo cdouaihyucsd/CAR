@@ -7,7 +7,7 @@ Created for CSE-110 project.
 2. Use `cd CAR` to go inside the repo!
 3. Use `git branch <branch name>` to create a new branch.
 4. Use `git checkout <branch name>` to switch to another branch.
-   - Use `git fetch` first if checking out a branch from GitHub to make sure you get the most up to date branch.
+   - Use `git pull` first if checking out a branch from GitHub to make sure you get the most up to date branch.
 5. Use `git add <file name>` to add a file to commit.
    - Use `git add .` to add all changed files in current directories and below to commit.
 5. Use `git commit -m "<commit message>"` to commit changes.
@@ -18,4 +18,4 @@ Created for CSE-110 project.
    - Use `git merge <branch B>` to merge branch B into branch A.
    - Use `git commit -a` to commit your changes.
    - Use `git push origin master` to push these changes to GitHub.
-9. Use `git fetch` to update branch with what is on GitHub.
+9. Use `git pull` to update branch with what is on GitHub.
