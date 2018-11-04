@@ -30,14 +30,6 @@
                 android:value="com.car.carsquad.carapp.MainActivity" />
         </activity>
         <activity
-            android:name=".VerifyActivity"
-            android:label="@string/title_activity_verify"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.car.carsquad.carapp.MainActivity" />
-        </activity>
-        <activity
             android:name=".ForgotPasswordActivity"
             android:label="@string/title_activity_forgot_password"
             android:parentActivityName=".MainActivity">
@@ -45,6 +37,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.car.carsquad.carapp.MainActivity" />
         </activity>
+        <activity
+            android:name=".RegisterActivity"
+            android:label="New User Registration"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.car.carsquad.carapp.MainActivity" />
+        </activity>
+        <activity android:name=".MainAppActivity"></activity>
     </application>
 
 </manifest>

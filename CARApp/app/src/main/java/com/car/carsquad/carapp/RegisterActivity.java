@@ -46,20 +46,20 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 import static android.Manifest.permission.READ_CONTACTS;
 
-
 /**
- * A login screen that offers login via email/password.
+ * A registration screen using email/password.
  */
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
     // UI references
     private EditText editTextEmail;
     private EditText editTextPassword;
-    private Button buttonLogin;
+    private Button buttonRegister;
     private ProgressDialog progressDialog;
 
     //firebase authentication object
@@ -68,91 +68,89 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_register);
 
         //initializing FirebaseAuth object
         firebaseAuth = FirebaseAuth.getInstance();
-
-        //if User is already logged in, skip this login activity
-        if(firebaseAuth.getCurrentUser() != null && firebaseAuth.getCurrentUser().isEmailVerified()) {
-            //start profile activity
-            startActivity(new Intent(getApplicationContext(), MainAppActivity.class));
-        }
 
         // Link to UI elements
         progressDialog = new ProgressDialog(this);
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
-        buttonLogin = findViewById(R.id.buttonLogin);
+        buttonRegister = findViewById(R.id.buttonRegister);
 
         //wait until Register button is clicked
-        buttonLogin.setOnClickListener(this);
+        buttonRegister.setOnClickListener(this);
     }
 
     //method to register user to Firebase server
-    private void userLogin(){
+    private void registerUser(){
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
-
         //empty email check
         if(TextUtils.isEmpty(email)){
-            //email is empty
             Toast.makeText(this, "Please enter your Email", Toast.LENGTH_SHORT).show();
-            //stop the function
             return;
         }
         //empty password check
         if(TextUtils.isEmpty(password)){
-            //password is empty
             Toast.makeText(this, "Please enter your password", Toast.LENGTH_SHORT).show();
-            //stop the function
+            finish();
+            startActivity(new Intent(this, MainActivity.class));
             return;
         }
         //valid email check
         if(!isEmailValid(email)){
-            //email is invalid
-            Toast.makeText(this, "Please enter a valid UCSD Email",
-                    Toast.LENGTH_SHORT).show();
-            //stop the function
+            Toast.makeText(this, "Please enter a valid UCSD Email", Toast.LENGTH_SHORT).show();
             return;
         }
         //valid password check
         if(!isPasswordValid(password)){
-            //password is invalid
-            Toast.makeText(this, "Password should contain more than 4 characters",
-                    Toast.LENGTH_SHORT).show();
-            //stop the function
+            Toast.makeText(this, "Password should contain more than 4 characters", Toast.LENGTH_SHORT).show();
             return;
         }
 
         //email and password OKAY
         //show a progress bar
-        progressDialog.setMessage("Logging In...");
+        progressDialog.setMessage("Registering User...");
         progressDialog.show();
 
-        //allow user to login with email and password
-        firebaseAuth.signInWithEmailAndPassword(email, password)
+        //create user on Firebase
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        //close progress bar
                         progressDialog.dismiss();
-                        if (task.isSuccessful()) {
-                            if(firebaseAuth.getCurrentUser().isEmailVerified()){
-                                //go to main app screen if sign in successfully
-                                startActivity(new Intent(getApplicationContext(), MainAppActivity.class));
-                            } else {
-                                Toast.makeText(LoginActivity.this,
-                                        "Please verify your email using the verification link", Toast.LENGTH_SHORT).show();
-                            }
+                        //if creating user on Firebase is successful
+                        if(task.isSuccessful()){
+                            //send verification link
+                            Objects.requireNonNull(firebaseAuth.getCurrentUser()).sendEmailVerification()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task2) {
+                                            if(task2.isSuccessful()){
+                                                //start LoginActivity
+                                                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+
+                                                Toast.makeText(getApplicationContext(),
+                                                        "Registration successful! Please check your email for verification link",
+                                                        Toast.LENGTH_LONG).show();
+                                            } else {
+                                                Toast.makeText(RegisterActivity.this,
+                                                        Objects.requireNonNull(task2.getException()).getMessage(), Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    });
                         }
+                        //creating user on Firebase failed
                         else {
-                            Toast.makeText(LoginActivity.this,
-                                    task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this,
+                                    Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
                 });
     }
-
     //check if email is valid
     private boolean isEmailValid(String email) {
         return email.contains("@ucsd.edu");
@@ -161,12 +159,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private boolean isPasswordValid(String password) {
         return password.length() > 4;
     }
-
     //when the user clicks register
     @Override
     public void onClick(View view) {
-        if(view == buttonLogin) {
-            userLogin();
+        if(view == buttonRegister) {
+            registerUser();
         }
     }
 }
