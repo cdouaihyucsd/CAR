@@ -1,8 +1,11 @@
 package com.car.carsquad.carapp;
 
 import android.content.Intent;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,6 +21,8 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
     //UI references
     private TextView textviewUserEmail;
     private Button buttonLogout;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +37,14 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
             finish();
             startActivity(new Intent(this, LoginActivity.class));
         }
+
+        //for the sidebar
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
+        mDrawerLayout.addDrawerListener(mToggle);
+        mToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         //display USER EMAIL
         FirebaseUser user = firebaseAuth.getCurrentUser();
         textviewUserEmail = (TextView) findViewById(R.id.textViewUserEmail);
@@ -40,6 +53,15 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
         buttonLogout = (Button) findViewById(R.id.buttonLogout);
         buttonLogout.setOnClickListener(this);
     }
+    //for the side bar
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if(mToggle.onOptionsItemSelected(item)){
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     public void onClick(View view) {
        if(view == buttonLogout) {
