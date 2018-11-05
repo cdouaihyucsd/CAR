@@ -2,6 +2,7 @@ package com.car.carsquad.carapp;
 
 import android.content.Intent;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -53,6 +54,7 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
         buttonLogout = (Button) findViewById(R.id.buttonLogout);
         buttonLogout.setOnClickListener(this);
     }
+
     //for the side bar
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
@@ -71,5 +73,11 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
            finish();
            startActivity(new Intent(this, MainActivity.class));
        }
+    }
+
+    //prevent user from pressing the back button to go back from the main app screen
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
     }
 }

@@ -28,7 +28,9 @@ public class MainActivity extends AppCompatActivity {
         //if User is already logged in, skip this activity
         if(user != null && user.isEmailVerified()) {
             //start profile activity
+            //finish();
             startActivity(new Intent(getApplicationContext(), MainAppActivity.class));
+            //finish();
         }
     }
     //what activity to jump to
