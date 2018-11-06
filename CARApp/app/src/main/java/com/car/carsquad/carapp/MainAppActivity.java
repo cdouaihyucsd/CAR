@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainAppActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -58,20 +59,28 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
     //for the side bar
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        if(mToggle.onOptionsItemSelected(item)){
-            return true;
+        switch(item.getItemId()) {
+            case R.id.nav_logout:
+                logout();
+                return true;
+            default:
+                Toast.makeText(this, "* Something Magical Happens *", Toast.LENGTH_LONG).show();
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+        //sign user out
+        firebaseAuth.signOut();
+        //end current activity and go back to main screen
+        finish();
+        startActivity(new Intent(this, MainActivity.class));
     }
 
     @Override
     public void onClick(View view) {
        if(view == buttonLogout) {
-           //sign user out
-           firebaseAuth.signOut();
-           //end current activity and go back to main screen
-           finish();
-           startActivity(new Intent(this, MainActivity.class));
+           logout();
        }
     }
 
