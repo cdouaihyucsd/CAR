@@ -29,6 +29,7 @@
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:orientation="vertical">
 
             <android.support.design.widget.TextInputLayout
@@ -39,6 +40,7 @@
                     android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:hint="UCSD Email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
