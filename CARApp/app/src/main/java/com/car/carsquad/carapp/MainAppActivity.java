@@ -1,6 +1,7 @@
 package com.car.carsquad.carapp;
 
 import android.content.Intent;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -54,19 +55,35 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
 
         buttonLogout = (Button) findViewById(R.id.buttonLogout);
         buttonLogout.setOnClickListener(this);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        // menuItem.setChecked(true);
+                        // close drawer when item is tapped
+                        mDrawerLayout.closeDrawers();
+
+                        // Add code here to update the UI based on the item selected
+                        // For example, swap UI fragments here
+                        switch (menuItem.getItemId()) {
+                            case R.id.nav_logout:
+                                logout();
+                                break;
+                        }
+                        return true;
+                    }
+                });
     }
 
     //for the side bar
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        switch(item.getItemId()) {
-            case R.id.nav_logout:
-                logout();
-                return true;
-            default:
-                Toast.makeText(this, "* Something Magical Happens *", Toast.LENGTH_LONG).show();
-                return super.onOptionsItemSelected(item);
-        }
+        if(mToggle.onOptionsItemSelected(item))
+            return true;
+        return super.onOptionsItemSelected(item);
     }
 
     private void logout() {
