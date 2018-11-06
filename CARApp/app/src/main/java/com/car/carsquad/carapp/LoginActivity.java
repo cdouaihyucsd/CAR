@@ -60,6 +60,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText editTextEmail;
     private EditText editTextPassword;
     private Button buttonLogin;
+    private Button buttonForgotPassword;
     private ProgressDialog progressDialog;
 
     //firebase authentication object
@@ -84,9 +85,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
         buttonLogin = findViewById(R.id.buttonLogin);
+        buttonForgotPassword = findViewById(R.id.forgot_password_button);
 
         //wait until Register button is clicked
         buttonLogin.setOnClickListener(this);
+        buttonForgotPassword.setOnClickListener(this);
     }
 
     //method to register user to Firebase server
@@ -140,7 +143,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             if(firebaseAuth.getCurrentUser().isEmailVerified()){
                                 //go to main app screen if sign in successfully
                                 startActivity(new Intent(getApplicationContext(), MainAppActivity.class));
-                                //finish();
                             } else {
                                 Toast.makeText(LoginActivity.this,
                                         "Please verify your email using the verification link", Toast.LENGTH_SHORT).show();
@@ -168,6 +170,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         if(view == buttonLogin) {
             userLogin();
+        } else if (view == buttonForgotPassword) {
+            finish();
+            startActivity(new Intent(this, ForgotPasswordActivity.class));
         }
     }
 }

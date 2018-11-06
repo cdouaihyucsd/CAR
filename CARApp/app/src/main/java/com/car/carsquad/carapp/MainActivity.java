@@ -46,10 +46,10 @@ public class MainActivity extends AppCompatActivity {
                 nextActivityIntent = new Intent(this, RegisterActivity.class);
                 startActivity(nextActivityIntent);
                 break;
-            case R.id.forgot_password_button:
+            /*case R.id.forgot_password_button:
                 nextActivityIntent = new Intent(this, ForgotPasswordActivity.class);
                 startActivity(nextActivityIntent);
-                break;
+                break;*/
         }
     }
 }

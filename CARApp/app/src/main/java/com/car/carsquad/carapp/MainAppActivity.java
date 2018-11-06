@@ -69,6 +69,7 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
                         switch (menuItem.getItemId()) {
+                            //logout from menu bar
                             case R.id.nav_logout:
                                 logout();
                                 break;
@@ -86,6 +87,7 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
         return super.onOptionsItemSelected(item);
     }
 
+    //LOGOUT of the app
     private void logout() {
         //sign user out
         firebaseAuth.signOut();
