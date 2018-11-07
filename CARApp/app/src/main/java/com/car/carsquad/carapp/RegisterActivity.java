@@ -82,8 +82,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         buttonRegister = findViewById(R.id.buttonRegister);
         bannerImage = findViewById(R.id.bannerImage);
 
-        //wait until Register button is clicked
+        // event handlers
         buttonRegister.setOnClickListener(this);
+        editTextEmail.setOnFocusChangeListener(this);
+        editTextPassword.setOnFocusChangeListener(this);
+        buttonRegister.setOnFocusChangeListener(this);
     }
 
     //method to register user to Firebase server
@@ -172,15 +175,25 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onFocusChange(View view, boolean b) {
+        System.out.println("Id: " + view.getId() + ", bool: " + b);
         switch(view.getId()) {
             case R.id.email :
-                hideLogo();
+                if(b)
+                    hideLogo();
+                else
+                    showLogo();
                 break;
             case R.id.password :
-                hideLogo();
+                if(b)
+                    hideLogo();
+                else
+                    showLogo();
                 break;
             case R.id.register_button:
-                hideLogo();
+                if(b)
+                    hideLogo();
+                else
+                    showLogo();
                 break;
             default:
                 showLogo();
@@ -188,11 +201,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void hideLogo() {
-        bannerImage.setVisibility(View.GONE);
+        if(bannerImage.getVisibility() != View.GONE)
+            bannerImage.setVisibility(View.GONE);
     }
 
     public void showLogo() {
-        bannerImage.setVisibility(View.VISIBLE);
+        if(bannerImage.getVisibility() != View.VISIBLE)
+            bannerImage.setVisibility(View.VISIBLE);
     }
 }
 
