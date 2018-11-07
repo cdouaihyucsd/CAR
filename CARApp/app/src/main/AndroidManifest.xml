@@ -39,7 +39,7 @@
         </activity>
         <activity
             android:name=".RegisterActivity"
-            android:label="New User Registration"
+            android:label="Register"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
