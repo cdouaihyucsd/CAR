@@ -14,7 +14,7 @@
 
     <!-- Login progress -->
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/bannerImage"
         android:layout_width="match_parent"
         android:layout_height="182dp"
         android:layout_alignParentBottom="true"
@@ -49,7 +49,8 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:focusableInTouchMode="true"
-            android:focusable="true">
+            android:clickable="true"
+            android:focusable="true" >
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"

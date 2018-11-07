@@ -15,8 +15,8 @@
     <!-- Login progress -->
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="match_parent"
-        android:layout_height="182dp"
+        android:layout_width="182dp"
+        android:layout_height="180dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true"
@@ -41,7 +41,8 @@
     <RelativeLayout
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp">
 
         <LinearLayout
             android:id="@+id/email_login_form"

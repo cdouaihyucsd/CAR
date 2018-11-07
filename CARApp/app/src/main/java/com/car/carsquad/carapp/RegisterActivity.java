@@ -31,6 +31,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,13 +55,14 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A registration screen using email/password.
  */
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
     // UI references
     private EditText editTextEmail;
     private EditText editTextPassword;
     private Button buttonRegister;
     private ProgressDialog progressDialog;
+    private ImageView bannerImage;
 
     //firebase authentication object
     private FirebaseAuth firebaseAuth;
@@ -78,6 +80,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
         buttonRegister = findViewById(R.id.buttonRegister);
+        bannerImage = findViewById(R.id.bannerImage);
 
         //wait until Register button is clicked
         buttonRegister.setOnClickListener(this);
@@ -165,6 +168,31 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         if(view == buttonRegister) {
             registerUser();
         }
+    }
+
+    @Override
+    public void onFocusChange(View view, boolean b) {
+        switch(view.getId()) {
+            case R.id.email :
+                hideLogo();
+                break;
+            case R.id.password :
+                hideLogo();
+                break;
+            case R.id.register_button:
+                hideLogo();
+                break;
+            default:
+                showLogo();
+        }
+    }
+
+    public void hideLogo() {
+        bannerImage.setVisibility(View.GONE);
+    }
+
+    public void showLogo() {
+        bannerImage.setVisibility(View.VISIBLE);
     }
 }
 
