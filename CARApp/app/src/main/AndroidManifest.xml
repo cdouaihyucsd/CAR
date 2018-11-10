@@ -47,7 +47,8 @@
         </activity>
         <activity android:name=".RiderActivity" />
         <activity android:name=".DriverActivity" />
-        <activity android:name=".DriverPostActivity"></activity>
+        <activity android:name=".DriverPostActivity" />
+        <activity android:name=".DriverProfileActivity"></activity>
     </application>
 
 </manifest>

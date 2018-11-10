@@ -67,6 +67,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     //firebase authentication object
     private FirebaseAuth firebaseAuth;
+    //DatabaseReference databaseUsers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +76,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         //initializing FirebaseAuth object
         firebaseAuth = FirebaseAuth.getInstance();
+        //databaseUsers = FirebaseDatabase.getInstance().getReference("users");
+
 
         // Link to UI elements
         progressDialog = new ProgressDialog(this);
@@ -137,6 +140,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task2) {
                                             if(task2.isSuccessful()){
+                                                //create USER OBJECT ON FIREBASE
+                                                //String userId = databaseUsers.push().getKey();
+                                                //User newUser = new User(userId, "","","",false,-1);
+                                                //databaseUsers.child(userId).setValue(newUser);
+
                                                 //start LoginActivity
                                                 startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
 
@@ -158,6 +166,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     }
                 });
     }
+    //public void
     //check if email is valid
     private boolean isEmailValid(String email) {
         return email.contains("@ucsd.edu");
@@ -170,6 +179,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View view) {
         if(view == buttonRegister) {
+            //String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            //DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
             registerUser();
         }
     }

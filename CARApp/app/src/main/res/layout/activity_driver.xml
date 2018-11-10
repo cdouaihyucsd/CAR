@@ -17,4 +17,12 @@
         android:clickable="true"
         app:backgroundTint="@color/AppBlue"
         app:srcCompat="@android:drawable/ic_menu_add" />
+
+    <Button
+        android:id="@+id/back_to_rider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="Go Back To RiderActivity" />
 </android.widget.RelativeLayout>

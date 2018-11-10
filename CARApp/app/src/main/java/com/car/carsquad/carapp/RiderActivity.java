@@ -66,7 +66,7 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                                 logout();
                                 break;
                             case R.id.nav_switch_to_driver:
-                                startActivity(new Intent(RiderActivity.this, DriverActivity.class));
+                                startActivity(new Intent(RiderActivity.this, DriverProfileActivity.class));
                                 break;
                         }
                         return true;
