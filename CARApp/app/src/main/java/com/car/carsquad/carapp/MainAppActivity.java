@@ -23,7 +23,6 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
 
     //UI references
     private TextView textviewUserEmail;
-    private Button buttonLogout;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
 
@@ -53,9 +52,6 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
         textviewUserEmail = (TextView) findViewById(R.id.textViewUserEmail);
         textviewUserEmail.setText("Welcome "+ user.getEmail());
 
-        buttonLogout = (Button) findViewById(R.id.buttonLogout);
-        buttonLogout.setOnClickListener(this);
-
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -72,6 +68,9 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
                             //logout from menu bar
                             case R.id.nav_logout:
                                 logout();
+                                break;
+                            case R.id.nav_switch_to_driver:
+                                startActivity(new Intent(MainAppActivity.this, DriverActivity.class));
                                 break;
                         }
                         return true;
@@ -98,9 +97,6 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
-       if(view == buttonLogout) {
-           logout();
-       }
     }
 
     //prevent user from pressing the back button to go back from the main app screen

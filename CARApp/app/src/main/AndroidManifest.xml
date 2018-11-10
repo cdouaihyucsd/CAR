@@ -45,7 +45,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.car.carsquad.carapp.MainActivity" />
         </activity>
-        <activity android:name=".MainAppActivity"></activity>
+        <activity android:name=".MainAppActivity" />
+        <activity android:name=".DriverActivity" />
+        <activity android:name=".DriverPostActivity"></activity>
     </application>
 
 </manifest>

@@ -46,10 +46,11 @@ public class MainActivity extends AppCompatActivity {
                 nextActivityIntent = new Intent(this, RegisterActivity.class);
                 startActivity(nextActivityIntent);
                 break;
-            /*case R.id.forgot_password_button:
-                nextActivityIntent = new Intent(this, ForgotPasswordActivity.class);
-                startActivity(nextActivityIntent);
-                break;*/
         }
+    }
+    //prevent user from pressing the back button to go back from the main app screen
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
     }
 }

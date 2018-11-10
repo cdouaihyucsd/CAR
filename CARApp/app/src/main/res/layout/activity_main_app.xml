@@ -12,24 +12,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/buttonLogout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="LOG OUT"
-            tools:layout_editor_absoluteX="148dp"
-            tools:layout_editor_absoluteY="414dp" />
-
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="328dp"
-            android:layout_height="172dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="MAIN APP SCREEN AFTER LOGIN"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:layout_editor_absoluteY="161dp" />
-
         <TextView
             android:id="@+id/textViewUserEmail"
             android:layout_width="270dp"
@@ -38,6 +20,7 @@
             android:textSize="20sp"
             tools:layout_editor_absoluteX="60dp"
             tools:layout_editor_absoluteY="77dp" />
+
     </LinearLayout>
 
     <android.support.design.widget.NavigationView
@@ -46,6 +29,7 @@
         app:menu="@menu/navigation_menu"
         android:layout_gravity="start"
         android:id="@+id/nav_view">
+
     </android.support.design.widget.NavigationView>
 
 

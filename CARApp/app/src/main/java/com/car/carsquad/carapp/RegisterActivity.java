@@ -27,6 +27,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -208,6 +209,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void showLogo() {
         if(bannerImage.getVisibility() != View.VISIBLE)
             bannerImage.setVisibility(View.VISIBLE);
+
     }
+
 }
 

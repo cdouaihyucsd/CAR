@@ -10,6 +10,9 @@
             android:title="Settings"/>
         <item android:id="@+id/nav_trips"
             android:title="Your Trips"/>
+        <item
+            android:id="@+id/nav_switch_to_driver"
+            android:title="Switch To Driver" />
         <item android:id="@+id/nav_logout"
             android:icon="@drawable/sign_out"
             android:title="Log Out"/>
