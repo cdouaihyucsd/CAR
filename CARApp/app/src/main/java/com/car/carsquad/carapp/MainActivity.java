@@ -5,8 +5,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         if(user != null && user.isEmailVerified()) {
             //start profile activity
             //finish();
-            startActivity(new Intent(getApplicationContext(), MainAppActivity.class));
+            startActivity(new Intent(getApplicationContext(), RiderActivity.class));
             //finish();
         }
     }

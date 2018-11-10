@@ -3,7 +3,6 @@ package com.car.carsquad.carapp;
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,10 +12,7 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import android.widget.Button;
-import android.widget.Toast;
-
-public class MainAppActivity extends AppCompatActivity implements View.OnClickListener {
+public class RiderActivity extends AppCompatActivity implements View.OnClickListener {
 
     //Firebase object
     private FirebaseAuth firebaseAuth;
@@ -29,7 +25,7 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_app);
+        setContentView(R.layout.activity_rider);
 
         //initialize fireBase
         firebaseAuth = firebaseAuth.getInstance();
@@ -70,7 +66,7 @@ public class MainAppActivity extends AppCompatActivity implements View.OnClickLi
                                 logout();
                                 break;
                             case R.id.nav_switch_to_driver:
-                                startActivity(new Intent(MainAppActivity.this, DriverActivity.class));
+                                startActivity(new Intent(RiderActivity.this, DriverActivity.class));
                                 break;
                         }
                         return true;
