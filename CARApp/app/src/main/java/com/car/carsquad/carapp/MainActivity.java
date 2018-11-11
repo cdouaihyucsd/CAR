@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
             //start profile activity
             //finish();
             startActivity(new Intent(getApplicationContext(), RiderActivity.class));
-            //finish();
+
         }
     }
     //what activity to jump to
