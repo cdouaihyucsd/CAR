@@ -38,18 +38,23 @@ public class DriverProfileActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_profile);
 
-        databaseCar = FirebaseDatabase.getInstance().getReference("car");
-        databaseUser = FirebaseDatabase.getInstance().getReference("users");
 
-        /*//Firebase Authentication Objects
-        String userId = FirebaseAuth.getInstance().getCurrentUser().get;
-        //if User is already logged in, skip this activity
-        if(user != null && user.isEmailVerified()) {
+/*
+        //SKIP THIS PAGE IF USER ALREADY REGISTERED AS DRIVER
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+
+        if() {
             //start profile activity
             //finish();
             startActivity(new Intent(getApplicationContext(), RiderActivity.class));
             //finish();
-        }*/
+        }
+*/
+
+
+        databaseCar = FirebaseDatabase.getInstance().getReference("car");
+        databaseUser = FirebaseDatabase.getInstance().getReference("users");
 
         //UI References
         mFirstName = (EditText) findViewById(R.id.driver_first_name);
@@ -74,14 +79,13 @@ public class DriverProfileActivity extends AppCompatActivity implements View.OnC
         String licenseNo = mLicensePlate.getText().toString().trim();
         String numSeats = mNumSeats.getText().toString().trim();
 
-
         if(!TextUtils.isEmpty(firstName) && !TextUtils.isEmpty(lastName) &&
                 !TextUtils.isEmpty(phoneNo) && !TextUtils.isEmpty(carModel) &&
                 !TextUtils.isEmpty(licenseNo)&& !TextUtils.isEmpty(numSeats)) {
 
             String carId = databaseCar.push().getKey();
             //String userId = databaseUser.push().getKey();
-            Car newCar = new Car(carId, numSeats,carModel,licenseNo);
+            Car newCar = new Car(userId, carId, numSeats,carModel,licenseNo);
             databaseCar.child(carId).setValue(newCar);
             Toast.makeText(this, "You have successfully enrolled as a driver", Toast.LENGTH_LONG).show();
         } else {

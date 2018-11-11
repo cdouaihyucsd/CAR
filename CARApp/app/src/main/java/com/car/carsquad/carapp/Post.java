@@ -26,7 +26,6 @@ public class Post {
     public String getUserID() {
         return userID;
     }
-
     public String getPostID() {
         return postID;
     }

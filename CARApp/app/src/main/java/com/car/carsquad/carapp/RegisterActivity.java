@@ -140,17 +140,35 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task2) {
                                             if(task2.isSuccessful()){
+
                                                 //create USER OBJECT ON FIREBASE
-                                                //String userId = databaseUsers.push().getKey();
-                                                //User newUser = new User(userId, "","","",false,-1);
+                                                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                                User newUser = new User(userId, "","","",false,-1);
                                                 //databaseUsers.child(userId).setValue(newUser);
+                                                FirebaseDatabase.getInstance().getReference("users")
+                                                        .child(userId).setValue(newUser)
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+
+                                                                if(task.isSuccessful()){
+                                                                    Toast.makeText(RegisterActivity.this,
+                                                                            "Registration successful! Please check your email for verification link",
+                                                                            Toast.LENGTH_LONG).show();
+                                                                } else {
+                                                                    Toast.makeText(RegisterActivity.this,
+                                                                            Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
+                                                                }
+                                                            }
+                                                        });
+
 
                                                 //start LoginActivity
                                                 startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
 
-                                                Toast.makeText(getApplicationContext(),
+                                                /*Toast.makeText(getApplicationContext(),
                                                         "Registration successful! Please check your email for verification link",
-                                                        Toast.LENGTH_LONG).show();
+                                                        Toast.LENGTH_LONG).show();*/
                                             } else {
                                                 Toast.makeText(RegisterActivity.this,
                                                         Objects.requireNonNull(task2.getException()).getMessage(), Toast.LENGTH_LONG).show();
