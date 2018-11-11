@@ -126,9 +126,12 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
             String postId = databasePosts.push().getKey();
             Post newPost = new Post(userId, postId,start,dest,departureDate,departureTime, note);
             databasePosts.child(postId).setValue(newPost);
+            finish();
+            startActivity(new Intent(this, DriverActivity.class));
             Toast.makeText(this, "Your ride has been posted", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "Please fill out the required fields", Toast.LENGTH_LONG).show();
+            return;
         }
     }
 
@@ -142,8 +145,6 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
             String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference("post");
             postRide();
-            finish();
-            startActivity(new Intent(this, DriverActivity.class));
         }
     }
 }

@@ -68,6 +68,8 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                             case R.id.nav_switch_to_driver:
                                 startActivity(new Intent(RiderActivity.this, DriverProfileActivity.class));
                                 break;
+                            case R.id.nav_account:
+                                startActivity(new Intent(RiderActivity.this, UpdateUserInfoActivity.class));
                         }
                         return true;
                     }

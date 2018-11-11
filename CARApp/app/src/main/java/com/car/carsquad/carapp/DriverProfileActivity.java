@@ -104,7 +104,6 @@ public class DriverProfileActivity extends AppCompatActivity implements View.OnC
 */
 
     private void enrollRider(){
-        //String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         String firstName = mFirstName.getText().toString().trim();
         String lastName = mLastName.getText().toString().trim();
@@ -129,13 +128,13 @@ public class DriverProfileActivity extends AppCompatActivity implements View.OnC
             updatedUser.setLastName(lastName);
             updatedUser.setPhoneNo(phoneNo);
             databaseUser.child(userId).setValue(updatedUser);
-
+            startActivity(new Intent(this, DriverActivity.class));
             Toast.makeText(this, "You have successfully enrolled as a driver", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "Please fill out the required fields", Toast.LENGTH_LONG).show();
+            return;
         }
     }
-
 
     @Override
     public void onClick(View view) {
@@ -143,10 +142,7 @@ public class DriverProfileActivity extends AppCompatActivity implements View.OnC
             finish();
             startActivity(new Intent(this, RiderActivity.class));
         } else if(view == mSubmitRiderSignup){
-            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
             enrollRider();
-            startActivity(new Intent(this, DriverActivity.class));
         }
     }
 }
