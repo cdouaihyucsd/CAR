@@ -66,6 +66,9 @@ public class DriverProfileActivity extends AppCompatActivity implements View.OnC
                     finish();
                     startActivity(new Intent(getApplicationContext(), DriverActivity.class));
                 }
+                else{
+                    Toast.makeText(DriverProfileActivity.this, isDriver, Toast.LENGTH_LONG).show();
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
