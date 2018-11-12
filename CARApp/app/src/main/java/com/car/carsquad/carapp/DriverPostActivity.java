@@ -24,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.sql.Driver;
 import java.util.Calendar;
+import java.util.Objects;
 
 public class DriverPostActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -72,7 +73,7 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
                         DriverPostActivity.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth, mDateSetListener,
                         year, month, day);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
         });
@@ -88,7 +89,7 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
                         DriverPostActivity.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth, mTimeSetListener,
                         hour, minute, true);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
         });
@@ -113,7 +114,7 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void postRide(){
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         String start = mStartPoint.getText().toString().trim();
         String dest = mEndPoint.getText().toString().trim();
         String departureDate = mDisplayDate.getText().toString().trim();
@@ -125,7 +126,7 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
 
             String postId = databasePosts.push().getKey();
             Post newPost = new Post(userId, postId,start,dest,departureDate,departureTime, note);
-            databasePosts.child(postId).setValue(newPost);
+            databasePosts.child(Objects.requireNonNull(postId)).setValue(newPost);
             finish();
             startActivity(new Intent(this, DriverActivity.class));
             Toast.makeText(this, "Your ride has been posted", Toast.LENGTH_LONG).show();
@@ -142,7 +143,7 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
             startActivity(new Intent(this, DriverActivity.class));
             Toast.makeText(this, "Ride post canceled", Toast.LENGTH_LONG).show();
         } else if(view == mPostRide){
-            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference("post");
             postRide();
         }

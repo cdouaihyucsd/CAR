@@ -20,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Objects;
+
 public class DriverProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     //firebase references
@@ -39,6 +41,7 @@ public class DriverProfileActivity extends AppCompatActivity implements View.OnC
     private Button mSubmitRiderSignup;
     private Button mCancel;
     private String userId;
+    private String isDriver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,35 +52,24 @@ public class DriverProfileActivity extends AppCompatActivity implements View.OnC
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
-        userId = user.getUid();
+        userId = Objects.requireNonNull(user).getUid();
 
         databaseCar = FirebaseDatabase.getInstance().getReference("car");
         databaseUser = FirebaseDatabase.getInstance().getReference("users");
 
-        /*
-        databaseUser.addValueEventListener(new ValueEventListener() {
+        //skip if user already signed up as DRIVER
+        databaseUser.child(userId).child("isDriver").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //showData(dataSnapshot);
-                if(dataSnapshot.getValue(User.class).isDriver() == true){
+                isDriver = dataSnapshot.getValue(String.class);
+                if(Objects.equals(isDriver, "true")){
                     finish();
                     startActivity(new Intent(getApplicationContext(), DriverActivity.class));
                 }
             }
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });*/
-
-        /*
-        //SKIP THIS PAGE IF USER ALREADY REGISTERED AS DRIVER
-        if(databaseUser.child("users").child(userId).get) {
-            //start profile activity
-            //finish();
-            startActivity(new Intent(getApplicationContext(), DriverActivity.class));
-            //finish();
-        }*/
-
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
 
         //UI References
         mFirstName = (EditText) findViewById(R.id.driver_first_name);
@@ -94,17 +86,9 @@ public class DriverProfileActivity extends AppCompatActivity implements View.OnC
 
     }
 
-/*
-    private void showData(DataSnapshot dataSnapshot) {
-        for(DataSnapshot ds : dataSnapshot.getChildren()){
-            User uInfo = new User();
-            uInfo.setDriver(ds.child(userId).getValue().);
-        }
-    }
-*/
 
     private void enrollRider(){
-
+        //userId = mAuth.getCurrentUser().getUid();
         String firstName = mFirstName.getText().toString().trim();
         String lastName = mLastName.getText().toString().trim();
         String phoneNo = mPhoneNo.getText().toString().trim();
@@ -119,20 +103,15 @@ public class DriverProfileActivity extends AppCompatActivity implements View.OnC
             //send car info to database
             String carId = databaseCar.push().getKey();
             Car newCar = new Car(userId, carId, numSeats,carModel,licenseNo);
-            databaseCar.child(carId).setValue(newCar);
+            databaseCar.child(Objects.requireNonNull(carId)).setValue(newCar);
 
             //update user info
-            User updatedUser = new User();
-            updatedUser.setDriver(true);
-            updatedUser.setFirstName(firstName);
-            updatedUser.setLastName(lastName);
-            updatedUser.setPhoneNo(phoneNo);
+            User updatedUser = new User(userId, firstName, lastName, phoneNo, "true", 0);
             databaseUser.child(userId).setValue(updatedUser);
             startActivity(new Intent(this, DriverActivity.class));
             Toast.makeText(this, "You have successfully enrolled as a driver", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "Please fill out the required fields", Toast.LENGTH_LONG).show();
-            return;
         }
     }
 

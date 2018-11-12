@@ -67,7 +67,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     //firebase authentication object
     private FirebaseAuth firebaseAuth;
-    //DatabaseReference databaseUsers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +75,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         //initializing FirebaseAuth object
         firebaseAuth = FirebaseAuth.getInstance();
-        //databaseUsers = FirebaseDatabase.getInstance().getReference("users");
-
 
         // Link to UI elements
         progressDialog = new ProgressDialog(this);
@@ -142,8 +139,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                             if(task2.isSuccessful()){
 
                                                 //create USER OBJECT ON FIREBASE
-                                                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                                                User newUser = new User(userId, "","","",false,-1);
+                                                String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+                                                User newUser = new User(userId, "","","","false",-1);
                                                 //databaseUsers.child(userId).setValue(newUser);
                                                 FirebaseDatabase.getInstance().getReference("users")
                                                         .child(userId).setValue(newUser)

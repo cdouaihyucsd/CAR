@@ -44,9 +44,9 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //display USER EMAIL
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        textviewUserEmail = (TextView) findViewById(R.id.textViewUserEmail);
-        textviewUserEmail.setText("Welcome "+ user.getEmail());
+        //FirebaseUser user = firebaseAuth.getCurrentUser();
+        //textviewUserEmail = (TextView) findViewById(R.id.textViewUserEmail);
+        //textviewUserEmail.setText("Welcome "+ user.getEmail());
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(

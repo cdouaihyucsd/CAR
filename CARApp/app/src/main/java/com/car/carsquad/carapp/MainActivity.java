@@ -9,13 +9,15 @@ import android.view.View;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+        Objects.requireNonNull(actionBar).hide();
 
         setContentView(R.layout.activity_main);
 

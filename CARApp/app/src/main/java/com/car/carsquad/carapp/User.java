@@ -11,7 +11,7 @@ public class User {
     public String firstName;
     public String lastName;
     public String phoneNo;
-    public boolean isDriver;
+    public String isDriver;
     public double driverRating;
 
     //link to database
@@ -24,7 +24,7 @@ public class User {
     }
 
     public User(String userID, String firstName, String lastName, String phoneNo,
-                 boolean isDriver, double driverRating){
+                 String isDriver, double driverRating){
         this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -57,10 +57,10 @@ public class User {
     public void setPhoneNo(String phoneNo) {
         this.phoneNo = phoneNo;
     }
-    public boolean isDriver() {
+    public String isDriver() {
         return isDriver;
     }
-    public void setDriver(boolean driver) {
+    public void setDriver(String driver) {
         isDriver = driver;
     }
     public double getDriverRating() {

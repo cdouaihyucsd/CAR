@@ -44,6 +44,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //if User is already logged in, skip this login activity
         if(firebaseAuth.getCurrentUser() != null && firebaseAuth.getCurrentUser().isEmailVerified()) {
             //start profile activity
+            finish();
             startActivity(new Intent(getApplicationContext(), RiderActivity.class));
         }
 
