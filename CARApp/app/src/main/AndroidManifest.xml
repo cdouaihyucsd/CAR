@@ -49,7 +49,8 @@
         <activity android:name=".DriverActivity" />
         <activity android:name=".DriverPostActivity" />
         <activity android:name=".DriverProfileActivity" />
-        <activity android:name=".UpdateUserInfoActivity"></activity>
+        <activity android:name=".UpdateUserInfoActivity" />
+        <activity android:name=".SearchActivity"></activity>
     </application>
 
 </manifest>

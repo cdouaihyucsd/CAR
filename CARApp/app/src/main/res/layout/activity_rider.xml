@@ -12,6 +12,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <Button
+            android:id="@+id/search_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Search for a ride!" />
+
         <TextView
             android:id="@+id/textViewUserEmail"
             android:layout_width="270dp"

@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,6 +22,7 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
     private TextView textviewUserEmail;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
+    private Button mSearchButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,17 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
         FirebaseUser user = firebaseAuth.getCurrentUser();
         textviewUserEmail = (TextView) findViewById(R.id.textViewUserEmail);
         textviewUserEmail.setText("Welcome "+ user.getEmail());
+
+        //for search button
+        mSearchButton = (Button) findViewById(R.id.search_button);
+
+        mSearchButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v){
+                Intent nextActivityIntent = new Intent(RiderActivity.this, SearchActivity.class);
+                finish();
+                startActivity(nextActivityIntent);
+            }
+        });
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
