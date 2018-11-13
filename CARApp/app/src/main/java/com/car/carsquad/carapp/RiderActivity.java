@@ -169,13 +169,13 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
             super(itemView);
             mView = itemView;
         }
-        public void setTitle(String title){
+        public void setTitle(String start){
             TextView post_title = (TextView)mView.findViewById(R.id.post_title);
-            post_title.setText(title);
+            post_title.setText(start);
         }
-        public void setDesc(String desc){
+        public void setDesc(String dest){
             TextView post_desc = (TextView)mView.findViewById(R.id.post_desc);
-            post_desc.setText(desc);
+            post_desc.setText(dest);
         }
         public void setImage(Context ctx, String image){
             ImageView postImage = (ImageView)mView.findViewById(R.id.post_image);
