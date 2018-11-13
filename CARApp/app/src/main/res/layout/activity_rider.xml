@@ -13,14 +13,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textViewUserEmail"
-            android:layout_width="270dp"
-            android:layout_height="65dp"
-            android:text="TextView"
-            android:textSize="20sp"
-            tools:layout_editor_absoluteX="60dp"
-            tools:layout_editor_absoluteY="77dp" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/driver_post_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="50dp">
+
+        </android.support.v7.widget.RecyclerView>
 
     </LinearLayout>
 

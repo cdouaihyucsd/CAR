@@ -1,22 +1,29 @@
 package com.car.carsquad.carapp;
 
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+//import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.squareup.picasso.Picasso;
+import android.support.v7.widget.SearchView;
 
 public class DriverActivity extends AppCompatActivity {
 
@@ -59,6 +66,22 @@ public class DriverActivity extends AppCompatActivity {
         });
     }
 
+    //search for posts
+    private void firebaseSearch(String searchText){
+        Query firebaseSearchQuery = mDatabase.orderByChild("startPt")
+                .startAt(searchText).endAt(searchText + "/uf8ff");
+        FirebaseRecyclerAdapter<Post,PostViewHolder> firebaseRecyclerAdapter =
+                new FirebaseRecyclerAdapter<Post, PostViewHolder>
+                        (Post.class, R.layout.post_cardview, PostViewHolder.class, firebaseSearchQuery){
+                    @Override
+                    protected void populateViewHolder(PostViewHolder viewHolder, Post model, int position){
+                        viewHolder.setTitle(model.getStartPt());
+                        viewHolder.setDesc(model.getEndPt());
+                    }
+                };
+        mPostList.setAdapter(firebaseRecyclerAdapter);
+    }
+
     @Override
     protected void onStart(){
         super.onStart();
@@ -74,6 +97,37 @@ public class DriverActivity extends AppCompatActivity {
         };
         mPostList.setAdapter(firebaseRecyclerAdapter);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                firebaseSearch(query);
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                firebaseSearch(newText);
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+
+        if(id == R.id.action_settings){
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 
     public static class PostViewHolder extends RecyclerView.ViewHolder{
         View mView;
