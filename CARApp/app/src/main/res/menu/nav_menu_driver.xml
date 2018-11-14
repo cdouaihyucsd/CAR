@@ -9,9 +9,9 @@
             android:icon="@drawable/baseline_schedule_black_24dp"
             android:title="Your Trips"/>
         <item
-            android:id="@+id/nav_switch_to_driver"
-            android:icon="@drawable/baseline_local_taxi_black_24dp"
-            android:title="Switch To Driver" />
+            android:id="@+id/nav_switch_to_rider"
+            android:icon="@drawable/baseline_person_black_24dp"
+            android:title="Switch To Rider" />
         <item android:id="@+id/nav_logout"
             android:icon="@drawable/sign_out"
             android:title="Log Out"/>

@@ -45,11 +45,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.car.carsquad.carapp.MainActivity" />
         </activity>
-        <activity android:name=".RiderActivity" />
-        <activity android:name=".DriverActivity" />
-        <activity android:name=".DriverPostActivity" />
-        <activity android:name=".DriverProfileActivity" />
-        <activity android:name=".UpdateUserInfoActivity" />
+        <activity android:name=".RiderActivity"
+            android:label="Rider"/>
+        <activity android:name=".DriverActivity"
+            android:label="Driver"/>
+        <activity android:name=".DriverPostActivity"
+            android:label="Post Rides"/>
+        <activity android:name=".DriverProfileActivity"
+            android:label="Driver Profile"/>
+        <activity android:name=".UpdateUserInfoActivity"
+            android:label="Update User Info"/>
+
         <activity android:name=".SearchActivity"></activity>
     </application>
 

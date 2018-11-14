@@ -2,6 +2,7 @@ package com.car.carsquad.carapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -16,13 +17,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Objects;
 
 public class RiderActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -62,33 +69,45 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        //display USER EMAIL
-        //FirebaseUser user = firebaseAuth.getCurrentUser();
-        //textviewUserEmail = (TextView) findViewById(R.id.textViewUserEmail);
-        //textviewUserEmail.setText("Welcome "+ user.getEmail());
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        // set item as selected to persist highlight
-                        // menuItem.setChecked(true);
+                    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
 
-                        // Add code here to update the UI based on the item selected
-                        // For example, swap UI fragments here
                         switch (menuItem.getItemId()) {
                             //logout from menu bar
                             case R.id.nav_logout:
                                 logout();
                                 break;
                             case R.id.nav_switch_to_driver:
-                                startActivity(new Intent(RiderActivity.this, DriverProfileActivity.class));
+                                DatabaseReference databaseUser =
+                                        FirebaseDatabase.getInstance().getReference("users");
+                                final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                                //skip if user already signed up as DRIVER
+                                databaseUser.child(userId).child("isDriver").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        String isDriver;
+                                        isDriver = dataSnapshot.getValue(String.class);
+                                        if(Objects.equals(isDriver, "true")){
+                                            finish();
+                                            startActivity(new Intent(getApplicationContext(), DriverActivity.class));
+                                        }
+                                        else{
+                                            startActivity(new Intent(RiderActivity.this, DriverProfileActivity.class));
+                                        }
+                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {}
+                                });
                                 break;
+
                             case R.id.nav_account:
                                 startActivity(new Intent(RiderActivity.this, UpdateUserInfoActivity.class));
                         }

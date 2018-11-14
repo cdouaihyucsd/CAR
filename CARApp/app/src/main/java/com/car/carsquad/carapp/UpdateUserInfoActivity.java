@@ -1,6 +1,7 @@
 package com.car.carsquad.carapp;
 
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 public class UpdateUserInfoActivity extends AppCompatActivity implements View.OnClickListener {
@@ -65,8 +67,7 @@ public class UpdateUserInfoActivity extends AppCompatActivity implements View.On
         final String lastName = mLastName.getText().toString().trim();
         final String phoneNo = mPhoneNo.getText().toString().trim();
 
-        if(!TextUtils.isEmpty(firstName) && !TextUtils.isEmpty(firstName) && !TextUtils.isEmpty(firstName)) {
-
+        if(!TextUtils.isEmpty(firstName) && !TextUtils.isEmpty(lastName) && !TextUtils.isEmpty(phoneNo)) {
             databaseUser.child(userId).child("driverRating").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -91,6 +92,7 @@ public class UpdateUserInfoActivity extends AppCompatActivity implements View.On
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {}
             });
+
         } else {
             Toast.makeText(this, "Please fill out all the required fields", Toast.LENGTH_LONG).show();
         }

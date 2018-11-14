@@ -3,13 +3,17 @@ package com.car.carsquad.carapp;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,20 +23,36 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import android.support.v7.widget.SearchView;
+
+import java.util.Objects;
 
 public class DriverActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private FloatingActionButton mAddPost;
-    private Button backToRider;
 
     private RecyclerView mPostList;
     private DatabaseReference mDatabase;
+    //Firebase object
+    private FirebaseAuth firebaseAuth;
+
+    private String start;
+    private String destination;
+
+    private ActionBarDrawerToggle mToggle;
 
 
     @Override
@@ -40,6 +60,7 @@ public class DriverActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver);
 
+        firebaseAuth = firebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference().child("post");
         mDatabase.keepSynced(true);
         mPostList = (RecyclerView) findViewById(R.id.driver_post_view);
@@ -47,8 +68,6 @@ public class DriverActivity extends AppCompatActivity {
         mPostList.setLayoutManager(new LinearLayoutManager(this));
 
         mAddPost = (FloatingActionButton) findViewById(R.id.add_post);
-        backToRider = (Button) findViewById(R.id.back_to_rider);
-
         mAddPost.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v){
                 Intent nextActivityIntent = new Intent(DriverActivity.this, DriverPostActivity.class);
@@ -57,13 +76,51 @@ public class DriverActivity extends AppCompatActivity {
             }
         });
 
-        backToRider.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v){
-                Intent nextActivityIntent = new Intent(DriverActivity.this, RiderActivity.class);
-                finish();
-                startActivity(nextActivityIntent);
+
+/*
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                start = place.getName().toString();
+                destination = place.getName().toString();
             }
-        });
+            @Override
+            public void onError(Status status) { }
+        });*/
+
+
+        //for the sidebar
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout2);
+        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
+        mDrawerLayout.addDrawerListener(mToggle);
+        mToggle.syncState();
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+        NavigationView navigationView = findViewById(R.id.nav_view2);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                        // close drawer when item is tapped
+                        mDrawerLayout.closeDrawers();
+
+                        switch (menuItem.getItemId()) {
+                            //logout from menu bar
+                            case R.id.nav_logout:
+                                logout();
+                                break;
+                            case R.id.nav_switch_to_rider:
+                                startActivity(new Intent(DriverActivity.this, RiderActivity.class));
+                                break;
+                            case R.id.nav_account:
+                                startActivity(new Intent(DriverActivity.this, UpdateUserInfoActivity.class));
+                        }
+                        return true;
+                    }
+                });
     }
 
     //search for posts
@@ -121,6 +178,10 @@ public class DriverActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
 
+        if(mToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
         if(id == R.id.action_settings){
             return true;
         }
@@ -153,5 +214,14 @@ public class DriverActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
+    }
+
+    //LOGOUT of the app
+    private void logout() {
+        //sign user out
+        firebaseAuth.signOut();
+        //end current activity and go back to main screen
+        finish();
+        startActivity(new Intent(this, MainActivity.class));
     }
 }

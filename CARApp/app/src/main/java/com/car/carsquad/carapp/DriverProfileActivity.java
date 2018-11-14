@@ -58,7 +58,7 @@ public class DriverProfileActivity extends AppCompatActivity implements View.OnC
         databaseUser = FirebaseDatabase.getInstance().getReference("users");
 
         //skip if user already signed up as DRIVER
-        databaseUser.child(userId).child("isDriver").addListenerForSingleValueEvent(new ValueEventListener() {
+       /* databaseUser.child(userId).child("isDriver").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 isDriver = dataSnapshot.getValue(String.class);
@@ -72,7 +72,7 @@ public class DriverProfileActivity extends AppCompatActivity implements View.OnC
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
-        });
+        });*/
 
         //UI References
         mFirstName = (EditText) findViewById(R.id.driver_first_name);
