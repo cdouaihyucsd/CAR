@@ -1,12 +1,14 @@
 package com.car.carsquad.carapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -85,27 +87,47 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                                 logout();
                                 break;
                             case R.id.nav_switch_to_driver:
-                                DatabaseReference databaseUser =
-                                        FirebaseDatabase.getInstance().getReference("users");
-                                final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                AlertDialog.Builder builder = new AlertDialog.Builder(RiderActivity.this);
+                                builder.setCancelable(true);
+                                builder.setTitle("You are about to switch into Driver mode");
+                                builder.setMessage("Do you want to proceed?");
 
-                                //skip if user already signed up as DRIVER
-                                databaseUser.child(userId).child("isDriver").addListenerForSingleValueEvent(new ValueEventListener() {
+                                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                     @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        String isDriver;
-                                        isDriver = dataSnapshot.getValue(String.class);
-                                        if(Objects.equals(isDriver, "true")){
-                                            finish();
-                                            startActivity(new Intent(getApplicationContext(), DriverActivity.class));
-                                        }
-                                        else{
-                                            startActivity(new Intent(RiderActivity.this, DriverProfileActivity.class));
-                                        }
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.cancel();
                                     }
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {}
                                 });
+                                builder.setPositiveButton("Proceed", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+
+                                        DatabaseReference databaseUser =
+                                             FirebaseDatabase.getInstance().getReference("users");
+                                        final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                                        //skip if user already signed up as DRIVER
+                                        databaseUser.child(userId).child("isDriver").addListenerForSingleValueEvent(new ValueEventListener() {
+                                         @Override
+                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                             String isDriver;
+                                             isDriver = dataSnapshot.getValue(String.class);
+                                             if (Objects.equals(isDriver, "true")) {
+                                                 finish();
+                                                 startActivity(new Intent(getApplicationContext(), DriverActivity.class));
+                                             } else {
+                                                 startActivity(new Intent(RiderActivity.this, DriverProfileActivity.class));
+                                             }
+                                         }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            }
+                                        });
+                                    }
+                                });
+                                builder.show();
                                 break;
 
                             case R.id.nav_account:

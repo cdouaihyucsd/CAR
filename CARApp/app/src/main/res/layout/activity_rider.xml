@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".RiderActivity"
     android:id="@+id/drawerLayout"
+    android:background="#efc98d"
     android:theme="@style/AppTheme.NoActionBar">
 
     <LinearLayout

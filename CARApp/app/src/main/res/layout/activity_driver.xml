@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/drawerLayout2"
-    tools:context=".DriverActivity">
+    tools:context=".DriverActivity"
+    android:background="#655081c4">
 
     <android.widget.RelativeLayout
         android:layout_width="match_parent"
@@ -23,7 +24,8 @@
             app:backgroundTint="@color/AppBlue"
             app:srcCompat="@drawable/baseline_add_black_24dp"
             tools:layout_editor_absoluteX="295dp"
-            tools:layout_editor_absoluteY="0dp" />
+            tools:layout_editor_absoluteY="0dp"
+            android:elevation="20dp"/>
 
 
         <android.support.v7.widget.RecyclerView

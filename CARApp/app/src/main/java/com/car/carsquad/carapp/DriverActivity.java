@@ -2,6 +2,7 @@ package com.car.carsquad.carapp;
 
 import android.app.DownloadManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -9,6 +10,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -113,7 +115,24 @@ public class DriverActivity extends AppCompatActivity {
                                 logout();
                                 break;
                             case R.id.nav_switch_to_rider:
-                                startActivity(new Intent(DriverActivity.this, RiderActivity.class));
+                                AlertDialog.Builder builder = new AlertDialog.Builder(DriverActivity.this);
+                                builder.setCancelable(true);
+                                builder.setTitle("You are about to switch into Rider mode");
+                                builder.setMessage("Do you want to proceed?");
+
+                                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.cancel();
+                                    }
+                                });
+                                builder.setPositiveButton("Proceed", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        startActivity(new Intent(DriverActivity.this, RiderActivity.class));
+                                    }
+                                });
+                                builder.show();
                                 break;
                             case R.id.nav_account:
                                 startActivity(new Intent(DriverActivity.this, UpdateUserInfoActivity.class));
