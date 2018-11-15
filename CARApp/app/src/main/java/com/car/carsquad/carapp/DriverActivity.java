@@ -45,6 +45,7 @@ public class DriverActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private FloatingActionButton mAddPost;
+    private FloatingActionButton mDeletePost;
 
     private RecyclerView mPostList;
     private DatabaseReference mDatabase;
@@ -78,22 +79,6 @@ public class DriverActivity extends AppCompatActivity {
             }
         });
 
-
-/*
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                start = place.getName().toString();
-                destination = place.getName().toString();
-            }
-            @Override
-            public void onError(Status status) { }
-        });*/
-
-
         //for the sidebar
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout2);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
@@ -117,8 +102,8 @@ public class DriverActivity extends AppCompatActivity {
                             case R.id.nav_switch_to_rider:
                                 AlertDialog.Builder builder = new AlertDialog.Builder(DriverActivity.this);
                                 builder.setCancelable(true);
-                                builder.setTitle("You are about to switch into Rider mode");
-                                builder.setMessage("Do you want to proceed?");
+                                builder.setTitle("You are about to enter RIDER mode");
+                                builder.setMessage("Do you wish to proceed?");
 
                                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                     @Override

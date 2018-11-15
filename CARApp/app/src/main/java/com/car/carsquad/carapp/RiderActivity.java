@@ -89,8 +89,8 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                             case R.id.nav_switch_to_driver:
                                 AlertDialog.Builder builder = new AlertDialog.Builder(RiderActivity.this);
                                 builder.setCancelable(true);
-                                builder.setTitle("You are about to switch into Driver mode");
-                                builder.setMessage("Do you want to proceed?");
+                                builder.setTitle("You are about to enter DRIVER mode");
+                                builder.setMessage("Do you wish to proceed?");
 
                                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                     @Override
@@ -142,11 +142,11 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
     private void firebaseSearch(String searchText){
         Query firebaseSearchQuery = mDatabase.orderByChild("startPt")
                 .startAt(searchText).endAt(searchText + "/uf8ff");
-        FirebaseRecyclerAdapter<Post,DriverActivity.PostViewHolder> firebaseRecyclerAdapter =
-                new FirebaseRecyclerAdapter<Post, DriverActivity.PostViewHolder>
-                        (Post.class, R.layout.post_cardview, DriverActivity.PostViewHolder.class, firebaseSearchQuery){
+        FirebaseRecyclerAdapter<Post,RiderActivity.PostViewHolder> firebaseRecyclerAdapter =
+                new FirebaseRecyclerAdapter<Post, RiderActivity.PostViewHolder>
+                        (Post.class, R.layout.post_cardview, RiderActivity.PostViewHolder.class, firebaseSearchQuery){
                     @Override
-                    protected void populateViewHolder(DriverActivity.PostViewHolder viewHolder, Post model, int position){
+                    protected void populateViewHolder(RiderActivity.PostViewHolder viewHolder, Post model, int position){
                         viewHolder.setTitle(model.getStartPt());
                         viewHolder.setDesc(model.getEndPt());
                     }
@@ -157,11 +157,11 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onStart(){
         super.onStart();
-        FirebaseRecyclerAdapter<Post,DriverActivity.PostViewHolder> firebaseRecyclerAdapter =
-                new FirebaseRecyclerAdapter<Post, DriverActivity.PostViewHolder>
-                        (Post.class, R.layout.post_cardview, DriverActivity.PostViewHolder.class, mDatabase){
+        FirebaseRecyclerAdapter<Post,RiderActivity.PostViewHolder> firebaseRecyclerAdapter =
+                new FirebaseRecyclerAdapter<Post, RiderActivity.PostViewHolder>
+                        (Post.class, R.layout.post_cardview, RiderActivity.PostViewHolder.class, mDatabase){
                     @Override
-                    protected void populateViewHolder(DriverActivity.PostViewHolder viewHolder, Post model, int position){
+                    protected void populateViewHolder(RiderActivity.PostViewHolder viewHolder, Post model, int position){
                         viewHolder.setTitle(model.getStartPt());
                         viewHolder.setDesc(model.getEndPt());
 
