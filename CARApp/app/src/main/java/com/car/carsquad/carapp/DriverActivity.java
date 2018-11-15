@@ -57,7 +57,6 @@ public class DriverActivity extends AppCompatActivity {
 
     private ActionBarDrawerToggle mToggle;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +137,8 @@ public class DriverActivity extends AppCompatActivity {
                     protected void populateViewHolder(PostViewHolder viewHolder, Post model, int position){
                         viewHolder.setTitle(model.getStartPt());
                         viewHolder.setDesc(model.getEndPt());
+                        viewHolder.setDepDate(model.getDate());
+                        viewHolder.setDepTime(model.getTime());
                     }
                 };
         mPostList.setAdapter(firebaseRecyclerAdapter);
@@ -153,7 +154,8 @@ public class DriverActivity extends AppCompatActivity {
             protected void populateViewHolder(PostViewHolder viewHolder, Post model, int position){
                 viewHolder.setTitle(model.getStartPt());
                 viewHolder.setDesc(model.getEndPt());
-
+                viewHolder.setDepDate(model.getDate());
+                viewHolder.setDepTime(model.getTime());
             }
         };
         mPostList.setAdapter(firebaseRecyclerAdapter);
@@ -202,11 +204,19 @@ public class DriverActivity extends AppCompatActivity {
         }
         public void setTitle(String title){
             TextView post_title = (TextView)mView.findViewById(R.id.post_title);
-            post_title.setText(title);
+            post_title.setText("FROM: " + title);
         }
         public void setDesc(String desc){
             TextView post_desc = (TextView)mView.findViewById(R.id.post_desc);
-            post_desc.setText(desc);
+            post_desc.setText("TO: " + desc);
+        }
+        public void setDepDate(String depDate){
+            TextView post_dep_date = (TextView)mView.findViewById(R.id.post_dep_date);
+            post_dep_date.setText("DEPARTURE DATE: " + depDate);
+        }
+        public void setDepTime(String depTime){
+            TextView post_dep_time = (TextView)mView.findViewById(R.id.post_dep_time);
+            post_dep_time.setText("DEPARTURE TIME: " + depTime);
         }
         public void setImage(Context ctx, String image){
             ImageView postImage = (ImageView)mView.findViewById(R.id.post_image);

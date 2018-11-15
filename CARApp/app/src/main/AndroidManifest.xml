@@ -56,7 +56,8 @@
         <activity android:name=".UpdateUserInfoActivity"
             android:label="Update User Info"/>
 
-        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".SearchActivity"
+            android:label="Enter Ride Preferences"></activity>
     </application>
 
 </manifest>

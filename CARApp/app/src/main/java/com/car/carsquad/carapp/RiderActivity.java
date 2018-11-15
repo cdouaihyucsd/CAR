@@ -53,7 +53,7 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("post");
         mDatabase.keepSynced(true);
-        mPostList = (RecyclerView) findViewById(R.id.driver_post_view);
+        mPostList = (RecyclerView) findViewById(R.id.rider_post_view);
         mPostList.setHasFixedSize(true);
         mPostList.setLayoutManager(new LinearLayoutManager(this));
 
@@ -147,8 +147,10 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                         (Post.class, R.layout.post_cardview, RiderActivity.PostViewHolder.class, firebaseSearchQuery){
                     @Override
                     protected void populateViewHolder(RiderActivity.PostViewHolder viewHolder, Post model, int position){
-                        viewHolder.setTitle(model.getStartPt());
-                        viewHolder.setDesc(model.getEndPt());
+                        viewHolder.setDepLoc(model.getStartPt().toUpperCase());
+                        viewHolder.setArrLoc(model.getEndPt().toUpperCase());
+                        viewHolder.setDepDate(model.getDate());
+                        viewHolder.setDepTime(model.getTime());
                     }
                 };
         mPostList.setAdapter(firebaseRecyclerAdapter);
@@ -162,9 +164,10 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                         (Post.class, R.layout.post_cardview, RiderActivity.PostViewHolder.class, mDatabase){
                     @Override
                     protected void populateViewHolder(RiderActivity.PostViewHolder viewHolder, Post model, int position){
-                        viewHolder.setTitle(model.getStartPt());
-                        viewHolder.setDesc(model.getEndPt());
-
+                        viewHolder.setDepLoc(model.getStartPt().toUpperCase());
+                        viewHolder.setArrLoc(model.getEndPt().toUpperCase());
+                        viewHolder.setDepDate(model.getDate());
+                        viewHolder.setDepTime(model.getTime());
                     }
                 };
         mPostList.setAdapter(firebaseRecyclerAdapter);
@@ -210,13 +213,21 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
             super(itemView);
             mView = itemView;
         }
-        public void setTitle(String start){
+        public void setDepLoc(String start){
             TextView post_title = (TextView)mView.findViewById(R.id.post_title);
-            post_title.setText(start);
+            post_title.setText("FROM: " +start);
         }
-        public void setDesc(String dest){
+        public void setArrLoc(String dest){
             TextView post_desc = (TextView)mView.findViewById(R.id.post_desc);
-            post_desc.setText(dest);
+            post_desc.setText("TO: " +dest);
+        }
+        public void setDepDate(String depDate){
+            TextView post_dep_date = (TextView)mView.findViewById(R.id.post_dep_date);
+            post_dep_date.setText("DEPARTURE DATE: " +depDate);
+        }
+        public void setDepTime(String depTime){
+            TextView post_dep_time = (TextView)mView.findViewById(R.id.post_dep_time);
+            post_dep_time.setText("DEPARTURE TIME: " + depTime);
         }
         public void setImage(Context ctx, String image){
             ImageView postImage = (ImageView)mView.findViewById(R.id.post_image);
