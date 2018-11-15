@@ -194,8 +194,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View view) {
         if(view == buttonRegister) {
-            //String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            //DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
             registerUser();
         }
     }
