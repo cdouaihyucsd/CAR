@@ -127,7 +127,7 @@ public class DriverActivity extends AppCompatActivity {
     }
 
     //search for posts
-    private void firebaseSearch(String searchText){
+   /* private void firebaseSearch(String searchText){
         Query firebaseSearchQuery = mDatabase.orderByChild("startPt")
                 .startAt(searchText).endAt(searchText + "/uf8ff");
         FirebaseRecyclerAdapter<Post,PostViewHolder> firebaseRecyclerAdapter =
@@ -142,20 +142,23 @@ public class DriverActivity extends AppCompatActivity {
                     }
                 };
         mPostList.setAdapter(firebaseRecyclerAdapter);
-    }
+    }*/
 
     @Override
     protected void onStart(){
         super.onStart();
+        String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+        Query firebaseSearchQuery = mDatabase.orderByChild("userID").equalTo(userId);
+
         FirebaseRecyclerAdapter<Post,PostViewHolder> firebaseRecyclerAdapter =
                 new FirebaseRecyclerAdapter<Post, PostViewHolder>
-                        (Post.class, R.layout.post_cardview, PostViewHolder.class, mDatabase){
+                        (Post.class, R.layout.post_cardview, PostViewHolder.class, firebaseSearchQuery/*mDatabase*/){
             @Override
             protected void populateViewHolder(PostViewHolder viewHolder, Post model, int position){
-                viewHolder.setTitle(model.getStartPt());
-                viewHolder.setDesc(model.getEndPt());
-                viewHolder.setDepDate(model.getDate());
-                viewHolder.setDepTime(model.getTime());
+                    viewHolder.setTitle(model.getStartPt());
+                    viewHolder.setDesc(model.getEndPt());
+                    viewHolder.setDepDate(model.getDate());
+                    viewHolder.setDepTime(model.getTime());
             }
         };
         mPostList.setAdapter(firebaseRecyclerAdapter);
@@ -163,7 +166,7 @@ public class DriverActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.search_menu, menu);
+        /*getMenuInflater().inflate(R.menu.search_menu, menu);
         MenuItem item = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -177,7 +180,7 @@ public class DriverActivity extends AppCompatActivity {
                 firebaseSearch(newText);
                 return false;
             }
-        });
+        });*/
         return super.onCreateOptionsMenu(menu);
     }
     @Override

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="170dp"
     android:layout_margin="10dp"
-    android:elevation="0dp"
+    android:elevation="90dp"
     android:orientation="vertical"
     app:cardCornerRadius="10dp">
 
@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="170dp"
         android:background="#123456"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:elevation="90dp">
 
         <ImageView
             android:id="@+id/post_image"
