@@ -17,6 +17,7 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 import java.util.Objects;
 
@@ -142,11 +145,11 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
     private void firebaseSearch(String searchText){
         Query firebaseSearchQuery = mDatabase.orderByChild("startPt")
                 .startAt(searchText).endAt(searchText + "/uf8ff");
-        FirebaseRecyclerAdapter<Post,DriverActivity.PostViewHolder> firebaseRecyclerAdapter =
-                new FirebaseRecyclerAdapter<Post, DriverActivity.PostViewHolder>
-                        (Post.class, R.layout.post_cardview, DriverActivity.PostViewHolder.class, firebaseSearchQuery){
+        FirebaseRecyclerAdapter<Post,RiderActivity.PostViewHolder> firebaseRecyclerAdapter =
+                new FirebaseRecyclerAdapter<Post, RiderActivity.PostViewHolder>
+                        (Post.class, R.layout.post_cardview, RiderActivity.PostViewHolder.class, firebaseSearchQuery){
                     @Override
-                    protected void populateViewHolder(DriverActivity.PostViewHolder viewHolder, Post model, int position){
+                    protected void populateViewHolder(RiderActivity.PostViewHolder viewHolder, Post model, int position){
                         viewHolder.setTitle(model.getStartPt());
                         viewHolder.setDesc(model.getEndPt());
                     }
@@ -157,14 +160,45 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onStart(){
         super.onStart();
-        FirebaseRecyclerAdapter<Post,DriverActivity.PostViewHolder> firebaseRecyclerAdapter =
-                new FirebaseRecyclerAdapter<Post, DriverActivity.PostViewHolder>
-                        (Post.class, R.layout.post_cardview, DriverActivity.PostViewHolder.class, mDatabase){
+        FirebaseRecyclerAdapter<Post,RiderActivity.PostViewHolder> firebaseRecyclerAdapter =
+                new FirebaseRecyclerAdapter<Post, RiderActivity.PostViewHolder>
+                        (Post.class, R.layout.post_cardview, RiderActivity.PostViewHolder.class, mDatabase){
                     @Override
-                    protected void populateViewHolder(DriverActivity.PostViewHolder viewHolder, Post model, int position){
+                    protected void populateViewHolder(RiderActivity.PostViewHolder viewHolder, Post model, int position){
                         viewHolder.setTitle(model.getStartPt());
                         viewHolder.setDesc(model.getEndPt());
 
+                    }
+
+                    @Override
+                    public RiderActivity.PostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                        RiderActivity.PostViewHolder viewHolder = super.onCreateViewHolder(parent, viewType);
+                        viewHolder.setOnClickListener(new PostViewHolder.ClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                //views
+                                TextView mTitleTv = view.findViewById(R.id.post_title_detail);
+                                TextView mDescTv = view.findViewById(R.id.post_desc_detail);
+                                ImageView mImageView = view.findViewById(R.id.post_image_detail);
+                                //get data from views
+                                String mTitle = mTitleTv.getText().toString();
+                                String mDesc = mDescTv.getText().toString();
+                                //Drawable mDrawable = mImageView.getDrawable();
+                                Intent intent = new Intent(view.getContext(),RiderPostDetails.class);
+                                intent.putExtra("title", mTitle);
+                                intent.putExtra("description", mDesc);
+
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void onItemLongClick(View view, int position) {
+
+                            }
+                        });
+
+                        //return super.onCreateViewHolder(parent, viewType);
+                        return viewHolder;
                     }
                 };
         mPostList.setAdapter(firebaseRecyclerAdapter);
@@ -209,6 +243,23 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
         public PostViewHolder(View itemView){
             super(itemView);
             mView = itemView;
+
+            //item clicked
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mClickListener.onItemClick(view, getAdapterPosition());
+                }
+            });
+
+            //item long clicked
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    mClickListener.onItemLongClick(view, getAdapterPosition());
+                    return true;
+                }
+            });
         }
         public void setTitle(String start){
             TextView post_title = (TextView)mView.findViewById(R.id.post_title);
@@ -222,6 +273,19 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
             ImageView postImage = (ImageView)mView.findViewById(R.id.post_image);
             //Picasso.with(ctx).load(image).into(postImage);
         }
+        private PostViewHolder.ClickListener mClickListener;
+
+        public interface ClickListener{
+            void onItemClick(View view, int position);
+            void onItemLongClick(View view, int position);
+        }
+
+        public void setOnClickListener(PostViewHolder.ClickListener clickListener) {
+            mClickListener = clickListener;
+
+
+        }
+
     }
 
     //LOGOUT of the app

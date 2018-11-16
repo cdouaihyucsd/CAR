@@ -227,6 +227,9 @@ public class DriverActivity extends AppCompatActivity {
             ImageView postImage = (ImageView)mView.findViewById(R.id.post_image);
             //Picasso.with(ctx).load(image).into(postImage);
         }
+
+
+
     }
 
     //prevent user from pressing the back button to go back from the main app screen
