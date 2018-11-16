@@ -4,11 +4,13 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -148,24 +150,26 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                                             @Override
                                                             public void onComplete(@NonNull Task<Void> task) {
 
-                                                                if(task.isSuccessful()){
-                                                                    Toast.makeText(RegisterActivity.this,
-                                                                            "Registration successful! Please check your email for verification link",
-                                                                            Toast.LENGTH_LONG).show();
-                                                                } else {
+                                                                if(!task.isSuccessful()){
                                                                     Toast.makeText(RegisterActivity.this,
                                                                             Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
                                                                 }
                                                             }
                                                         });
 
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                                                builder.setCancelable(true);
+                                                builder.setTitle("VERIFICATION EMAIL SENT");
+                                                builder.setMessage("Please check your email for verification link");
 
-                                                //start LoginActivity
-                                                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-
-                                                /*Toast.makeText(getApplicationContext(),
-                                                        "Registration successful! Please check your email for verification link",
-                                                        Toast.LENGTH_LONG).show();*/
+                                                builder.setPositiveButton("Proceed", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        finish();
+                                                        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                                                    }
+                                                });
+                                                builder.show();
                                             } else {
                                                 Toast.makeText(RegisterActivity.this,
                                                         Objects.requireNonNull(task2.getException()).getMessage(), Toast.LENGTH_LONG).show();

@@ -3,11 +3,13 @@ package com.car.carsquad.carapp;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -80,10 +82,24 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
-                                Toast.makeText(ForgotPasswordActivity.this,
-                                        "Please check your mailbox for password reset link", Toast.LENGTH_SHORT).show();
+                                AlertDialog.Builder builder = new AlertDialog.Builder(ForgotPasswordActivity.this);
+                                builder.setCancelable(true);
+                                builder.setTitle("RESET PASSWORD EMAIL SENT");
+                                builder.setMessage("Please check your email for reset password link");
+
+                                builder.setPositiveButton("Proceed", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        finish();
+                                        startActivity(new Intent(ForgotPasswordActivity.this, LoginActivity.class));
+                                    }
+                                });
+                                builder.show();
+
+                                //Toast.makeText(ForgotPasswordActivity.this,
+                                 //       "Please check your mailbox for password reset link", Toast.LENGTH_SHORT).show();
                                 //go back to loginActivity, allow user to login using new password
-                                startActivity(new Intent(ForgotPasswordActivity.this, LoginActivity.class));
+                                //startActivity(new Intent(ForgotPasswordActivity.this, LoginActivity.class));
                             }
                             else {
                                 Toast.makeText(ForgotPasswordActivity.this,

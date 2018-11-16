@@ -1,8 +1,10 @@
 package com.car.carsquad.carapp;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -112,8 +114,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 //go to main app screen if sign in successfully
                                 startActivity(new Intent(getApplicationContext(), RiderActivity.class));
                             } else {
-                                Toast.makeText(LoginActivity.this,
-                                        "Please verify your email using the verification link", Toast.LENGTH_SHORT).show();
+                                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                                builder.setCancelable(true);
+                                builder.setTitle("ACCOUNT NOT VERIFIED");
+                                builder.setMessage("Please check the verification link sent to your email");
+
+                                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                    }
+                                });
+                                builder.show();
                             }
                         }
                         else {
