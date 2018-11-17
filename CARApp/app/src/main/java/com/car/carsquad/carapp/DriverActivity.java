@@ -73,7 +73,7 @@ public class DriverActivity extends AppCompatActivity {
         mAddPost.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v){
                 Intent nextActivityIntent = new Intent(DriverActivity.this, DriverPostActivity.class);
-                finish();
+                //finish();
                 startActivity(nextActivityIntent);
             }
         });

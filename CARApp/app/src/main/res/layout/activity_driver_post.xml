@@ -33,7 +33,9 @@
             android:id="@+id/tvDate"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:textSize="24sp"
             android:hint="Select departure date"/>
 
@@ -41,7 +43,9 @@
             android:id="@+id/tvTime"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:hint="Select departure time"
             android:textSize="24sp" />
 
@@ -49,7 +53,9 @@
             android:id="@+id/note_to_riders"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:ems="10"
             android:hint="Leave your riders a note"
             android:inputType="textMultiLine" />

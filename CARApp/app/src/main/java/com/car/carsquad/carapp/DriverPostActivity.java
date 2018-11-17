@@ -136,12 +136,15 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                 Log.d("DriverPostActivity", "onTimeSet: hh:mm: " + hour + "/" + minute);
-                String time = hour + ":" + minute;
+                String time = checkDigit(hour) + ":" + checkDigit(minute);
                 mDisplayTime.setText(time);
             }
         };
     }
 
+    public String checkDigit(int number) {
+        return number <= 9 ? "0" + number : String.valueOf(number);
+    }
     private void postRide(){
         String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         //String start = mStartPoint.getText().toString().trim();
@@ -175,4 +178,10 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
             postRide();
         }
     }
+
+    //prevent user from pressing the back button to go back from the main app screen
+   // @Override
+   // public void onBackPressed() {
+   //     moveTaskToBack(true);
+    //}
 }
