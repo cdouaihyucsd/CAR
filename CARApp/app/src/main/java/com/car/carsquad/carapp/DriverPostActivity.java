@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -55,6 +57,9 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
         PlaceAutocompleteFragment autocompleteFragment1 = (PlaceAutocompleteFragment) getFragmentManager()
                 .findFragmentById(R.id.post_start_point1);
         autocompleteFragment1.setHint("ENTER START POINT");
+        ImageView startIcon = (ImageView)((LinearLayout)autocompleteFragment1.getView()).getChildAt(0);
+        startIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_start));
+
         autocompleteFragment1.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
@@ -68,6 +73,8 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
         PlaceAutocompleteFragment autocompleteFragment2 = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.post_destination_point1);
         autocompleteFragment2.setHint("ENTER DESTINATION");
+        ImageView endIcon = (ImageView)((LinearLayout)autocompleteFragment1.getView()).getChildAt(0);
+        endIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_end));
         autocompleteFragment2.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
@@ -105,6 +112,7 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth, mDateSetListener,
                         year, month, day);
                 Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.getDatePicker().setMinDate(System.currentTimeMillis()-1000);
                 dialog.show();
             }
         });
@@ -120,6 +128,7 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth, mTimeSetListener,
                         hour, minute, true);
                 Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
                 dialog.show();
             }
         });
@@ -128,7 +137,7 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month++;
                 Log.d("DriverPostActivity", "onDateSet: mm/dd/yyyy: " + month + "/" + day + "/" + year);
-                String date = month + "/" + day + "/" + year;
+                String date = "Departure date: " + month + "/" + day + "/" + year;
                 mDisplayDate.setText(date);
             }
         };
@@ -136,7 +145,7 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                 Log.d("DriverPostActivity", "onTimeSet: hh:mm: " + hour + "/" + minute);
-                String time = checkDigit(hour) + ":" + checkDigit(minute);
+                String time = "Departure time: " + checkDigit(hour) + ":" + checkDigit(minute);
                 mDisplayTime.setText(time);
             }
         };
