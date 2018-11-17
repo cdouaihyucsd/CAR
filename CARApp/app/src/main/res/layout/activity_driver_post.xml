@@ -14,21 +14,20 @@
         tools:layout_editor_absoluteY="88dp">
 
 
-        <AutoCompleteTextView
-            android:id="@+id/post_start_point"
+        <fragment
+            android:id="@+id/post_start_point1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:hint="Enter starting point"
-            android:textSize="24sp" />
+            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+            />
 
-        <AutoCompleteTextView
-            android:id="@+id/post_destination_point"
+        <fragment
+            android:id="@+id/post_destination_point1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:hint="Enter destination"
-            android:textSize="24sp" />
+            android:layout_marginTop="10dp"
+            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+            />
 
         <TextView
             android:id="@+id/tvDate"

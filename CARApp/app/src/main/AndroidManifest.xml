@@ -58,6 +58,9 @@
 
         <activity android:name=".SearchActivity"
             android:label="Enter Ride Preferences"></activity>
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAQ27pNj-PxchceZSOrO0Caea_jOrot52I"/>
     </application>
 
 </manifest>
