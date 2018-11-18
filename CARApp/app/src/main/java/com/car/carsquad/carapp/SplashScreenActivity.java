@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,26 +16,22 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity {
+public class SplashScreenActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.activity_splash_screen);
+
         ActionBar actionBar = getSupportActionBar();
         Objects.requireNonNull(actionBar).hide();
-
-        setContentView(R.layout.activity_main);
 
         //Firebase Authentication Objects
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
-        /*
         //if User is already logged in, skip this activity
         if(user != null && user.isEmailVerified()) {
-
-            //finish();
-
             DatabaseReference databaseUser =
                     FirebaseDatabase.getInstance().getReference("users");
             final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -47,43 +42,21 @@ public class MainActivity extends AppCompatActivity {
                     String currentMode;
                     currentMode = dataSnapshot.getValue(String.class);
                     if (Objects.equals(currentMode, "driver")) {
-                        //finish();
                         startActivity(new Intent(getApplicationContext(), DriverActivity.class));
                     } else if (Objects.equals(currentMode, "rider")){
-                        //finish();
-                        startActivity(new Intent(MainActivity.this, RiderActivity.class));
+                        startActivity(new Intent(SplashScreenActivity.this, RiderActivity.class));
+                    }
+                    else{
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     }
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
             });
-
-
-            //start profile activity
-            //finish();
-            //startActivity(new Intent(getApplicationContext(), RiderActivity.class));
-
-        }*/
-    }
-    //what activity to jump to
-    public void nextActivity(View view) {
-        int viewId = view.getId();
-        Intent nextActivityIntent;
-        switch(viewId) {
-            case R.id.login_button:
-                nextActivityIntent = new Intent(this, LoginActivity.class);
-                startActivity(nextActivityIntent);
-                break;
-            case R.id.register_button:
-                nextActivityIntent = new Intent(this, RegisterActivity.class);
-                startActivity(nextActivityIntent);
-                break;
         }
-    }
-    //prevent user from pressing the back button to go back from the main app screen
-    @Override
-    public void onBackPressed() {
-        moveTaskToBack(true);
+        else{
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        }
     }
 }

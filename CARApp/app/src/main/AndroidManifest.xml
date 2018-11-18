@@ -15,11 +15,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
+           <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        -->
         </activity>
         <activity
             android:name=".LoginActivity"
@@ -45,22 +47,36 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.car.carsquad.carapp.MainActivity" />
         </activity>
-        <activity android:name=".RiderActivity"
-            android:label="Rider"/>
-        <activity android:name=".DriverActivity"
-            android:label="Driver"/>
-        <activity android:name=".DriverPostActivity"
-            android:label="Post Rides"/>
-        <activity android:name=".DriverProfileActivity"
-            android:label="Driver Profile"/>
-        <activity android:name=".UpdateUserInfoActivity"
-            android:label="Update User Info"/>
+        <activity
+            android:name=".RiderActivity"
+            android:label="Rider" />
+        <activity
+            android:name=".DriverActivity"
+            android:label="Driver" />
+        <activity
+            android:name=".DriverPostActivity"
+            android:label="Post Rides" />
+        <activity
+            android:name=".DriverProfileActivity"
+            android:label="Driver Profile" />
+        <activity
+            android:name=".UpdateUserInfoActivity"
+            android:label="Update User Info" />
+        <activity
+            android:name=".SearchActivity"
+            android:label="Enter Ride Preferences" />
 
-        <activity android:name=".SearchActivity"
-            android:label="Enter Ride Preferences"></activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAQ27pNj-PxchceZSOrO0Caea_jOrot52I" />
 
-        <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAQ27pNj-PxchceZSOrO0Caea_jOrot52I"/>
+        <activity android:name=".SplashScreenActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

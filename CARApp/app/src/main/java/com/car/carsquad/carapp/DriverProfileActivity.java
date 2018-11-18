@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 public class DriverProfileActivity extends AppCompatActivity implements View.OnClickListener {
@@ -111,6 +112,11 @@ public class DriverProfileActivity extends AppCompatActivity implements View.OnC
             //update user info
             User updatedUser = new User(userId, firstName, lastName, phoneNo, "true", 0);
             databaseUser.child(userId).setValue(updatedUser);
+
+            HashMap<String, Object> result = new HashMap<>();
+            result.put("currentMode", "driver");
+            databaseUser.child(userId).updateChildren(result);
+
             startActivity(new Intent(this, DriverActivity.class));
             Toast.makeText(this, "You have successfully enrolled as a driver", Toast.LENGTH_LONG).show();
         } else {

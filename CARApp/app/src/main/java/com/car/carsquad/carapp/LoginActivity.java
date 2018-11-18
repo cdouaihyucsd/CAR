@@ -18,6 +18,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Objects;
 
 
 /**
@@ -110,9 +117,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         progressDialog.dismiss();
                         if (task.isSuccessful()) {
+                            //progressDialog.dismiss();
                             if(firebaseAuth.getCurrentUser().isEmailVerified()){
                                 //go to main app screen if sign in successfully
-                                startActivity(new Intent(getApplicationContext(), RiderActivity.class));
+                                DatabaseReference databaseUser =
+                                        FirebaseDatabase.getInstance().getReference("users");
+                                final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                databaseUser.child(userId).child("currentMode").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        String currentMode;
+                                        currentMode = dataSnapshot.getValue(String.class);
+                                        if (Objects.equals(currentMode, "driver")) {
+                                            //progressDialog.dismiss();
+                                            startActivity(new Intent(getApplicationContext(), DriverActivity.class));
+                                        } else if (Objects.equals(currentMode, "rider")){
+                                            //progressDialog.dismiss();
+                                            startActivity(new Intent(getApplicationContext(), RiderActivity.class));
+                                        }
+                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    }
+                                });
+                                //startActivity(new Intent(getApplicationContext(), RiderActivity.class));
                             } else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                                 builder.setCancelable(true);

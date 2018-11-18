@@ -24,6 +24,8 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
@@ -48,10 +50,15 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private TimePickerDialog.OnTimeSetListener mTimeSetListener;
 
+    private DatabaseReference mPostDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        mPostDatabase = FirebaseDatabase.getInstance().getReference().child("post");
+        mPostDatabase.keepSynced(true);
 
         //GOOGLE PLACES AUTOCOMPLETE
         PlaceAutocompleteFragment autocompleteFragment1 = (PlaceAutocompleteFragment) getFragmentManager()
@@ -64,8 +71,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             public void onPlaceSelected(Place place) {
                 startPt = place.getName().toString();
                 startLatLng = place.getLatLng();
-                //findStartLat = startLatLng.latitude;
-                //findStartLng = startLatLng.longitude;
+                findStartLat = startLatLng.latitude;
+                findStartLng = startLatLng.longitude;
             }
             @Override
             public void onError(Status status) {
@@ -81,8 +88,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             public void onPlaceSelected(Place place) {
                 endPt = place.getName().toString();
                 endLatLng = place.getLatLng();
-                //findEndLat = endLatLng.latitude;
-                //findEndLng = endLatLng.longitude;
+                findEndLat = endLatLng.latitude;
+                findEndLng = endLatLng.longitude;
             }
             @Override
             public void onError(Status status) {
@@ -156,7 +163,6 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         builder.setCancelable(true);
         builder.setTitle("DISTANCE CALCULATED");
         builder.setMessage("Distance is approx: " + (int) result + " miles");
-
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

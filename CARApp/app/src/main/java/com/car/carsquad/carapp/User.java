@@ -14,6 +14,8 @@ public class User {
     public String isDriver;
     public double driverRating;
 
+    public String currentMode;
+
     //link to database
     //private DatabaseReference mDatabase;
     //mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -31,6 +33,7 @@ public class User {
         this.phoneNo = phoneNo;
         this.isDriver = isDriver;
         this.driverRating = driverRating;
+        this.currentMode = "rider";
     }
 
     public String getUserID() {
@@ -70,10 +73,10 @@ public class User {
         this.driverRating = driverRating;
     }
 
-    /*
-    private void writeNewUser(String userID, String firstName, String lastName, String email,
-                              boolean isDriver, double driverRating) {
-        User user = new User(userID, firstName, lastName, email, isDriver, driverRating);
-        mDatabase.child("users").child(userID).setValue(user);
-    }*/
+    public String getCurrentMode() {
+        return currentMode;
+    }
+    public void setCurrentMode(String currentMode) {
+        this.currentMode = currentMode;
+    }
 }

@@ -39,6 +39,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import android.support.v7.widget.SearchView;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 public class DriverActivity extends AppCompatActivity {
@@ -113,6 +114,11 @@ public class DriverActivity extends AppCompatActivity {
                                 builder.setPositiveButton("Proceed", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
+                                        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                        HashMap<String, Object> result = new HashMap<>();
+                                        result.put("currentMode", "rider");
+                                        FirebaseDatabase.getInstance().getReference().child("users")
+                                                .child(userId).updateChildren(result);
                                         startActivity(new Intent(DriverActivity.this, RiderActivity.class));
                                     }
                                 });

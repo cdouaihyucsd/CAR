@@ -17,6 +17,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
@@ -90,7 +91,29 @@ public class UpdateUserInfoActivity extends AppCompatActivity implements View.On
                     User updatedUser = new User(userId, firstName, lastName, phoneNo, isDriver, driverRating);
                     databaseUser.child(userId).setValue(updatedUser);
                     finish();
-                    startActivity(new Intent(UpdateUserInfoActivity.this, RiderActivity.class));
+
+                    //Query currMode = databaseUser.child("userId").child("currentMode").equalTo("rider");
+                    //Toast.makeText(UpdateUserInfoActivity.this, currMode.toString(), Toast.LENGTH_LONG).show();
+
+                    /*databaseUser.child(userId).child("currentMode").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            String currentMode;
+                            currentMode = dataSnapshot.getValue(String.class);
+                            if (Objects.equals(currentMode, "driver")) {
+                                HashMap<String, Object> result = new HashMap<>();
+                                result.put("currentMode", "driver");
+                                FirebaseDatabase.getInstance().getReference().child("users")
+                                        .child(userId).updateChildren(result);
+                                startActivity(new Intent(getApplicationContext(), DriverActivity.class));
+                            } else if (Objects.equals(currentMode, "rider")){
+                                startActivity(new Intent(getApplicationContext(), RiderActivity.class));
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) { }
+                    });*/
+                    startActivity(new Intent(getApplicationContext(), RiderActivity.class));
                     Toast.makeText(UpdateUserInfoActivity.this, "Your profile information has been updated", Toast.LENGTH_LONG).show();
                 }
                 @Override

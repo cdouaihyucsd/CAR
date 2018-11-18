@@ -32,6 +32,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 public class RiderActivity extends AppCompatActivity implements View.OnClickListener {
@@ -121,6 +122,12 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                                              if (Objects.equals(isDriver, "true")) {
                                                  finish();
                                                  startActivity(new Intent(getApplicationContext(), DriverActivity.class));
+
+                                                 HashMap<String, Object> result = new HashMap<>();
+                                                 result.put("currentMode", "driver");
+                                                 FirebaseDatabase.getInstance().getReference().child("users")
+                                                         .child(userId).updateChildren(result);
+
                                              } else {
                                                  startActivity(new Intent(RiderActivity.this, DriverProfileActivity.class));
                                              }
