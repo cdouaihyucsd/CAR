@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -19,15 +20,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.sql.Driver;
 import java.util.Calendar;
 import java.util.Objects;
@@ -39,12 +39,21 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
     private TextView message;
     private String startPt;
     private String endPt;
+    //private LatLng startLatLng;
+    //private LatLng endLatLng;
+    private Double startLat;
+    private Double startLng;
+    private Double endLat;
+    private Double endLng;
     private TextView mDisplayDate;
     private TextView mDisplayTime;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private TimePickerDialog.OnTimeSetListener mTimeSetListener;
     private Button mPostRide;
     private Button mCancelPost;
+
+    MyLatLng startLoc;
+    MyLatLng endLoc;
 
     DatabaseReference databasePosts;
 
@@ -63,8 +72,14 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
         autocompleteFragment1.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
+                //String placeID = place.getId();
                 startPt = place.getName().toString();
-                //place.getLatLng();
+                //startLatLng = place.getLatLng();
+                startLat = place.getLatLng().latitude;
+                startLng = place.getLatLng().longitude;
+                startLoc = new MyLatLng();
+                startLoc.setLatitude(startLat);
+                startLoc.setLongitude(startLng);
             }
             @Override
             public void onError(Status status) {
@@ -79,6 +94,12 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onPlaceSelected(Place place) {
                 endPt = place.getName().toString();
+                //endLatLng = place.getLatLng();
+                endLat = place.getLatLng().latitude;
+                endLng = place.getLatLng().longitude;
+                endLoc = new MyLatLng();
+                endLoc.setLatitude(endLat);
+                endLoc.setLongitude(endLng);
             }
             @Override
             public void onError(Status status) {
@@ -92,8 +113,6 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
         mDisplayTime = (TextView) findViewById(R.id.tvTime);
         mPostRide = (Button) findViewById(R.id.confirm_post);
         mCancelPost = (Button) findViewById(R.id.post_cancel);
-        //mStartPoint = (AutoCompleteTextView) findViewById(R.id.post_start_point);
-        //mEndPoint = (AutoCompleteTextView) findViewById(R.id.post_destination_point);
         message = (TextView) findViewById(R.id.note_to_riders);
 
         //set action
@@ -137,7 +156,7 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month++;
                 Log.d("DriverPostActivity", "onDateSet: mm/dd/yyyy: " + month + "/" + day + "/" + year);
-                String date = "Departure date: " + month + "/" + day + "/" + year;
+                String date = month + "/" + day + "/" + year;
                 mDisplayDate.setText(date);
             }
         };
@@ -145,7 +164,7 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                 Log.d("DriverPostActivity", "onTimeSet: hh:mm: " + hour + "/" + minute);
-                String time = "Departure time: " + checkDigit(hour) + ":" + checkDigit(minute);
+                String time = checkDigit(hour) + ":" + checkDigit(minute);
                 mDisplayTime.setText(time);
             }
         };
@@ -156,8 +175,6 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
     }
     private void postRide(){
         String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-        //String start = mStartPoint.getText().toString().trim();
-        //String dest = mEndPoint.getText().toString().trim();
         String departureDate = mDisplayDate.getText().toString().trim();
         String departureTime = mDisplayTime.getText().toString().trim();
         String note = message.getText().toString().trim();
@@ -166,7 +183,7 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
                 !TextUtils.isEmpty(departureDate) && !TextUtils.isEmpty(departureTime)) {
 
             String postId = databasePosts.push().getKey();
-            Post newPost = new Post(userId, postId,startPt,endPt,departureDate,departureTime, note);
+            Post newPost = new Post(userId, postId,startPt,endPt,departureDate,departureTime, note, startLoc, endLoc);
             databasePosts.child(Objects.requireNonNull(postId)).setValue(newPost);
             finish();
             startActivity(new Intent(this, DriverActivity.class));
@@ -188,9 +205,4 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    //prevent user from pressing the back button to go back from the main app screen
-   // @Override
-   // public void onBackPressed() {
-   //     moveTaskToBack(true);
-    //}
 }

@@ -21,7 +21,9 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.model.LatLng;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Objects;
 
@@ -30,6 +32,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     private Button mCancelSearch;
     private String startPt;
     private String endPt;
+    private LatLng startLatLng;
+    private LatLng endLatLng;
     private TextView mDisplayDate;
     private TextView mDisplayTime;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
@@ -51,7 +55,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onPlaceSelected(Place place) {
                 startPt = place.getName().toString();
-                //place.getLatLng();
+                startLatLng = place.getLatLng();
             }
             @Override
             public void onError(Status status) {
@@ -66,6 +70,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onPlaceSelected(Place place) {
                 endPt = place.getName().toString();
+                endLatLng = place.getLatLng();
             }
             @Override
             public void onError(Status status) {
@@ -114,7 +119,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month++;
                 Log.d("DriverPostActivity", "onDateSet: mm/dd/yyyy: " + month + "/" + day + "/" + year);
-                String date = "Departure date: " + month + "/" + day + "/" + year;
+                String date =  month + "/" + day + "/" + year;
                 mDisplayDate.setText(date);
             }
         };
@@ -122,7 +127,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                 Log.d("DriverPostActivity", "onTimeSet: hh:mm: " + hour + "/" + minute);
-                String time = "Departure time: " + checkDigit(hour) + ":" + checkDigit(minute);
+                String time =  checkDigit(hour) + ":" + checkDigit(minute);
                 mDisplayTime.setText(time);
             }
         };
@@ -137,5 +142,29 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             finish();
             startActivity(new Intent(this, RiderActivity.class));
         }
+    }
+
+    public double CalculationByDistance(LatLng StartP, LatLng EndP) {
+        int Radius = 6371;// radius of earth in Km
+        double lat1 = StartP.latitude;
+        double lat2 = EndP.latitude;
+        double lon1 = StartP.longitude;
+        double lon2 = EndP.longitude;
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(Math.toRadians(lat1))
+                * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
+                * Math.sin(dLon / 2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        double valueResult = Radius * c;
+        double km = valueResult / 1;
+        DecimalFormat newFormat = new DecimalFormat("####");
+        int kmInDec = Integer.valueOf(newFormat.format(km));
+        double meter = valueResult % 1000;
+        int meterInDec = Integer.valueOf(newFormat.format(meter));
+        Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
+                + " Meter   " + meterInDec);
+        return Radius * c;
     }
 }

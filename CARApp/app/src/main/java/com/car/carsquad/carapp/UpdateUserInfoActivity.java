@@ -67,6 +67,10 @@ public class UpdateUserInfoActivity extends AppCompatActivity implements View.On
         final String lastName = mLastName.getText().toString().trim();
         final String phoneNo = mPhoneNo.getText().toString().trim();
 
+        if(phoneNo.length() != 10) {
+            Toast.makeText(UpdateUserInfoActivity.this, "Please enter a valid phone number", Toast.LENGTH_LONG).show();
+            return;
+        }
         if(!TextUtils.isEmpty(firstName) && !TextUtils.isEmpty(lastName) && !TextUtils.isEmpty(phoneNo)) {
             databaseUser.child(userId).child("driverRating").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override

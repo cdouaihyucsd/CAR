@@ -1,5 +1,9 @@
 package com.car.carsquad.carapp;
 
+import android.location.Location;
+
+import com.google.android.gms.maps.model.LatLng;
+
 public class Post {
     String userID;
     String postID;
@@ -8,12 +12,18 @@ public class Post {
     String date;
     String time;
     String note;
+    MyLatLng startLatLgn;
+    MyLatLng endLatLgn;
+    //Location startLoc;
+    //Location endLoc;
 
     public Post(){
         //default constructor
     }
 
-    public Post(String userID, String postID, String startPt, String endPt, String date, String time, String note){
+    public Post(String userID, String postID, String startPt, String endPt, String date, String time, String note,
+                //Location startLoc, Location endLoc){
+                MyLatLng startLatLgn, MyLatLng endLatLgn){
         this.userID = userID;
         this.postID = postID;
         this.startPt = startPt;
@@ -21,6 +31,10 @@ public class Post {
         this.date = date;
         this.time = time;
         this.note = note;
+        this.startLatLgn = startLatLgn;
+        this.endLatLgn = endLatLgn;
+        //this.startLoc = startLoc;
+        //this.endLoc = endLoc;
     }
 
     public String getUserID() {
@@ -44,4 +58,52 @@ public class Post {
     public String getNote() {
         return note;
     }
+
+    public void setStartLatLgn(MyLatLng startLatLgn) {
+        this.startLatLgn = startLatLgn;
+    }
+
+    public void setEndLatLgn(MyLatLng endLatLgn) {
+        this.endLatLgn = endLatLgn;
+    }
+
+    public MyLatLng getStartLatLgn() {
+        return startLatLgn;
+    }
+
+    public MyLatLng getEndLatLgn() {
+        return endLatLgn;
+    }
+
+    /*
+    public LatLng getEndLatLgn() {
+        return endLatLgn;
+    }
+    public LatLng getStartLatLgn() {
+        return startLatLgn;
+    }*/
+/*
+    public void setEndLatLgn(MyLatLng endLatLgn) {
+        this.endLatLgn = endLatLgn;
+    }
+    public void setStartLatLgn(MyLatLng startLatLgn) {
+        this.startLatLgn = startLatLgn;
+    }
+*/
+
+/*
+    public MyLatLng getEndLoc() {
+        return endLoc;
+    }
+
+    public MyLatLng getStartLoc() {
+        return startLoc;
+    }
+
+    public void setEndLoc(Location endLoc) {
+        this.endLoc = endLoc;
+    }
+    public void setStartLoc(Location startLoc){
+        this.startLoc = startLoc;
+    }*/
 }
