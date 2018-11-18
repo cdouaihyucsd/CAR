@@ -39,8 +39,8 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
     private TextView message;
     private String startPt;
     private String endPt;
-    //private LatLng startLatLng;
-    //private LatLng endLatLng;
+    private LatLng startLatLng;
+    private LatLng endLatLng;
     private Double startLat;
     private Double startLng;
     private Double endLat;
@@ -74,9 +74,9 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
             public void onPlaceSelected(Place place) {
                 //String placeID = place.getId();
                 startPt = place.getName().toString();
-                //startLatLng = place.getLatLng();
-                startLat = place.getLatLng().latitude;
-                startLng = place.getLatLng().longitude;
+                startLatLng = place.getLatLng();
+                startLat = startLatLng.latitude;
+                startLng = startLatLng.longitude;
                 startLoc = new MyLatLng();
                 startLoc.setLatitude(startLat);
                 startLoc.setLongitude(startLng);
@@ -94,9 +94,9 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onPlaceSelected(Place place) {
                 endPt = place.getName().toString();
-                //endLatLng = place.getLatLng();
-                endLat = place.getLatLng().latitude;
-                endLng = place.getLatLng().longitude;
+                endLatLng = place.getLatLng();
+                endLat = endLatLng.latitude;
+                endLng = endLatLng.longitude;
                 endLoc = new MyLatLng();
                 endLoc.setLatitude(endLat);
                 endLoc.setLongitude(endLng);

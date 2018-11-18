@@ -7,14 +7,12 @@ public class MyLatLng {
     public Double longitude;
 
     public MyLatLng() {
-     //   super();
+        //default constructor
     }
-
     public MyLatLng(Double latitude, Double longitude){
         this.latitude = latitude;
         this.longitude = longitude;
     }
-
     public Double getLatitude() {
         return latitude;
     }

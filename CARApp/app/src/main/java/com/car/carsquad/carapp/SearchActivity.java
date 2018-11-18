@@ -2,9 +2,11 @@ package com.car.carsquad.carapp;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,16 +31,22 @@ import java.util.Objects;
 
 public class SearchActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private final double SEARCHRADIUS = 10; //SEARCH WITHIN 10 miles
+
     private Button mCancelSearch;
+    private Button mSearch;
     private String startPt;
     private String endPt;
     private LatLng startLatLng;
     private LatLng endLatLng;
+    private Double findStartLat;
+    private Double findStartLng;
+    private Double findEndLat;
+    private Double findEndLng;
     private TextView mDisplayDate;
     private TextView mDisplayTime;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private TimePickerDialog.OnTimeSetListener mTimeSetListener;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +64,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             public void onPlaceSelected(Place place) {
                 startPt = place.getName().toString();
                 startLatLng = place.getLatLng();
+                //findStartLat = startLatLng.latitude;
+                //findStartLng = startLatLng.longitude;
             }
             @Override
             public void onError(Status status) {
@@ -71,6 +81,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             public void onPlaceSelected(Place place) {
                 endPt = place.getName().toString();
                 endLatLng = place.getLatLng();
+                //findEndLat = endLatLng.latitude;
+                //findEndLng = endLatLng.longitude;
             }
             @Override
             public void onError(Status status) {
@@ -79,6 +91,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
         mCancelSearch = (Button) findViewById(R.id.cancel_search);
         mCancelSearch.setOnClickListener(this);
+        mSearch = (Button) findViewById(R.id.submit_search_button);
+        mSearch.setOnClickListener(this);
         mDisplayDate = (TextView) findViewById(R.id.tvDate);
         mDisplayTime = (TextView) findViewById(R.id.tvTime);
 
@@ -133,17 +147,25 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         };
     }
 
-    public String checkDigit(int number) {
-        return number <= 9 ? "0" + number : String.valueOf(number);
-    }
+    //search for rides that match user preferences
+    public void searchRides(){
+        double result = CalculationByDistance(startLatLng, endLatLng);
+        //Toast.makeText(this, "Distance is: " + Double.toString(result), Toast.LENGTH_LONG).show();
 
-    public void onClick(View view) {
-        if(view == mCancelSearch){
-            finish();
-            startActivity(new Intent(this, RiderActivity.class));
-        }
-    }
+        AlertDialog.Builder builder = new AlertDialog.Builder(SearchActivity.this);
+        builder.setCancelable(true);
+        builder.setTitle("DISTANCE CALCULATED");
+        builder.setMessage("Distance is approx: " + (int) result + " miles");
 
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        builder.show();
+
+    }
+    //CALCULATE DISTANCE GIVEN COORDINATES
     public double CalculationByDistance(LatLng StartP, LatLng EndP) {
         int Radius = 6371;// radius of earth in Km
         double lat1 = StartP.latitude;
@@ -165,6 +187,21 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         int meterInDec = Integer.valueOf(newFormat.format(meter));
         Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
                 + " Meter   " + meterInDec);
-        return Radius * c;
+        //return distance in miles
+        return Radius * c * 0.621371;
+    }
+
+    public void onClick(View view) {
+        if(view == mCancelSearch){
+            finish();
+            startActivity(new Intent(this, RiderActivity.class));
+        }
+        else if(view == mSearch){
+            searchRides();
+        }
+    }
+
+    public String checkDigit(int number) {
+        return number <= 9 ? "0" + number : String.valueOf(number);
     }
 }
