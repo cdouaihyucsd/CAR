@@ -73,52 +73,40 @@ public class UpdateUserInfoActivity extends AppCompatActivity implements View.On
             return;
         }
         if(!TextUtils.isEmpty(firstName) && !TextUtils.isEmpty(lastName) && !TextUtils.isEmpty(phoneNo)) {
-            databaseUser.child(userId).child("driverRating").addListenerForSingleValueEvent(new ValueEventListener() {
+
+            HashMap<String, Object> firstN = new HashMap<>();
+            firstN.put("firstName", firstName);
+            FirebaseDatabase.getInstance().getReference().child("users")
+                    .child(userId).updateChildren(firstN);
+
+            HashMap<String, Object> lastN = new HashMap<>();
+            lastN.put("lastName", lastName);
+            FirebaseDatabase.getInstance().getReference().child("users")
+                    .child(userId).updateChildren(lastN);
+
+            HashMap<String, Object> phoneN = new HashMap<>();
+            phoneN.put("phoneNo", phoneNo);
+            FirebaseDatabase.getInstance().getReference().child("users")
+                    .child(userId).updateChildren(phoneN);
+
+            databaseUser.child(userId).child("currentMode").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    driverRating = Double.parseDouble(Objects.requireNonNull(dataSnapshot.getValue()).toString());
+                    String currentMode;
+                    currentMode = dataSnapshot.getValue(String.class);
+                    if (Objects.equals(currentMode, "driver")) {
+                        finish();
+                        startActivity(new Intent(getApplicationContext(), DriverActivity.class));
+                    } else if (Objects.equals(currentMode, "rider")){
+                        finish();
+                        startActivity(new Intent(getApplicationContext(), RiderActivity.class));
+                    }
                 }
                 @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
+                public void onCancelled(@NonNull DatabaseError databaseError) { }
             });
-            databaseUser.child(userId).child("isDriver").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    String isDriver = dataSnapshot.getValue(String.class);
-                    //update user info on firebase
-                    User updatedUser = new User(userId, firstName, lastName, phoneNo, isDriver, driverRating);
-                    databaseUser.child(userId).setValue(updatedUser);
-                    finish();
-
-                    //Query currMode = databaseUser.child("userId").child("currentMode").equalTo("rider");
-                    //Toast.makeText(UpdateUserInfoActivity.this, currMode.toString(), Toast.LENGTH_LONG).show();
-
-                    /*databaseUser.child(userId).child("currentMode").addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            String currentMode;
-                            currentMode = dataSnapshot.getValue(String.class);
-                            if (Objects.equals(currentMode, "driver")) {
-                                HashMap<String, Object> result = new HashMap<>();
-                                result.put("currentMode", "driver");
-                                FirebaseDatabase.getInstance().getReference().child("users")
-                                        .child(userId).updateChildren(result);
-                                startActivity(new Intent(getApplicationContext(), DriverActivity.class));
-                            } else if (Objects.equals(currentMode, "rider")){
-                                startActivity(new Intent(getApplicationContext(), RiderActivity.class));
-                            }
-                        }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) { }
-                    });*/
-                    startActivity(new Intent(getApplicationContext(), RiderActivity.class));
-                    Toast.makeText(UpdateUserInfoActivity.this, "Your profile information has been updated", Toast.LENGTH_LONG).show();
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {}
-            });
+            //startActivity(new Intent(getApplicationContext(), RiderActivity.class));
+            Toast.makeText(UpdateUserInfoActivity.this, "Your profile information has been updated", Toast.LENGTH_LONG).show();
 
         } else {
             Toast.makeText(this, "Please fill out all the required fields", Toast.LENGTH_LONG).show();
@@ -128,8 +116,24 @@ public class UpdateUserInfoActivity extends AppCompatActivity implements View.On
     @Override
     public void onClick(View view) {
         if(view == mCancel){
-            finish();
-            startActivity(new Intent(this, RiderActivity.class));
+            databaseUser.child(userId).child("currentMode").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String currentMode;
+                    currentMode = dataSnapshot.getValue(String.class);
+                    if (Objects.equals(currentMode, "driver")) {
+                        finish();
+                        startActivity(new Intent(getApplicationContext(), DriverActivity.class));
+                    } else if (Objects.equals(currentMode, "rider")){
+                        finish();
+                        startActivity(new Intent(getApplicationContext(), RiderActivity.class));
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) { }
+            });
+            //finish();
+            //startActivity(new Intent(this, RiderActivity.class));
         } else if(view == mSubmitInfo){
             updateInfo();
         }
