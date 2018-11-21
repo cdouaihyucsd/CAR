@@ -216,15 +216,15 @@ public class DriverActivity extends AppCompatActivity {
             mView = itemView;
         }
         public void setTitle(String title){
-            TextView post_title = (TextView)mView.findViewById(R.id.post_title);
+            TextView post_title = (TextView)mView.findViewById(R.id.post_start);
             post_title.setText(title);
         }
         public void setDesc(String desc){
-            TextView post_desc = (TextView)mView.findViewById(R.id.post_desc);
+            TextView post_desc = (TextView)mView.findViewById(R.id.post_dest);
             post_desc.setText(desc);
         }
         public void setImage(Context ctx, String image){
-            ImageView postImage = (ImageView)mView.findViewById(R.id.post_image);
+            //ImageView postImage = (ImageView)mView.findViewById(R.id.post_image);
             //Picasso.with(ctx).load(image).into(postImage);
         }
 

@@ -150,8 +150,8 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                         (Post.class, R.layout.post_cardview, RiderActivity.PostViewHolder.class, firebaseSearchQuery){
                     @Override
                     protected void populateViewHolder(RiderActivity.PostViewHolder viewHolder, Post model, int position){
-                        viewHolder.setTitle(model.getStartPt());
-                        viewHolder.setDesc(model.getEndPt());
+                        viewHolder.setStart(model.getStartPt());
+                        viewHolder.setDest(model.getEndPt());
                     }
                 };
         mPostList.setAdapter(firebaseRecyclerAdapter);
@@ -165,8 +165,11 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                         (Post.class, R.layout.post_cardview, RiderActivity.PostViewHolder.class, mDatabase){
                     @Override
                     protected void populateViewHolder(RiderActivity.PostViewHolder viewHolder, Post model, int position){
-                        viewHolder.setTitle(model.getStartPt());
-                        viewHolder.setDesc(model.getEndPt());
+                        viewHolder.setStart(model.getStartPt());
+                        viewHolder.setDest(model.getEndPt());
+                        viewHolder.setCost(model.getNote());
+                        viewHolder.setDate(model.getDate());
+                        viewHolder.setDetours("NULL");
 
                     }
 
@@ -177,12 +180,12 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                             @Override
                             public void onItemClick(View view, int position) {
                                 //views
-                                TextView mTitleTv = view.findViewById(R.id.post_title_detail);
-                                TextView mDescTv = view.findViewById(R.id.post_desc_detail);
-                                ImageView mImageView = view.findViewById(R.id.post_image_detail);
+                                TextView mStartTv = view.findViewById(R.id.post_start);
+                                TextView mDestTv = view.findViewById(R.id.post_dest);
+                                //ImageView mImageView = view.findViewById(R.id.post_image_detail);
                                 //get data from views
-                                String mTitle = mTitleTv.getText().toString();
-                                String mDesc = mDescTv.getText().toString();
+                                String mTitle = mStartTv.getText().toString();
+                                String mDesc = mDestTv.getText().toString();
                                 //Drawable mDrawable = mImageView.getDrawable();
                                 Intent intent = new Intent(view.getContext(),RiderPostDetails.class);
                                 intent.putExtra("title", mTitle);
@@ -261,16 +264,31 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                 }
             });
         }
-        public void setTitle(String start){
-            TextView post_title = (TextView)mView.findViewById(R.id.post_title);
-            post_title.setText(start);
+        public void setStart(String start){
+            TextView post_start = (TextView)mView.findViewById(R.id.post_start);
+            post_start.setText(start);
         }
-        public void setDesc(String dest){
-            TextView post_desc = (TextView)mView.findViewById(R.id.post_desc);
-            post_desc.setText(dest);
+        public void setDest(String dest){
+            TextView post_dest = (TextView)mView.findViewById(R.id.post_dest);
+            post_dest.setText(dest);
         }
+
+        public void setCost(String cost){
+            TextView post_cost = (TextView)mView.findViewById(R.id.post_cost);
+            post_cost.setText("$" + cost);
+        }
+        public void setDetours(String detours){
+            TextView post_detours = (TextView)mView.findViewById(R.id.post_detours);
+            post_detours.setText(detours + " stops along the way");
+        }
+
+        public void setDate(String date){
+            TextView post_date = (TextView)mView.findViewById(R.id.post_date);
+            post_date.setText(date);
+        }
+
         public void setImage(Context ctx, String image){
-            ImageView postImage = (ImageView)mView.findViewById(R.id.post_image);
+           // ImageView postImage = (ImageView)mView.findViewById(R.id.post_image);
             //Picasso.with(ctx).load(image).into(postImage);
         }
         private PostViewHolder.ClickListener mClickListener;
