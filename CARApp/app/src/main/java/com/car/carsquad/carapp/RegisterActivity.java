@@ -61,6 +61,8 @@ import static android.Manifest.permission.READ_CONTACTS;
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
     // UI references
+    private EditText editTextFirstName;
+    private EditText editTextLastName;
     private EditText editTextEmail;
     private EditText editTextPassword;
     private Button buttonRegister;
@@ -80,6 +82,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         // Link to UI elements
         progressDialog = new ProgressDialog(this);
+        editTextFirstName = findViewById(R.id.first_name);
+        editTextLastName = findViewById(R.id.last_name);
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
         buttonRegister = findViewById(R.id.buttonRegister);
@@ -96,7 +100,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private void registerUser(){
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
+        final String firstName = editTextFirstName.getText().toString().trim();
+        final String lastName = editTextLastName.getText().toString().trim();
         //empty email check
+        if(TextUtils.isEmpty(firstName)){
+            Toast.makeText(this, "Please enter your first name", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(TextUtils.isEmpty(lastName)){
+            Toast.makeText(this, "Please enter your last name", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if(TextUtils.isEmpty(email)){
             Toast.makeText(this, "Please enter your Email", Toast.LENGTH_SHORT).show();
             return;
@@ -142,7 +156,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                                                 //create USER OBJECT ON FIREBASE
                                                 String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-                                                User newUser = new User(userId, "","","","false",-1);
+                                                User newUser = new User(userId, firstName,lastName,"","false",-1);
                                                 //databaseUsers.child(userId).setValue(newUser);
                                                 FirebaseDatabase.getInstance().getReference("users")
                                                         .child(userId).setValue(newUser)
@@ -206,6 +220,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void onFocusChange(View view, boolean b) {
         System.out.println("Id: " + view.getId() + ", bool: " + b);
         switch(view.getId()) {
+            case R.id.first_name :
+                if(b)
+                    hideLogo();
+                else
+                    showLogo();
+                break;
+            case R.id.last_name :
+                if(b)
+                    hideLogo();
+                else
+                    showLogo();
+                break;
             case R.id.email :
                 if(b)
                     hideLogo();

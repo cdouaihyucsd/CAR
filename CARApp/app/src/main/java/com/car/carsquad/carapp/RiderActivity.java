@@ -157,13 +157,15 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                 .startAt(searchText).endAt(searchText + "/uf8ff");
         FirebaseRecyclerAdapter<Post,RiderActivity.PostViewHolder> firebaseRecyclerAdapter =
                 new FirebaseRecyclerAdapter<Post, RiderActivity.PostViewHolder>
-                        (Post.class, R.layout.post_cardview, RiderActivity.PostViewHolder.class, firebaseSearchQuery){
+                        (Post.class, R.layout.post_cardview_rider, RiderActivity.PostViewHolder.class, firebaseSearchQuery){
                     @Override
                     protected void populateViewHolder(RiderActivity.PostViewHolder viewHolder, Post model, int position){
-                        //viewHolder.setDepLoc(model.getStartPt().toUpperCase());
-                        //viewHolder.setArrLoc(model.getEndPt().toUpperCase());
-                        //viewHolder.setDepDate(model.getDate());
-                        //viewHolder.setDepTime(model.getTime());
+                        viewHolder.setStart(model.getStartPt().toUpperCase());
+                        viewHolder.setDest(model.getEndPt().toUpperCase());
+                        viewHolder.setDate(model.getDate());
+                        viewHolder.setCost(model.getNote());
+                        viewHolder.setDetours("NULL");
+                        viewHolder.setTime(model.getTime());
                     }
                 };
         mPostList.setAdapter(firebaseRecyclerAdapter);
@@ -198,7 +200,6 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
         if(id == R.id.action_settings){
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -224,13 +225,11 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
 
     public static class PostViewHolder extends RecyclerView.ViewHolder{
         View mView;
-        private Button viewRideButton;
-
+        //private Button viewRideButton;
         public PostViewHolder(View itemView){
             super(itemView);
             mView = itemView;
         }
-
         public void setStart(String start){
             TextView post_start = (TextView)mView.findViewById(R.id.post_start);
             post_start.setText(start);
