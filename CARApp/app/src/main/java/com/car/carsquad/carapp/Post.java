@@ -11,7 +11,7 @@ public class Post {
     String endPt;
     String date;
     String time;
-    String note;
+    String cost;
     MyLatLng startLatLgn;
     MyLatLng endLatLgn;
     //Location startLoc;
@@ -21,7 +21,7 @@ public class Post {
         //default constructor
     }
 
-    public Post(String userID, String postID, String startPt, String endPt, String date, String time, String note,
+    public Post(String userID, String postID, String startPt, String endPt, String date, String time, String cost,
                 //Location startLoc, Location endLoc){
                 MyLatLng startLatLgn, MyLatLng endLatLgn){
         this.userID = userID;
@@ -30,7 +30,7 @@ public class Post {
         this.endPt = endPt;
         this.date = date;
         this.time = time;
-        this.note = note;
+        this.cost = cost;
         this.startLatLgn = startLatLgn;
         this.endLatLgn = endLatLgn;
         //this.startLoc = startLoc;
@@ -55,8 +55,8 @@ public class Post {
     public String getStartPt() {
         return startPt;
     }
-    public String getNote() {
-        return note;
+    public String getCost() {
+        return cost;
     }
 
     public void setStartLatLgn(MyLatLng startLatLgn) {

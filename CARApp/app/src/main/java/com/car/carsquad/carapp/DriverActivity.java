@@ -165,7 +165,7 @@ public class DriverActivity extends AppCompatActivity {
                 viewHolder.setDest(model.getEndPt().toUpperCase());
                 viewHolder.setDate(model.getDate());
                 //viewHolder.setTime(model.getTime());
-                viewHolder.setCost(model.getNote());
+                viewHolder.setCost(model.getCost());
                 viewHolder.setDetours("NULL");
                 viewHolder.setTime(model.getTime());
             }

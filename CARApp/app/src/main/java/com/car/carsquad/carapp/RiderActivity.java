@@ -163,7 +163,7 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                         viewHolder.setStart(model.getStartPt().toUpperCase());
                         viewHolder.setDest(model.getEndPt().toUpperCase());
                         viewHolder.setDate(model.getDate());
-                        viewHolder.setCost(model.getNote());
+                        viewHolder.setCost(model.getCost());
                         viewHolder.setDetours("NULL");
                         viewHolder.setTime(model.getTime());
                     }
@@ -182,7 +182,7 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                         viewHolder.setStart(model.getStartPt().toUpperCase());
                         viewHolder.setDest(model.getEndPt().toUpperCase());
                         viewHolder.setDate(model.getDate());
-                        viewHolder.setCost(model.getNote());
+                        viewHolder.setCost(model.getCost());
                         viewHolder.setDetours("NULL");
                         viewHolder.setTime(model.getTime());
                     }

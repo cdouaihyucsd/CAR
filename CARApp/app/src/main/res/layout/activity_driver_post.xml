@@ -50,20 +50,21 @@
             android:textSize="24sp" />
 
         <EditText
-            android:id="@+id/note_to_riders"
+            android:id="@+id/ride_cost"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:ems="10"
-            android:hint="Leave your riders a note"
-            android:inputType="textMultiLine" />
+            android:hint="Price (Per person)"
+            android:inputType="numberDecimal" />
 
         <Button
             android:id="@+id/confirm_post"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:text="POST RIDE" />
 
         <Button

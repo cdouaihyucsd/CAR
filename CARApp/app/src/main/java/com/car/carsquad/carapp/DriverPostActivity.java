@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,7 +37,7 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
 
     //private AutoCompleteTextView mStartPoint;
     //private AutoCompleteTextView mEndPoint;
-    private TextView message;
+    private EditText mCost;
     private String startPt;
     private String endPt;
     private LatLng startLatLng;
@@ -113,7 +114,7 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
         mDisplayTime = (TextView) findViewById(R.id.tvTime);
         mPostRide = (Button) findViewById(R.id.confirm_post);
         mCancelPost = (Button) findViewById(R.id.post_cancel);
-        message = (TextView) findViewById(R.id.note_to_riders);
+        mCost = (EditText) findViewById(R.id.ride_cost);
 
         //set action
         mPostRide.setOnClickListener(this);
@@ -177,13 +178,13 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
         String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         String departureDate = mDisplayDate.getText().toString().trim();
         String departureTime = mDisplayTime.getText().toString().trim();
-        String note = message.getText().toString().trim();
+        String cost = mCost.getText().toString().trim();
 
         if(!TextUtils.isEmpty(startPt) && !TextUtils.isEmpty(endPt) &&
                 !TextUtils.isEmpty(departureDate) && !TextUtils.isEmpty(departureTime)) {
 
             String postId = databasePosts.push().getKey();
-            Post newPost = new Post(userId, postId,startPt,endPt,departureDate,departureTime, note, startLoc, endLoc);
+            Post newPost = new Post(userId, postId,startPt,endPt,departureDate,departureTime, cost, startLoc, endLoc);
             databasePosts.child(Objects.requireNonNull(postId)).setValue(newPost);
             finish();
             startActivity(new Intent(this, DriverActivity.class));

@@ -10,7 +10,7 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="220dp"
         android:background="@color/colorPrimaryLight"
         android:orientation="vertical">
 
@@ -100,7 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="192dp"
+            android:layout_marginTop="164dp"
             android:background="@drawable/curved_button_primarylight"
             android:backgroundTint="#5bc948"
             android:fontFamily="@font/work_sans"
