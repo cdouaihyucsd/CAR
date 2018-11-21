@@ -52,6 +52,8 @@
             android:clickable="true"
             android:focusable="true" >
 
+
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

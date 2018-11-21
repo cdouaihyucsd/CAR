@@ -15,19 +15,6 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/post_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginLeft="10dp"
-            android:fontFamily="@font/work_sans"
-            android:text="20:00"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="15sp"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="16dp" />
-
-        <TextView
             android:id="@+id/post_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,7 +23,7 @@
             android:fontFamily="@font/work_sans"
             android:text="November 26th"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="15sp"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -45,14 +32,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="55dp"
+            android:layout_marginTop="64dp"
             android:drawableLeft="@drawable/material_circle"
             android:drawablePadding="20dp"
             android:drawableTint="@color/colorGrey"
             android:fontFamily="@font/work_sans"
             android:text="Starting Location"
-            android:textColor="#123456"
-            android:textStyle="bold"
+            android:textColor="@color/colorGrey"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -78,9 +64,9 @@
         <TextView
             android:id="@+id/post_dest"
             android:layout_width="wrap_content"
-            android:layout_height="18dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="40dp"
             android:drawableLeft="@drawable/material_place"
             android:drawablePadding="20dp"
             android:drawableTint="@color/colorAccent"
@@ -90,7 +76,7 @@
             android:textSize="16sp"
             app:layout_constraintLeft_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/post_start" />
+            app:layout_constraintTop_toBottomOf="@+id/post_detours" />
 
         <TextView
             android:id="@+id/post_cost"
@@ -108,7 +94,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
         <Button
-            android:id="@+id/view_ride_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"

@@ -5,4 +5,5 @@
     <color name="colorPrimaryLight">#ffffff</color>
     <color name="colorAccent">#FF4081</color>
     <color name="AppBlue">#6bbfde</color>
+    <color name="colorGrey">#bdbdbd</color>
 </resources>

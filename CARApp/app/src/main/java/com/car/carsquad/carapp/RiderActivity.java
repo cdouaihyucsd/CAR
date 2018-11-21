@@ -18,6 +18,7 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -159,10 +160,10 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                         (Post.class, R.layout.post_cardview, RiderActivity.PostViewHolder.class, firebaseSearchQuery){
                     @Override
                     protected void populateViewHolder(RiderActivity.PostViewHolder viewHolder, Post model, int position){
-                        viewHolder.setDepLoc(model.getStartPt().toUpperCase());
-                        viewHolder.setArrLoc(model.getEndPt().toUpperCase());
-                        viewHolder.setDepDate(model.getDate());
-                        viewHolder.setDepTime(model.getTime());
+                        //viewHolder.setDepLoc(model.getStartPt().toUpperCase());
+                        //viewHolder.setArrLoc(model.getEndPt().toUpperCase());
+                        //viewHolder.setDepDate(model.getDate());
+                        //viewHolder.setDepTime(model.getTime());
                     }
                 };
         mPostList.setAdapter(firebaseRecyclerAdapter);
@@ -173,13 +174,15 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
         super.onStart();
         FirebaseRecyclerAdapter<Post,RiderActivity.PostViewHolder> firebaseRecyclerAdapter =
                 new FirebaseRecyclerAdapter<Post, RiderActivity.PostViewHolder>
-                        (Post.class, R.layout.post_cardview, RiderActivity.PostViewHolder.class, mDatabase){
+                        (Post.class, R.layout.post_cardview_rider, RiderActivity.PostViewHolder.class, mDatabase){
                     @Override
                     protected void populateViewHolder(RiderActivity.PostViewHolder viewHolder, Post model, int position){
-                        viewHolder.setDepLoc(model.getStartPt().toUpperCase());
-                        viewHolder.setArrLoc(model.getEndPt().toUpperCase());
-                        viewHolder.setDepDate(model.getDate());
-                        viewHolder.setDepTime(model.getTime());
+                        viewHolder.setStart(model.getStartPt().toUpperCase());
+                        viewHolder.setDest(model.getEndPt().toUpperCase());
+                        viewHolder.setDate(model.getDate());
+                        viewHolder.setCost(model.getNote());
+                        viewHolder.setDetours("NULL");
+                        viewHolder.setTime(model.getTime());
                     }
                 };
         mPostList.setAdapter(firebaseRecyclerAdapter);
@@ -221,29 +224,36 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
 
     public static class PostViewHolder extends RecyclerView.ViewHolder{
         View mView;
+        private Button viewRideButton;
+
         public PostViewHolder(View itemView){
             super(itemView);
             mView = itemView;
         }
-        public void setDepLoc(String start){
-            TextView post_title = (TextView)mView.findViewById(R.id.post_title);
-            post_title.setText("FROM: " +start);
+
+        public void setStart(String start){
+            TextView post_start = (TextView)mView.findViewById(R.id.post_start);
+            post_start.setText(start);
         }
-        public void setArrLoc(String dest){
-            TextView post_desc = (TextView)mView.findViewById(R.id.post_desc);
-            post_desc.setText("TO: " +dest);
+        public void setDest(String dest){
+            TextView post_dest = (TextView)mView.findViewById(R.id.post_dest);
+            post_dest.setText(dest);
         }
-        public void setDepDate(String depDate){
-            TextView post_dep_date = (TextView)mView.findViewById(R.id.post_dep_date);
-            post_dep_date.setText("DEPARTURE DATE: " +depDate);
+        public void setDate(String depDate){
+            TextView post_date = (TextView)mView.findViewById(R.id.post_date);
+            post_date.setText("DATE: " +depDate);
         }
-        public void setDepTime(String depTime){
-            TextView post_dep_time = (TextView)mView.findViewById(R.id.post_dep_time);
-            post_dep_time.setText("DEPARTURE TIME: " + depTime);
+        public void setCost(String cost){
+            TextView post_dep_date = (TextView)mView.findViewById(R.id.post_cost);
+            post_dep_date.setText("$" + cost);
         }
-        public void setImage(Context ctx, String image){
-            ImageView postImage = (ImageView)mView.findViewById(R.id.post_image);
-            //Picasso.with(ctx).load(image).into(postImage);
+        public void setDetours(String detours){
+            TextView post_detours = (TextView)mView.findViewById(R.id.post_detours);
+            post_detours.setText(detours + " stops along the way");
+        }
+        public void setTime(String depTime){
+            TextView post_dep_time = (TextView)mView.findViewById(R.id.post_time);
+            post_dep_time.setText("TIME: " + depTime);
         }
     }
 
@@ -255,14 +265,12 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
         finish();
         startActivity(new Intent(this, MainActivity.class));
     }
-
     @Override
     public void onClick(View view) {
         if(view == mSearch){
             startActivity(new Intent(this, SearchActivity.class));
         }
     }
-
     //prevent user from pressing the back button to go back from the main app screen
     @Override
     public void onBackPressed() {

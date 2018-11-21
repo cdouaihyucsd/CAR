@@ -161,10 +161,13 @@ public class DriverActivity extends AppCompatActivity {
                         (Post.class, R.layout.post_cardview, PostViewHolder.class, firebaseSearchQuery/*mDatabase*/){
             @Override
             protected void populateViewHolder(PostViewHolder viewHolder, Post model, int position){
-                    viewHolder.setTitle(model.getStartPt());
-                    viewHolder.setDesc(model.getEndPt());
-                    viewHolder.setDepDate(model.getDate());
-                    viewHolder.setDepTime(model.getTime());
+                viewHolder.setStart(model.getStartPt().toUpperCase());
+                viewHolder.setDest(model.getEndPt().toUpperCase());
+                viewHolder.setDate(model.getDate());
+                //viewHolder.setTime(model.getTime());
+                viewHolder.setCost(model.getNote());
+                viewHolder.setDetours("NULL");
+                viewHolder.setTime(model.getTime());
             }
         };
         mPostList.setAdapter(firebaseRecyclerAdapter);
@@ -211,26 +214,31 @@ public class DriverActivity extends AppCompatActivity {
             super(itemView);
             mView = itemView;
         }
-        public void setTitle(String title){
-            TextView post_title = (TextView)mView.findViewById(R.id.post_title);
-            post_title.setText("FROM: " + title);
+        public void setStart(String start){
+            TextView post_start = (TextView)mView.findViewById(R.id.post_start);
+            post_start.setText(start);
         }
-        public void setDesc(String desc){
-            TextView post_desc = (TextView)mView.findViewById(R.id.post_desc);
-            post_desc.setText("TO: " + desc);
+        public void setDest(String dest){
+            TextView post_dest = (TextView)mView.findViewById(R.id.post_dest);
+            post_dest.setText(dest);
         }
-        public void setDepDate(String depDate){
-            TextView post_dep_date = (TextView)mView.findViewById(R.id.post_dep_date);
-            post_dep_date.setText("DEPARTURE DATE: " + depDate);
+        public void setDate(String depDate){
+            TextView post_date = (TextView)mView.findViewById(R.id.post_date);
+            post_date.setText("DATE: " +depDate);
         }
-        public void setDepTime(String depTime){
-            TextView post_dep_time = (TextView)mView.findViewById(R.id.post_dep_time);
-            post_dep_time.setText("DEPARTURE TIME: " + depTime);
+        public void setCost(String cost){
+            TextView post_dep_date = (TextView)mView.findViewById(R.id.post_cost);
+            post_dep_date.setText("$" + cost);
         }
-        public void setImage(Context ctx, String image){
-            ImageView postImage = (ImageView)mView.findViewById(R.id.post_image);
-            //Picasso.with(ctx).load(image).into(postImage);
+        public void setDetours(String detours){
+            TextView post_detours = (TextView)mView.findViewById(R.id.post_detours);
+            post_detours.setText(detours + " stops along the way");
         }
+        public void setTime(String depTime){
+            TextView post_dep_time = (TextView)mView.findViewById(R.id.post_time);
+            post_dep_time.setText("TIME: " + depTime);
+        }
+
     }
 
     //prevent user from pressing the back button to go back from the main app screen
