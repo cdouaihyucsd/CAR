@@ -239,6 +239,15 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
         public PostViewHolder(View itemView){
             super(itemView);
             mView = itemView;
+
+            itemView.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, RiderPostDetails.class);
+                    context.startActivity(intent);
+                }
+            });
         }
         public void setStart(String start){
             TextView post_start = (TextView)mView.findViewById(R.id.post_start);
