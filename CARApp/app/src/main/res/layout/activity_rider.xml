@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".RiderActivity"
     android:id="@+id/drawerLayout"
-    android:background="#efc98d"
+    android:background="#ddddda"
     android:theme="@style/AppTheme.NoActionBar">
 
     <android.support.design.widget.CoordinatorLayout

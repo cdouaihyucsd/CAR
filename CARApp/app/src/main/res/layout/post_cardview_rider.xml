@@ -10,7 +10,7 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="240dp"
         android:background="@color/colorPrimaryLight"
         android:orientation="vertical">
 
@@ -18,8 +18,8 @@
             android:id="@+id/post_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:drawablePadding="20dp"
             android:fontFamily="@font/work_sans"
             android:text="20:00"
@@ -33,8 +33,8 @@
             android:id="@+id/post_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:fontFamily="@font/work_sans"
             android:text="November 26th"
             android:textColor="@color/colorPrimaryDark"
@@ -55,8 +55,8 @@
             android:fontFamily="@font/work_sans"
             android:text="Starting Location"
             android:textColor="#123456"
-            android:textStyle="bold"
             android:textSize="16sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -64,9 +64,9 @@
             android:id="@+id/post_detours"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:drawableLeft="@drawable/material_more"
             android:drawablePadding="20dp"
             android:drawableTint="@color/colorGrey"
@@ -93,14 +93,14 @@
             android:textSize="15sp"
             app:layout_constraintLeft_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/post_start"/>
+            app:layout_constraintTop_toBottomOf="@+id/post_start" />
 
         <TextView
             android:id="@+id/post_cost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="164dp"
+            android:layout_marginTop="184dp"
             android:background="@drawable/curved_button_primarylight"
             android:backgroundTint="#5bc948"
             android:fontFamily="@font/work_sans"
@@ -110,18 +110,19 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <Button
             android:id="@+id/view_ride_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/curved_button_primarylight"
             android:backgroundTint="@color/colorPrimaryDark"
             android:drawableTint="@color/colorPrimaryDark"
-            android:padding="10dp"
             android:elevation="0dp"
             android:fontFamily="@font/work_sans"
+            android:padding="10dp"
             android:text="View Ride"
             android:textColor="@color/colorPrimaryLight"
             android:textStyle="bold"

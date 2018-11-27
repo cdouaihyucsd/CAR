@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -51,11 +52,38 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         firebaseAuth = FirebaseAuth.getInstance();
 
         //if User is already logged in, skip this login activity
-        if(firebaseAuth.getCurrentUser() != null && firebaseAuth.getCurrentUser().isEmailVerified()) {
+        /*if(firebaseAuth.getCurrentUser() != null && firebaseAuth.getCurrentUser().isEmailVerified()) {
             //start profile activity
             finish();
             startActivity(new Intent(getApplicationContext(), RiderActivity.class));
+        }*/
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+
+        //if User is already logged in, skip this activity
+        if (user != null && user.isEmailVerified()) {
+            DatabaseReference databaseUser =
+                    FirebaseDatabase.getInstance().getReference("users");
+            final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+            databaseUser.child(userId).child("currentMode").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String currentMode;
+                    currentMode = dataSnapshot.getValue(String.class);
+                    if (Objects.equals(currentMode, "driver")) {
+                        startActivity(new Intent(getApplicationContext(), DriverActivity.class));
+                    } else if (Objects.equals(currentMode, "rider")) {
+                        startActivity(new Intent(LoginActivity.this, RiderActivity.class));
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
         }
+
 
         // Link to UI elements
         progressDialog = new ProgressDialog(this);
