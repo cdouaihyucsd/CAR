@@ -149,8 +149,12 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                                 builder.show();
                                 break;
 
+                            case R.id.messages:
+                                startActivity(new Intent(RiderActivity.this, MessageActivity.class));
+                                break;
                             case R.id.nav_account:
                                 startActivity(new Intent(RiderActivity.this, UpdateUserInfoActivity.class));
+                                break;
                         }
                         return true;
                     }
