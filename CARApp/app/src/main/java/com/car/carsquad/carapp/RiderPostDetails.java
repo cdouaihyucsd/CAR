@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 public class RiderPostDetails extends AppCompatActivity {
 
-    TextView mTitleTv, mDetailTv;
+    TextView mStartTv, mDestTv;
     ImageView mImageTv;
 
 
@@ -26,16 +26,16 @@ public class RiderPostDetails extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
 
-        mTitleTv = findViewById(R.id.post_title_detail);
-        mDetailTv = findViewById(R.id.post_desc_detail);
-        mImageTv = findViewById(R.id.post_image_detail);
+        mStartTv = findViewById(R.id.post_start);
+        mDestTv = findViewById(R.id.post_dest);
+        //mImageTv = findViewById(R.id.post_image_detail);
 
         //get data from intent
         String title = getIntent().getStringExtra("title");
         String desc = getIntent().getStringExtra("description");
 
-        mTitleTv.setText(title);
-        mDetailTv.setText(desc);
+        mStartTv.setText(title);
+        mDestTv.setText(desc);
 
     }
 
