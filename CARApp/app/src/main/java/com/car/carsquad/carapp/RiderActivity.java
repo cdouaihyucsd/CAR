@@ -99,6 +99,12 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                             case R.id.nav_logout:
                                 logout();
                                 break;
+
+                            case R.id.messages:
+                                startActivity(new Intent(RiderActivity.this, MessageActivity.class));
+                                Toast.makeText(getApplicationContext(), "hello!", Toast.LENGTH_SHORT).show();
+                                break;
+
                             case R.id.nav_switch_to_driver:
                                 AlertDialog.Builder builder = new AlertDialog.Builder(RiderActivity.this);
                                 builder.setCancelable(true);
@@ -151,6 +157,9 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
 
                             case R.id.nav_account:
                                 startActivity(new Intent(RiderActivity.this, UpdateUserInfoActivity.class));
+                                break;
+
+
                         }
                         return true;
                     }

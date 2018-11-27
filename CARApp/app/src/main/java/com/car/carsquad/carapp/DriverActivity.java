@@ -38,6 +38,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import android.support.v7.widget.SearchView;
+import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -99,6 +100,10 @@ public class DriverActivity extends AppCompatActivity {
                             case R.id.nav_logout:
                                 logout();
                                 break;
+                            case R.id.messages:
+                                startActivity(new Intent(DriverActivity.this, MessageActivity.class));
+                                Toast.makeText(getApplicationContext(), "hello!", Toast.LENGTH_SHORT).show();
+                                break;
                             case R.id.nav_switch_to_rider:
                                 AlertDialog.Builder builder = new AlertDialog.Builder(DriverActivity.this);
                                 builder.setCancelable(true);
@@ -126,6 +131,7 @@ public class DriverActivity extends AppCompatActivity {
                                 break;
                             case R.id.nav_account:
                                 startActivity(new Intent(DriverActivity.this, UpdateUserInfoActivity.class));
+                                break;
                         }
                         return true;
                     }

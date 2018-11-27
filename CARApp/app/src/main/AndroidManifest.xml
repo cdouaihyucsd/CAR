@@ -67,6 +67,9 @@
         <activity
             android:name=".SearchActivity"
             android:label="Enter Ride Preferences" />
+        <activity
+            android:name=".MessageActivity"
+            android:label="Message your buddies!" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
