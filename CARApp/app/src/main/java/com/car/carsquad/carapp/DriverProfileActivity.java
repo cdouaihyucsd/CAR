@@ -120,7 +120,7 @@ public class DriverProfileActivity extends AppCompatActivity implements View.OnC
                     .child(userId).updateChildren(mode);
 
             HashMap<String, Object> isDriver = new HashMap<>();
-            isDriver.put("isDriver", "driver");
+            isDriver.put("isDriver", "true");
             FirebaseDatabase.getInstance().getReference().child("users")
                     .child(userId).updateChildren(isDriver);
 
