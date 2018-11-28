@@ -230,10 +230,6 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
         if(mToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        int id = item.getItemId();
-        if(id == R.id.action_settings){
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 

@@ -124,8 +124,12 @@ public class DriverActivity extends AppCompatActivity {
                                 });
                                 builder.show();
                                 break;
+                            case R.id.messages:
+                                startActivity(new Intent(DriverActivity.this, MessageActivity.class));
+                                break;
                             case R.id.nav_account:
                                 startActivity(new Intent(DriverActivity.this, UpdateUserInfoActivity.class));
+                                break;
                         }
                         return true;
                     }
@@ -160,7 +164,7 @@ public class DriverActivity extends AppCompatActivity {
                 new FirebaseRecyclerAdapter<Post, PostViewHolder>
                         (Post.class, R.layout.post_cardview, PostViewHolder.class, firebaseSearchQuery/*mDatabase*/){
             @Override
-            protected void populateViewHolder(PostViewHolder viewHolder, Post model, int position){
+            protected void populateViewHolder(PostViewHolder viewHolder, final Post model, int position){
                 viewHolder.setStart(model.getStartPt().toUpperCase());
                 viewHolder.setDest(model.getEndPt().toUpperCase());
                 viewHolder.setDate(model.getDate());
@@ -168,6 +172,26 @@ public class DriverActivity extends AppCompatActivity {
                 viewHolder.setCost(model.getCost());
                 viewHolder.setDetours("NULL");
                 viewHolder.setTime(model.getTime());
+
+                //Go to next activity on click
+                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(DriverActivity.this, DriverPostDetails.class);
+                        //send information to next activity
+                        intent.putExtra("postID", model.getPostID());
+                        intent.putExtra("startPt", model.getStartPt());
+                        intent.putExtra("endPt", model.getEndPt());
+                        intent.putExtra("date", model.getDate());
+                        intent.putExtra("time", model.getTime());
+                        intent.putExtra("cost", model.getCost());
+                        intent.putExtra("driverID", model.getUserID());
+
+                        //Toast.makeText(RiderActivity.this, "DriverID: " + model.getUserID(), Toast.LENGTH_LONG).show();
+
+                        startActivity(intent);
+                    }
+                });
             }
         };
         mPostList.setAdapter(firebaseRecyclerAdapter);
@@ -200,9 +224,6 @@ public class DriverActivity extends AppCompatActivity {
             return true;
         }
 
-        if(id == R.id.action_settings){
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
