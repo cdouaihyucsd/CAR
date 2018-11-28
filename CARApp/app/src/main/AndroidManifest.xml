@@ -71,6 +71,10 @@
             android:name=".MessageActivity"
             android:label="Message your buddies!" />
 
+        <activity
+            android:name=".ChatRoomActivity"
+            android:label="Chat Room" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAQ27pNj-PxchceZSOrO0Caea_jOrot52I" />
