@@ -19,7 +19,7 @@ public class RiderPostDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rider_post_details);
 
-        ActionBar actionBar = getSupportActionBar();
+        /*ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Post details");
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
@@ -33,7 +33,7 @@ public class RiderPostDetails extends AppCompatActivity {
         String desc = getIntent().getStringExtra("description");
 
         mStartTv.setText(title);
-        mDestTv.setText(desc);
+        mDestTv.setText(desc);*/
 
     }
 
