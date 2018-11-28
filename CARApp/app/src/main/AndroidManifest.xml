@@ -83,7 +83,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".RiderPostDetails" />
-        <activity android:name=".MessageActivity"></activity>
+        <activity android:name=".MessageActivity" />
+        <activity android:name=".DriverPostDetails"></activity>
     </application>
 
 </manifest>

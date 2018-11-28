@@ -35,6 +35,8 @@ public class RiderPostDetails extends AppCompatActivity {
         mStartTv.setText(title);
         mDestTv.setText(desc);*/
 
+
+
     }
 
     @Override
