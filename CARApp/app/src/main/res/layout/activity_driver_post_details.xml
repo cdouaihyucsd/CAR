@@ -7,21 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryLight"
     android:orientation="vertical">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/driver_name_text_view"
-        android:text="Driver's name" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/rating_text_view"
-        android:text="driver's rating"/>
-    <Button
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:id="@+id/message_driver_button"
-        android:text="MESSAGE DRIVER"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -51,8 +37,8 @@
     <Button
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:id="@+id/join_ride_button"
-        android:text="REQUEST RIDE"/>
+        android:id="@+id/delete_ride_button"
+        android:text="DELETE RIDE"/>
 
     <ListView
         android:id="@+id/detour_list_view"

@@ -43,8 +43,6 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
     }
 
-
-
     private void showDialog()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
