@@ -196,16 +196,34 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                 new FirebaseRecyclerAdapter<Post, RiderActivity.PostViewHolder>
                         (Post.class, R.layout.post_cardview_rider, RiderActivity.PostViewHolder.class, mDatabase){
                     @Override
-                    protected void populateViewHolder(RiderActivity.PostViewHolder viewHolder, Post model, int position){
+                    protected void populateViewHolder(RiderActivity.PostViewHolder viewHolder, final Post model, int position){
                         viewHolder.setStart(model.getStartPt().toUpperCase());
                         viewHolder.setDest(model.getEndPt().toUpperCase());
                         viewHolder.setDate(model.getDate());
                         viewHolder.setCost(model.getCost());
-
                         //TODO
                         viewHolder.setDetours("NULL");
-
                         viewHolder.setTime(model.getTime());
+
+                        //Go to next activity on click
+                        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(RiderActivity.this, RiderPostDetails.class);
+                                //send information to next activity
+                                intent.putExtra("postID", model.getPostID());
+                                intent.putExtra("startPt", model.getStartPt());
+                                intent.putExtra("endPt", model.getEndPt());
+                                intent.putExtra("date", model.getDate());
+                                intent.putExtra("time", model.getTime());
+                                intent.putExtra("cost", model.getCost());
+                                intent.putExtra("driverID", model.getUserID());
+
+                                //Toast.makeText(RiderActivity.this, "DriverID: " + model.getUserID(), Toast.LENGTH_LONG).show();
+
+                                startActivity(intent);
+                            }
+                        });
                     }
                 };
         mPostList.setAdapter(firebaseRecyclerAdapter);

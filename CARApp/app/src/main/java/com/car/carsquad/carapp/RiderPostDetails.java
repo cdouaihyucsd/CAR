@@ -1,5 +1,7 @@
 package com.car.carsquad.carapp;
 
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,17 +9,24 @@ import android.os.Bundle;
 
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
+
+import java.util.Objects;
 
 public class RiderPostDetails extends AppCompatActivity {
 
-    TextView mStartTv, mDestTv;
-    TextView mView;
-    ImageView mImageTv;
     private DatabaseReference mDatabase;
-
+    String driverFirstName;
+    String driverLastName;
+    Double driverRating;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,58 +35,81 @@ public class RiderPostDetails extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("post");
         mDatabase.keepSynced(true);
-        /*ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Post details");
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
 
-        mStartTv = findViewById(R.id.post_start);
-        mDestTv = findViewById(R.id.post_dest);
-        //mImageTv = findViewById(R.id.post_image_detail);
-
-        //get data from intent
-        String title = getIntent().getStringExtra("title");
-        String desc = getIntent().getStringExtra("description");
-
-        mStartTv.setText(title);
-        mDestTv.setText(desc);*/
-
-
-
+        getIncomingIntent();
     }
 
-    public void setStart(String start){
-        TextView post_start = (TextView)mView.findViewById(R.id.post_start);
-        post_start.setText(start);
+    private void getIncomingIntent(){
+        if(getIntent().hasExtra("postID") && getIntent().hasExtra("startPt") && getIntent().hasExtra("endPt") &&
+                getIntent().hasExtra("date") && getIntent().hasExtra("time") && getIntent().hasExtra("cost") &&
+                getIntent().hasExtra("driverID")){
+
+            String postID = getIntent().getStringExtra("postID");
+            String startPt = getIntent().getStringExtra("startPt");
+            String endPt = getIntent().getStringExtra("endPt");
+            String date = getIntent().getStringExtra("date");
+            String time = getIntent().getStringExtra("time");
+            String cost = "$" + getIntent().getStringExtra("cost");
+            String driverID = getIntent().getStringExtra("driverID");
+
+            //call setDetails
+            setDetails(postID, startPt, endPt, date, time, cost, driverID);
+        }
     }
-    public void setDest(String dest){
-        TextView post_dest = (TextView)mView.findViewById(R.id.post_dest);
-        post_dest.setText(dest);
+
+    private void setDetails(String postID,String startPt,String endPt,String date,String time, String cost,String driverID){
+        TextView startTV = (TextView) findViewById(R.id.start_text_view);
+        startTV.setText(startPt);
+        TextView endTV = (TextView) findViewById(R.id.end_text_view);
+        endTV.setText(endPt);
+        TextView dateTV = (TextView) findViewById(R.id.date_text_view);
+        dateTV.setText(date);
+        TextView timeTV = (TextView) findViewById(R.id.time_text_view);
+        timeTV.setText(time);
+        TextView costTV = (TextView) findViewById(R.id.cost_text_view);
+        costTV.setText(cost);
+
+        final String driverId = driverID;
+
+        DatabaseReference databaseUser = FirebaseDatabase.getInstance().getReference("users");
+        databaseUser.child(driverID).child("firstName").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                driverFirstName = dataSnapshot.getValue(String.class);
+                TextView driverNameTV = (TextView) findViewById(R.id.driver_name_text_view);
+                String name = driverFirstName + " ";
+                driverNameTV.setText(name);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+        databaseUser.child(driverID).child("lastName").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                driverLastName = dataSnapshot.getValue(String.class);
+                TextView driverNameTV = (TextView) findViewById(R.id.driver_name_text_view);
+                driverNameTV.append(driverLastName);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+        databaseUser.child(driverID).child("driverRating").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                driverRating = dataSnapshot.getValue(Double.class);
+                TextView ratingTV = (TextView) findViewById(R.id.rating_text_view);
+                ratingTV.setText(driverRating.toString());
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+
     }
-    public void setDate(String depDate){
-        TextView post_date = (TextView)mView.findViewById(R.id.post_date);
-        post_date.setText("DATE: " +depDate);
-    }
-    public void setCost(String cost){
-        TextView post_dep_date = (TextView)mView.findViewById(R.id.post_cost);
-        post_dep_date.setText("$" + cost);
-    }
-    public void setDetours(String detours){
-        TextView post_detours = (TextView)mView.findViewById(R.id.post_detours);
-        post_detours.setText(detours + " stops along the way");
-    }
-    public void setTime(String depTime){
-        TextView post_dep_time = (TextView)mView.findViewById(R.id.post_time);
-        post_dep_time.setText("TIME: " + depTime);
-    }
-    public void setDriver(String driverName) {
-        TextView post_driver_name = (TextView)mView.findViewById(R.id.driver_name_text_view);
-        post_driver_name.setText(driverName);
-    }
-    public void setAvailableseats(String availableSeats) {
-        TextView post_available_seats = (TextView)mView.findViewById(R.id.seats_available_text_view);
-        post_available_seats.setText(availableSeats);
-    }
+
 
 
     @Override
