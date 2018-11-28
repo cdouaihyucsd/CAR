@@ -13,6 +13,7 @@
         android:layout_marginTop="15dp"
         android:background="#ffffff">
 
+        <!--
         <EditText
             android:id="@+id/driver_first_name"
             android:layout_width="match_parent"
@@ -33,7 +34,7 @@
             android:inputType="textPersonName"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:hint="Last Name" />
+            android:hint="Last Name" /> -->
 
         <EditText
             android:id="@+id/driver_phone_number"
