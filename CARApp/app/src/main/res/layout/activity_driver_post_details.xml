@@ -9,31 +9,41 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/start_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/seats_available_text_view"
-        android:text="Available seats: "/>
+        android:text="Start Location" />
+
+    <TextView
+        android:id="@+id/end_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End Location" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/date_text_view"
         android:text="Departure Date"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/time_text_view"
+        android:text="Departure Time"/>
+
+    <TextView
+        android:id="@+id/seats_available_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Available seats: " />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/cost_text_view"
         android:text="Cost: "/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/start_text_view"
-        android:text="Start Location" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/end_text_view"
-        android:text="End Location" />
     <Button
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
