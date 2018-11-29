@@ -67,6 +67,13 @@
         <activity
             android:name=".SearchActivity"
             android:label="Enter Ride Preferences" />
+        <activity
+            android:name=".MessageActivity"
+            android:label="Message your buddies!" />
+
+        <activity
+            android:name=".ChatRoomActivity"
+            android:label="Chat Room" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -83,7 +90,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".RiderPostDetails" />
-        <activity android:name=".MessageActivity" />
+
         <activity android:name=".DriverPostDetails"></activity>
     </application>
 
