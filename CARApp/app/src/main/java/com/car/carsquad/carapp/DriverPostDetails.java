@@ -98,7 +98,6 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
         riderRequest.setAdapter(firebaseRecyclerAdapter);
     }*/
 
-
     private void getIncomingIntent(){
         if(getIntent().hasExtra("postID") && getIntent().hasExtra("startPt") && getIntent().hasExtra("endPt") &&
                 getIntent().hasExtra("date") && getIntent().hasExtra("time") && getIntent().hasExtra("cost") &&
@@ -117,9 +116,9 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
 
     private void setDetails(String postID,String startPt,String endPt,String date,String time, String cost,String driverID){
         TextView startTV = (TextView) findViewById(R.id.start_text_view);
-        startTV.setText(startPt);
+        startTV.setText(startPt.toUpperCase());
         TextView endTV = (TextView) findViewById(R.id.end_text_view);
-        endTV.setText(endPt);
+        endTV.setText(endPt.toUpperCase());
         TextView dateTV = (TextView) findViewById(R.id.date_text_view);
         dateTV.setText(date);
         TextView timeTV = (TextView) findViewById(R.id.time_text_view);

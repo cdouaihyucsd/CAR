@@ -42,8 +42,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
 
     //0 = not friend. 1 = request received
     int currentState = 0;
-
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,9 +104,9 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
 
     private void setDetails(String postID,String startPt,String endPt,String date,String time, String cost,String driverID){
         TextView startTV = (TextView) findViewById(R.id.start_text_view);
-        startTV.setText(startPt);
+        startTV.setText(startPt.toUpperCase());
         TextView endTV = (TextView) findViewById(R.id.end_text_view);
-        endTV.setText(endPt);
+        endTV.setText(endPt.toUpperCase());
         TextView dateTV = (TextView) findViewById(R.id.date_text_view);
         dateTV.setText(date);
         TextView timeTV = (TextView) findViewById(R.id.time_text_view);

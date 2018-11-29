@@ -64,6 +64,7 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("post");
         mDatabase.keepSynced(true);
+
         mPostList = (RecyclerView) findViewById(R.id.rider_post_view);
         mPostList.setHasFixedSize(true);
         mPostList.setLayoutManager(new LinearLayoutManager(this));
@@ -99,7 +100,6 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                                 builder.setCancelable(true);
                                 builder.setTitle("You are about to enter DRIVER mode");
                                 builder.setMessage("Do you wish to proceed?");
-
                                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -115,26 +115,23 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
 
                                         //skip if user already signed up as DRIVER
                                         databaseUser.child(userId).child("isDriver").addListenerForSingleValueEvent(new ValueEventListener() {
-                                         @Override
-                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                             String isDriver;
-                                             isDriver = dataSnapshot.getValue(String.class);
-                                             if (Objects.equals(isDriver, "true")) {
-                                                 finish();
-                                                 startActivity(new Intent(getApplicationContext(), DriverActivity.class));
-
-                                                 HashMap<String, Object> result = new HashMap<>();
-                                                 result.put("currentMode", "driver");
-                                                 FirebaseDatabase.getInstance().getReference().child("users")
-                                                         .child(userId).updateChildren(result);
-                                             } else {
-                                                 startActivity(new Intent(RiderActivity.this, DriverProfileActivity.class));
-                                             }
-                                         }
-
                                             @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                String isDriver;
+                                                isDriver = dataSnapshot.getValue(String.class);
+                                                if (Objects.equals(isDriver, "true")) {
+                                                    finish();
+                                                    startActivity(new Intent(getApplicationContext(), DriverActivity.class));
+                                                    HashMap<String, Object> result = new HashMap<>();
+                                                    result.put("currentMode", "driver");
+                                                    FirebaseDatabase.getInstance().getReference().child("users")
+                                                         .child(userId).updateChildren(result);
+                                                 } else {
+                                                    startActivity(new Intent(RiderActivity.this, DriverProfileActivity.class));
+                                                 }
                                             }
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError){}
                                         });
                                     }
                                 });
@@ -152,27 +149,6 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                 });
     }
 
-    //search for posts
-    private void firebaseSearch(String searchText){
-        String query = searchText.toLowerCase();
-        Query firebaseSearchQuery = mDatabase.orderByChild("startPt")
-                .startAt(query).endAt(query + "\uf8ff");
-        FirebaseRecyclerAdapter<Post,RiderActivity.PostViewHolder> firebaseRecyclerAdapter =
-                new FirebaseRecyclerAdapter<Post, RiderActivity.PostViewHolder>
-                        (Post.class, R.layout.post_cardview_rider, RiderActivity.PostViewHolder.class, firebaseSearchQuery){
-                    @Override
-                    protected void populateViewHolder(RiderActivity.PostViewHolder viewHolder, Post model, int position){
-                        viewHolder.setStart(model.getStartPt().toUpperCase());
-                        viewHolder.setDest(model.getEndPt().toUpperCase());
-                        viewHolder.setDate(model.getDate());
-                        viewHolder.setCost(model.getCost());
-                        viewHolder.setTime(model.getTime());
-                        //TODO
-                        viewHolder.setDetours("NULL");
-                    }
-                };
-        mPostList.setAdapter(firebaseRecyclerAdapter);
-    }
 
     @Override
     protected void onStart(){
@@ -245,13 +221,11 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                 return false;
             }
         });
-
         return super.onCreateOptionsMenu(menu);
     }
 
     public static class PostViewHolder extends RecyclerView.ViewHolder{
         View mView;
-        //private Button viewRideButton;
         public PostViewHolder(View itemView){
             super(itemView);
             mView = itemView;
@@ -309,6 +283,29 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
     public void onBackPressed() {
         moveTaskToBack(true);
     }
+
+    //search for posts
+    private void firebaseSearch(String searchText){
+        String query = searchText.toLowerCase();
+        Query firebaseSearchQuery = mDatabase.orderByChild("startPt")
+                .startAt(query).endAt(query + "\uf8ff");
+        FirebaseRecyclerAdapter<Post,RiderActivity.PostViewHolder> firebaseRecyclerAdapter =
+                new FirebaseRecyclerAdapter<Post, RiderActivity.PostViewHolder>
+                        (Post.class, R.layout.post_cardview_rider, RiderActivity.PostViewHolder.class, firebaseSearchQuery){
+                    @Override
+                    protected void populateViewHolder(RiderActivity.PostViewHolder viewHolder, Post model, int position){
+                        viewHolder.setStart(model.getStartPt().toUpperCase());
+                        viewHolder.setDest(model.getEndPt().toUpperCase());
+                        viewHolder.setDate(model.getDate());
+                        viewHolder.setCost(model.getCost());
+                        viewHolder.setTime(model.getTime());
+                        //TODO
+                        viewHolder.setDetours("NULL");
+                    }
+                };
+        mPostList.setAdapter(firebaseRecyclerAdapter);
+    }
+
     private void populateSV(){
         FirebaseRecyclerAdapter<Post,RiderActivity.PostViewHolder> firebaseRecyclerAdapter =
                 new FirebaseRecyclerAdapter<Post, RiderActivity.PostViewHolder>
