@@ -158,6 +158,8 @@ public class DriverActivity extends AppCompatActivity {
     protected void onStart(){
         super.onStart();
         String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+
+        //mDatabase is database of POSTS
         Query firebaseSearchQuery = mDatabase.orderByChild("userID").equalTo(userId);
 
         FirebaseRecyclerAdapter<Post,PostViewHolder> firebaseRecyclerAdapter =

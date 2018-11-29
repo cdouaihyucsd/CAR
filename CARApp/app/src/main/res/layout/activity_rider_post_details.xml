@@ -65,6 +65,14 @@
         android:id="@+id/join_ride_button"
         android:text="REQUEST RIDE"/>
 
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/cancel_ride_button"
+        android:text="CANCEL REQUEST"/>
+
+
+
     <ListView
         android:id="@+id/detour_list_view"
         android:layout_width="wrap_content"
