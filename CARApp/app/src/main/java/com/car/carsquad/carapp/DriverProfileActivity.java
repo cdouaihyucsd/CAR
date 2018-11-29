@@ -76,8 +76,8 @@ public class DriverProfileActivity extends AppCompatActivity implements View.OnC
         });*/
 
         //UI References
-        mFirstName = (EditText) findViewById(R.id.driver_first_name);
-        mLastName = (EditText) findViewById(R.id.driver_last_name);
+        //mFirstName = (EditText) findViewById(R.id.driver_first_name);
+        //mLastName = (EditText) findViewById(R.id.driver_last_name);
         mPhoneNo = (EditText) findViewById(R.id.driver_phone_number);
         mCarModel = (EditText) findViewById(R.id.car_model);
         mLicensePlate = (EditText) findViewById(R.id.license_plate);
@@ -92,15 +92,15 @@ public class DriverProfileActivity extends AppCompatActivity implements View.OnC
 
 
     private void enrollRider(){
-        //userId = mAuth.getCurrentUser().getUid();
-        String firstName = mFirstName.getText().toString().trim();
-        String lastName = mLastName.getText().toString().trim();
+        userId = mAuth.getCurrentUser().getUid();
+        //String firstName = mFirstName.getText().toString().trim();
+        //String lastName = mLastName.getText().toString().trim();
         String phoneNo = mPhoneNo.getText().toString().trim();
         String carModel = mCarModel.getText().toString().trim();
         String licenseNo = mLicensePlate.getText().toString().trim();
         String numSeats = mNumSeats.getText().toString().trim();
 
-        if(!TextUtils.isEmpty(firstName) && !TextUtils.isEmpty(lastName) &&
+        if(/*!TextUtils.isEmpty(firstName) && !TextUtils.isEmpty(lastName) &&*/
                 !TextUtils.isEmpty(phoneNo) && !TextUtils.isEmpty(carModel) &&
                 !TextUtils.isEmpty(licenseNo)&& !TextUtils.isEmpty(numSeats)) {
 
@@ -110,12 +110,30 @@ public class DriverProfileActivity extends AppCompatActivity implements View.OnC
             databaseCar.child(Objects.requireNonNull(carId)).setValue(newCar);
 
             //update user info
-            User updatedUser = new User(userId, firstName, lastName, phoneNo, "true", 0);
-            databaseUser.child(userId).setValue(updatedUser);
 
-            HashMap<String, Object> result = new HashMap<>();
-            result.put("currentMode", "driver");
-            databaseUser.child(userId).updateChildren(result);
+            /* User updatedUser = new User(userId, firstName, lastName, phoneNo, "true", 0);
+            databaseUser.child(userId).setValue(updatedUser);*/
+
+            HashMap<String, Object> mode = new HashMap<>();
+            mode.put("currentMode", "driver");
+            FirebaseDatabase.getInstance().getReference().child("users")
+                    .child(userId).updateChildren(mode);
+
+            HashMap<String, Object> isDriver = new HashMap<>();
+            isDriver.put("isDriver", "true");
+            FirebaseDatabase.getInstance().getReference().child("users")
+                    .child(userId).updateChildren(isDriver);
+
+            HashMap<String, Object> phone = new HashMap<>();
+            phone.put("phoneNo", phoneNo);
+            FirebaseDatabase.getInstance().getReference().child("users")
+                    .child(userId).updateChildren(phone);
+
+            HashMap<String, Object> phoneN = new HashMap<>();
+            phoneN.put("phoneNo", phoneNo);
+            FirebaseDatabase.getInstance().getReference().child("users")
+                    .child(userId).updateChildren(phoneN);
+
 
             startActivity(new Intent(this, DriverActivity.class));
             Toast.makeText(this, "You have successfully enrolled as a driver", Toast.LENGTH_LONG).show();

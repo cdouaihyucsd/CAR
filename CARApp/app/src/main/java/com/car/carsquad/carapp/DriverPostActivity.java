@@ -74,7 +74,7 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onPlaceSelected(Place place) {
                 //String placeID = place.getId();
-                startPt = place.getName().toString();
+                startPt = place.getName().toString().toLowerCase();
                 startLatLng = place.getLatLng();
                 startLat = startLatLng.latitude;
                 startLng = startLatLng.longitude;
@@ -94,7 +94,7 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
         autocompleteFragment2.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                endPt = place.getName().toString();
+                endPt = place.getName().toString().toLowerCase();
                 endLatLng = place.getLatLng();
                 endLat = endLatLng.latitude;
                 endLng = endLatLng.longitude;

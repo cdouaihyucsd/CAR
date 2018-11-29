@@ -45,16 +45,14 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
 
     //Firebase object
     private FirebaseAuth firebaseAuth;
+    private DatabaseReference mDatabase;
 
     //UI references
     private TextView textviewUserEmail;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private FloatingActionButton mSearch;
-
     private RecyclerView mPostList;
-    private DatabaseReference mDatabase;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,19 +64,18 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("post");
         mDatabase.keepSynced(true);
+
         mPostList = (RecyclerView) findViewById(R.id.rider_post_view);
         mPostList.setHasFixedSize(true);
         mPostList.setLayoutManager(new LinearLayoutManager(this));
 
         //initialize fireBase
         firebaseAuth = firebaseAuth.getInstance();
-
         //if user is not logged in yet
         if(firebaseAuth.getCurrentUser() == null) {
             finish();
             startActivity(new Intent(this, LoginActivity.class));
         }
-
         //for the sidebar
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
@@ -93,7 +90,6 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
-
                         switch (menuItem.getItemId()) {
                             //logout from menu bar
                             case R.id.nav_logout:
@@ -104,7 +100,6 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                                 builder.setCancelable(true);
                                 builder.setTitle("You are about to enter DRIVER mode");
                                 builder.setMessage("Do you wish to proceed?");
-
                                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -114,41 +109,34 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                                 builder.setPositiveButton("Proceed", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-
-
                                         DatabaseReference databaseUser =
                                              FirebaseDatabase.getInstance().getReference("users");
                                         final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
                                         //skip if user already signed up as DRIVER
                                         databaseUser.child(userId).child("isDriver").addListenerForSingleValueEvent(new ValueEventListener() {
-                                         @Override
-                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                             String isDriver;
-                                             isDriver = dataSnapshot.getValue(String.class);
-                                             if (Objects.equals(isDriver, "true")) {
-                                                 finish();
-                                                 startActivity(new Intent(getApplicationContext(), DriverActivity.class));
-
-                                                 HashMap<String, Object> result = new HashMap<>();
-                                                 result.put("currentMode", "driver");
-                                                 FirebaseDatabase.getInstance().getReference().child("users")
-                                                         .child(userId).updateChildren(result);
-
-                                             } else {
-                                                 startActivity(new Intent(RiderActivity.this, DriverProfileActivity.class));
-                                             }
-                                         }
-
                                             @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                String isDriver;
+                                                isDriver = dataSnapshot.getValue(String.class);
+                                                if (Objects.equals(isDriver, "true")) {
+                                                    finish();
+                                                    startActivity(new Intent(getApplicationContext(), DriverActivity.class));
+                                                    HashMap<String, Object> result = new HashMap<>();
+                                                    result.put("currentMode", "driver");
+                                                    FirebaseDatabase.getInstance().getReference().child("users")
+                                                         .child(userId).updateChildren(result);
+                                                 } else {
+                                                    startActivity(new Intent(RiderActivity.this, DriverProfileActivity.class));
+                                                 }
                                             }
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError){}
                                         });
                                     }
                                 });
                                 builder.show();
                                 break;
-
                             case R.id.messages:
                                 startActivity(new Intent(RiderActivity.this, MessageActivity.class));
                                 break;
@@ -161,25 +149,6 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                 });
     }
 
-    //search for posts
-    private void firebaseSearch(String searchText){
-        Query firebaseSearchQuery = mDatabase.orderByChild("startPt")
-                .startAt(searchText).endAt(searchText + "/uf8ff");
-        FirebaseRecyclerAdapter<Post,RiderActivity.PostViewHolder> firebaseRecyclerAdapter =
-                new FirebaseRecyclerAdapter<Post, RiderActivity.PostViewHolder>
-                        (Post.class, R.layout.post_cardview_rider, RiderActivity.PostViewHolder.class, firebaseSearchQuery){
-                    @Override
-                    protected void populateViewHolder(RiderActivity.PostViewHolder viewHolder, Post model, int position){
-                        viewHolder.setStart(model.getStartPt().toUpperCase());
-                        viewHolder.setDest(model.getEndPt().toUpperCase());
-                        viewHolder.setDate(model.getDate());
-                        viewHolder.setCost(model.getCost());
-                        viewHolder.setDetours("NULL");
-                        viewHolder.setTime(model.getTime());
-                    }
-                };
-        mPostList.setAdapter(firebaseRecyclerAdapter);
-    }
 
     @Override
     protected void onStart(){
@@ -188,13 +157,32 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                 new FirebaseRecyclerAdapter<Post, RiderActivity.PostViewHolder>
                         (Post.class, R.layout.post_cardview_rider, RiderActivity.PostViewHolder.class, mDatabase){
                     @Override
-                    protected void populateViewHolder(RiderActivity.PostViewHolder viewHolder, Post model, int position){
+                    protected void populateViewHolder(RiderActivity.PostViewHolder viewHolder, final Post model, int position){
                         viewHolder.setStart(model.getStartPt().toUpperCase());
                         viewHolder.setDest(model.getEndPt().toUpperCase());
                         viewHolder.setDate(model.getDate());
                         viewHolder.setCost(model.getCost());
+                        //TODO
                         viewHolder.setDetours("NULL");
                         viewHolder.setTime(model.getTime());
+
+                        //Go to next activity on click
+                        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(RiderActivity.this, RiderPostDetails.class);
+                                //send information to next activity
+                                intent.putExtra("postID", model.getPostID());
+                                intent.putExtra("startPt", model.getStartPt());
+                                intent.putExtra("endPt", model.getEndPt());
+                                intent.putExtra("date", model.getDate());
+                                intent.putExtra("time", model.getTime());
+                                intent.putExtra("cost", model.getCost());
+                                intent.putExtra("driverID", model.getUserID());
+                                //Toast.makeText(RiderActivity.this, "DriverID: " + model.getUserID(), Toast.LENGTH_LONG).show();
+                                startActivity(intent);
+                            }
+                        });
                     }
                 };
         mPostList.setAdapter(firebaseRecyclerAdapter);
@@ -206,18 +194,14 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
         if(mToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        int id = item.getItemId();
-        if(id == R.id.action_settings){
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.search_menu, menu);
         MenuItem item = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setQueryHint("Enter a starting location...");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -225,8 +209,15 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                 return false;
             }
             @Override
-            public boolean onQueryTextChange(String newText) {
-                firebaseSearch(newText);
+            public boolean onQueryTextChange(String query) {
+                firebaseSearch(query);
+                return false;
+            }
+        });
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                populateSV();
                 return false;
             }
         });
@@ -235,11 +226,9 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
 
     public static class PostViewHolder extends RecyclerView.ViewHolder{
         View mView;
-        //private Button viewRideButton;
         public PostViewHolder(View itemView){
             super(itemView);
             mView = itemView;
-
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
@@ -293,5 +282,81 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
+    }
+
+    //search for posts
+    private void firebaseSearch(String searchText){
+        String query = searchText.toLowerCase();
+        Query firebaseSearchQuery = mDatabase.orderByChild("startPt")
+                .startAt(query).endAt(query + "\uf8ff");
+        FirebaseRecyclerAdapter<Post,RiderActivity.PostViewHolder> firebaseRecyclerAdapter =
+                new FirebaseRecyclerAdapter<Post, RiderActivity.PostViewHolder>
+                        (Post.class, R.layout.post_cardview_rider, RiderActivity.PostViewHolder.class, firebaseSearchQuery){
+                    @Override
+                    protected void populateViewHolder(RiderActivity.PostViewHolder viewHolder, final Post model, int position){
+                        viewHolder.setStart(model.getStartPt().toUpperCase());
+                        viewHolder.setDest(model.getEndPt().toUpperCase());
+                        viewHolder.setDate(model.getDate());
+                        viewHolder.setCost(model.getCost());
+                        viewHolder.setTime(model.getTime());
+                        //TODO
+                        viewHolder.setDetours("NULL");
+
+                        //Go to next activity on click
+                        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(RiderActivity.this, RiderPostDetails.class);
+                                //send information to next activity
+                                intent.putExtra("postID", model.getPostID());
+                                intent.putExtra("startPt", model.getStartPt());
+                                intent.putExtra("endPt", model.getEndPt());
+                                intent.putExtra("date", model.getDate());
+                                intent.putExtra("time", model.getTime());
+                                intent.putExtra("cost", model.getCost());
+                                intent.putExtra("driverID", model.getUserID());
+                                //Toast.makeText(RiderActivity.this, "DriverID: " + model.getUserID(), Toast.LENGTH_LONG).show();
+                                startActivity(intent);
+                            }
+                        });
+                    }
+                };
+        mPostList.setAdapter(firebaseRecyclerAdapter);
+    }
+
+    private void populateSV(){
+        FirebaseRecyclerAdapter<Post,RiderActivity.PostViewHolder> firebaseRecyclerAdapter =
+                new FirebaseRecyclerAdapter<Post, RiderActivity.PostViewHolder>
+                        (Post.class, R.layout.post_cardview_rider, RiderActivity.PostViewHolder.class, mDatabase){
+                    @Override
+                    protected void populateViewHolder(RiderActivity.PostViewHolder viewHolder, final Post model, int position){
+                        viewHolder.setStart(model.getStartPt().toUpperCase());
+                        viewHolder.setDest(model.getEndPt().toUpperCase());
+                        viewHolder.setDate(model.getDate());
+                        viewHolder.setCost(model.getCost());
+                        //TODO
+                        viewHolder.setDetours("NULL");
+                        viewHolder.setTime(model.getTime());
+
+                        //Go to next activity on click
+                        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(RiderActivity.this, RiderPostDetails.class);
+                                //send information to next activity
+                                intent.putExtra("postID", model.getPostID());
+                                intent.putExtra("startPt", model.getStartPt());
+                                intent.putExtra("endPt", model.getEndPt());
+                                intent.putExtra("date", model.getDate());
+                                intent.putExtra("time", model.getTime());
+                                intent.putExtra("cost", model.getCost());
+                                intent.putExtra("driverID", model.getUserID());
+                                //Toast.makeText(RiderActivity.this, "DriverID: " + model.getUserID(), Toast.LENGTH_LONG).show();
+                                startActivity(intent);
+                            }
+                        });
+                    }
+                };
+        mPostList.setAdapter(firebaseRecyclerAdapter);
     }
 }

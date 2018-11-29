@@ -7,21 +7,6 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryLight"
     android:orientation="vertical">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/driver_name_text_view"
-        android:text="Driver's name" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/rating_text_view"
-        android:text="driver's rating"/>
-    <Button
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:id="@+id/message_driver_button"
-        android:text="MESSAGE DRIVER"/>
 
     <TextView
         android:id="@+id/start_text_view"
@@ -42,16 +27,10 @@
         android:text="Departure Date"/>
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/time_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Departure Time: " />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/cost_text_view"
-        android:text="Cost: "/>
+        android:text="Departure Time"/>
 
     <TextView
         android:id="@+id/seats_available_text_view"
@@ -59,18 +38,25 @@
         android:layout_height="wrap_content"
         android:text="Available seats: " />
 
-    <Button
-        android:layout_height="wrap_content"
+    <TextView
         android:layout_width="wrap_content"
-        android:id="@+id/join_ride_button"
-        android:text="REQUEST RIDE"/>
+        android:layout_height="wrap_content"
+        android:id="@+id/cost_text_view"
+        android:text="Cost: "/>
 
     <Button
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:id="@+id/cancel_ride_button"
-        android:text="CANCEL REQUEST"/>
+        android:id="@+id/delete_ride_button"
+        android:text="DELETE RIDE"/>
 
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:id="@+id/request_list">
+
+    </android.support.v7.widget.RecyclerView>
 
 
     <ListView
