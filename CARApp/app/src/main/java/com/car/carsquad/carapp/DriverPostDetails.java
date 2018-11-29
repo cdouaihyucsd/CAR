@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,6 +32,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
     private Button mDeletePost;
     private DatabaseReference mRequestDatabase, mRiderRef, mFriendsRef;
     String postID;
+    private String myID;
     RecyclerView riderRequest;
 
     @Override
@@ -44,6 +47,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
         mRequestDatabase = FirebaseDatabase.getInstance().getReference().child("request").child(postID);
         mRiderRef = FirebaseDatabase.getInstance().getReference().child("user");
         mFriendsRef = FirebaseDatabase.getInstance().getReference().child("friends");
+        myID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         //recycler view for user requests
         riderRequest = (RecyclerView) findViewById(R.id.request_list);
@@ -62,8 +66,37 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                     @Override
                     protected void populateViewHolder(DriverPostDetails.RequestViewHolder viewHolder, final User model, int position){
                         String name = model.getFirstName() + " " + model.getLastName();
-                        Toast.makeText(DriverPostDetails.this, name, Toast.LENGTH_LONG).show();
-                        //viewHolder.setRiderName(name);
+                        //Toast.makeText(DriverPostDetails.this, name, Toast.LENGTH_LONG).show();
+                        viewHolder.setRiderName(name);
+
+                        viewHolder.btnAccept.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                // TODO Auto-generated method stub
+                                Toast.makeText(DriverPostDetails.this, "Accept button Clicked", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        viewHolder.btnReject.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(DriverPostDetails.this, "reject button Clicked", Toast.LENGTH_LONG).show();
+
+                                //REMOVE USER'S REQUEST IF DRIVER REJECTED
+                                /*FirebaseDatabase.getInstance().getReference().child("request").child(postID).child(myID).child("request_type")
+                                        .removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        FirebaseDatabase.getInstance().getReference().child("request").child(myID).child(postID).child("request_type")
+                                                .removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                Toast.makeText(DriverPostDetails.this, "rejected", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                                    }
+                                });*/
+                            }
+                        });
                     }
                 };
         riderRequest.setAdapter(firebaseRecyclerAdapter);
@@ -71,15 +104,22 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
 
     public static class RequestViewHolder extends RecyclerView.ViewHolder{
         View mView;
+        Button btnAccept;
+        Button btnReject;
         //private Button viewRideButton;
         public RequestViewHolder(View itemView){
             super(itemView);
             mView = itemView;
+
+            btnAccept = (Button) itemView.findViewById(R.id.button_accept_request);
+            btnReject = (Button) itemView.findViewById(R.id.button_reject_request);
         }
-        public void setRiderName(String start){
+        public void setRiderName(String name){
             TextView rider_name = (TextView)mView.findViewById(R.id.rider_name);
-            rider_name.setText(start);
+            rider_name.setText(name);
         }
+
+
     }
 
     /*private void showRequestList(){

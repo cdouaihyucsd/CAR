@@ -42,7 +42,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
 
     //0 = not friend. 1 = request received
     int currentState = 0;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
