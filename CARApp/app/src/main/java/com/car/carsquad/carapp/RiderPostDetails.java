@@ -30,6 +30,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
 
     private DatabaseReference mDatabase;
     private DatabaseReference mReference;
+    private DatabaseReference databaseUser;
     private Button mMessageDriver;
     private Button mRequestRide;
     private Button mCancelRequest;
@@ -39,6 +40,9 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
     private String driverID;
     private String myID;
     private String postID;
+    String riderFirstName;
+    String riderLastName;
+    User requestingRider;
 
     //0 = not friend. 1 = request received
     int currentState = 0;
@@ -65,6 +69,31 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
 
         getIncomingIntent();
         myID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        //requestingRider = new User(myID, riderFirstName, riderLastName, "","",0.0);
+        databaseUser = FirebaseDatabase.getInstance().getReference("users");
+
+        /*databaseUser.child(myID).child("firstName").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //riderFirstName = dataSnapshot.getValue(String.class);
+                //requestingRider.setFirstName(riderFirstName);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+        });
+
+        databaseUser.child(myID).child("lastName").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //riderLastName = dataSnapshot.getValue(String.class);
+                //requestingRider.setLastName(riderFirstName);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+        });
+        requestingRider = new User(myID, riderFirstName, riderLastName, "","",0.0);*/
+
 
         mReference.child("request").child(postID).addValueEventListener(new ValueEventListener() {
             @Override
@@ -172,9 +201,22 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                     });
                 }
             });
+            databaseUser.child(myID).child("lastName").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    riderLastName = dataSnapshot.getValue(String.class);
+                    //requestingRider.setLastName(riderFirstName);
+                    requestingRider = new User(myID, riderFirstName, riderLastName, "","",0.0);
+                    mReference.child("request_obj").child(postID).child(myID).setValue(requestingRider);
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) { }
+            });
+
         }
+
         if (currentState == 1) {
-            mReference.child("request").child(postID).child(myID).child("request_type")
+            mReference.child("request").child(postID).child(myID)/*.child("request_type")*/
                     .removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -189,12 +231,16 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                     });
                 }
             });
+            mReference.child("request_obj").child(postID).child(myID).removeValue();
         }
     }
 
     private void messageDriver() {
         //TODO: do something more than just this (i.e initiate correct chat room)
         Intent intent = new Intent(RiderPostDetails.this, MessageActivity.class);
+        /*intent.putExtra("riderID", myID);
+        intent.putExtra("driverID", driverID);
+        intent.putExtra("driverFirstName", driverFirstName);*/
         startActivity(intent);
     }
 

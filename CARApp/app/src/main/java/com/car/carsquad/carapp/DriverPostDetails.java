@@ -60,13 +60,15 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
     @Override
     protected void onStart(){
         super.onStart();
+
+        DatabaseReference requestUserRef = FirebaseDatabase.getInstance().getReference().child("request_obj").child(postID);
         FirebaseRecyclerAdapter<User,DriverPostDetails.RequestViewHolder> firebaseRecyclerAdapter =
                 new FirebaseRecyclerAdapter<User, DriverPostDetails.RequestViewHolder>
-                        (User.class, R.layout.ride_request_cardview, DriverPostDetails.RequestViewHolder.class, mRequestDatabase){
+                        (User.class, R.layout.ride_request_cardview, DriverPostDetails.RequestViewHolder.class, requestUserRef/*mRequestDatabase*/){
                     @Override
                     protected void populateViewHolder(DriverPostDetails.RequestViewHolder viewHolder, final User model, int position){
-                        String name = model.getFirstName() + " " + model.getLastName();
-                        //Toast.makeText(DriverPostDetails.this, name, Toast.LENGTH_LONG).show();
+                        String name = /*model.getFirstName() + " " +*/ model.getLastName();
+                        Toast.makeText(DriverPostDetails.this, "name is: " + name, Toast.LENGTH_LONG).show();
                         viewHolder.setRiderName(name);
 
                         viewHolder.btnAccept.setOnClickListener(new View.OnClickListener() {
