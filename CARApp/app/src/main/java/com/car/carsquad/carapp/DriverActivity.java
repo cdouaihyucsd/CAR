@@ -38,8 +38,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import android.support.v7.widget.SearchView;
-import android.widget.Toast;
 
+import java.sql.Driver;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -100,10 +100,6 @@ public class DriverActivity extends AppCompatActivity {
                             case R.id.nav_logout:
                                 logout();
                                 break;
-                            case R.id.messages:
-                                startActivity(new Intent(DriverActivity.this, MessageActivity.class));
-                                Toast.makeText(getApplicationContext(), "hello!", Toast.LENGTH_SHORT).show();
-                                break;
                             case R.id.nav_switch_to_rider:
                                 AlertDialog.Builder builder = new AlertDialog.Builder(DriverActivity.this);
                                 builder.setCancelable(true);
@@ -141,28 +137,12 @@ public class DriverActivity extends AppCompatActivity {
                 });
     }
 
-    //search for posts
-   /* private void firebaseSearch(String searchText){
-        Query firebaseSearchQuery = mDatabase.orderByChild("startPt")
-                .startAt(searchText).endAt(searchText + "/uf8ff");
-        FirebaseRecyclerAdapter<Post,PostViewHolder> firebaseRecyclerAdapter =
-                new FirebaseRecyclerAdapter<Post, PostViewHolder>
-                        (Post.class, R.layout.post_cardview, PostViewHolder.class, firebaseSearchQuery){
-                    @Override
-                    protected void populateViewHolder(PostViewHolder viewHolder, Post model, int position){
-                        viewHolder.setTitle(model.getStartPt());
-                        viewHolder.setDesc(model.getEndPt());
-                        viewHolder.setDepDate(model.getDate());
-                        viewHolder.setDepTime(model.getTime());
-                    }
-                };
-        mPostList.setAdapter(firebaseRecyclerAdapter);
-    }*/
-
     @Override
     protected void onStart(){
         super.onStart();
         String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+
+        //mDatabase is database of POSTS
         Query firebaseSearchQuery = mDatabase.orderByChild("userID").equalTo(userId);
 
         FirebaseRecyclerAdapter<Post,PostViewHolder> firebaseRecyclerAdapter =
@@ -201,38 +181,6 @@ public class DriverActivity extends AppCompatActivity {
         };
         mPostList.setAdapter(firebaseRecyclerAdapter);
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        /*getMenuInflater().inflate(R.menu.search_menu, menu);
-        MenuItem item = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                firebaseSearch(query);
-                return false;
-            }
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                firebaseSearch(newText);
-                return false;
-            }
-        });*/
-        return super.onCreateOptionsMenu(menu);
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        int id = item.getItemId();
-
-        if(mToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
 
     public static class PostViewHolder extends RecyclerView.ViewHolder{
         View mView;
@@ -290,4 +238,108 @@ public class DriverActivity extends AppCompatActivity {
         finish();
         startActivity(new Intent(this, MainActivity.class));
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        /*getMenuInflater().inflate(R.menu.search_menu, menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                firebaseSearch(query);
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                firebaseSearch(newText);
+                return false;
+            }
+        });
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                populateSV();
+                return false;
+            }
+        });*/
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+
+        if(mToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+    //search for posts
+    /*private void firebaseSearch(String searchText){
+        String query = searchText.toLowerCase();
+        Query firebaseSearchQuery = mDatabase.orderByChild("startPt")
+                .startAt(query).endAt(query + "\uf8ff");
+        FirebaseRecyclerAdapter<Post,DriverActivity.PostViewHolder> firebaseRecyclerAdapter =
+                new FirebaseRecyclerAdapter<Post, DriverActivity.PostViewHolder>
+                        (Post.class, R.layout.post_cardview_rider, DriverActivity.PostViewHolder.class, firebaseSearchQuery){
+                    @Override
+                    protected void populateViewHolder(DriverActivity.PostViewHolder viewHolder, Post model, int position){
+                        viewHolder.setStart(model.getStartPt().toUpperCase());
+                        viewHolder.setDest(model.getEndPt().toUpperCase());
+                        viewHolder.setDate(model.getDate());
+                        viewHolder.setCost(model.getCost());
+                        viewHolder.setTime(model.getTime());
+                        //TODO
+                        viewHolder.setDetours("NULL");
+                    }
+                };
+        mPostList.setAdapter(firebaseRecyclerAdapter);
+    }
+
+    private void populateSV(){
+        String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+
+        //mDatabase is database of POSTS
+        Query firebaseSearchQuery = mDatabase.orderByChild("userID").equalTo(userId);
+
+        FirebaseRecyclerAdapter<Post,PostViewHolder> firebaseRecyclerAdapter =
+                new FirebaseRecyclerAdapter<Post, PostViewHolder>
+                        (Post.class, R.layout.post_cardview, PostViewHolder.class, firebaseSearchQuery){
+                    @Override
+                    protected void populateViewHolder(PostViewHolder viewHolder, final Post model, int position){
+                        viewHolder.setStart(model.getStartPt().toUpperCase());
+                        viewHolder.setDest(model.getEndPt().toUpperCase());
+                        viewHolder.setDate(model.getDate());
+                        //viewHolder.setTime(model.getTime());
+                        viewHolder.setCost(model.getCost());
+                        viewHolder.setDetours("NULL");
+                        viewHolder.setTime(model.getTime());
+
+                        //Go to next activity on click
+                        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(DriverActivity.this, DriverPostDetails.class);
+                                //send information to next activity
+                                intent.putExtra("postID", model.getPostID());
+                                intent.putExtra("startPt", model.getStartPt());
+                                intent.putExtra("endPt", model.getEndPt());
+                                intent.putExtra("date", model.getDate());
+                                intent.putExtra("time", model.getTime());
+                                intent.putExtra("cost", model.getCost());
+                                intent.putExtra("driverID", model.getUserID());
+
+                                //Toast.makeText(RiderActivity.this, "DriverID: " + model.getUserID(), Toast.LENGTH_LONG).show();
+
+                                startActivity(intent);
+                            }
+                        });
+                    }
+                };
+        mPostList.setAdapter(firebaseRecyclerAdapter);
+    }*/
 }
