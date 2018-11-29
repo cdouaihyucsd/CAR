@@ -88,7 +88,7 @@ public class MessageActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(),ChatRoomActivity.class);
                 intent.putExtra("room_name",((TextView)view).getText().toString() );
-                intent.putExtra("user_name",Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
+                //intent.putExtra("user_name",Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
                 startActivity(intent);
             }
         });

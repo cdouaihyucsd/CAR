@@ -53,6 +53,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         userId = Objects.requireNonNull(user).getUid();
         databaseUser = FirebaseDatabase.getInstance().getReference("users");
 
+        // Get First Name and Last Name for the current User
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
         DatabaseReference fN = ref.child(userId).child("firstName");
 
@@ -82,9 +83,10 @@ public class ChatRoomActivity extends AppCompatActivity {
             }
         });
 
-        //user_name = databaseUser.child(userId).child("firstName").;
-        room_name = userId;
+        // Get room name
+        DatabaseReference roomRef = FirebaseDatabase.getInstance().getReference("chatroom");
 
+        room_name = getIntent().getExtras().get("room_name").toString();
         setTitle(" Room - "+room_name);
 
         root = FirebaseDatabase.getInstance().getReference("chatroom").child(room_name);
