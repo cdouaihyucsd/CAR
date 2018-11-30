@@ -33,6 +33,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
     private DatabaseReference mRequestDatabase, mRiderRef, mFriendsRef;
     String postID;
     private String riderID;
+    private String currentRiderID;
     private String myID;
     RecyclerView riderRequest, riderAccepted;
     String riderFirstName;
@@ -85,8 +86,9 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                         viewHolder.btnAccept.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                // TODO Auto-generated method stub
-                                //Toast.makeText(DriverPostDetails.this, "Accept button Clicked", Toast.LENGTH_LONG).show();
+
+                                //TODO UPDATE RIDER_ID
+                                riderID = model.getUserID();
 
                                 //ACCEPT RIDER
                                 acceptRider();
@@ -113,6 +115,8 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                         viewHolder.btnReject.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+
+                                riderID = model.getUserID();
                                 //Toast.makeText(DriverPostDetails.this, "reject button Clicked", Toast.LENGTH_LONG).show();
 
                                 //REMOVE USER'S REQUEST IF DRIVER REJECTED
@@ -155,6 +159,8 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                         viewHolder.btnMessage.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+
+                                riderID = model.getUserID();
                                 // TODO INITIATE CHAT ROOM
                                 Toast.makeText(DriverPostDetails.this, "message button Clicked", Toast.LENGTH_LONG).show();
 
@@ -164,6 +170,8 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                         viewHolder.btnRemove.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+
+                                riderID = model.getUserID();
 
                                 //Toast.makeText(DriverPostDetails.this, "RiderID: "+riderID, Toast.LENGTH_LONG).show();
 
@@ -197,6 +205,8 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
         Button btnReject;
         Button btnMessage;
         Button btnRemove;
+        String currentID;
+
         public RequestViewHolder(View itemView){
             super(itemView);
             mView = itemView;
@@ -206,6 +216,8 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
 
             btnMessage = (Button) itemView.findViewById(R.id.button_message);
             btnRemove = (Button) itemView.findViewById(R.id.button_remove);
+
+            //currentID = currentRiderID;
         }
         public void setRiderName(String name){
             TextView rider_name = (TextView)mView.findViewById(R.id.rider_name);
