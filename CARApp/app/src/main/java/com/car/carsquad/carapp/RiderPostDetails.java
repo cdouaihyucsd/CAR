@@ -195,6 +195,10 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
     private void messageDriver() {
         //TODO: do something more than just this (i.e initiate correct chat room)
         Intent intent = new Intent(RiderPostDetails.this, MessageActivity.class);
+        final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference();
+
+        chatRef.child("chatroom").child(myID).child("Room " + driverID).setValue(driverID);
+        chatRef.child("chatroom").child(driverID).child("Room " + myID).setValue(myID);
         startActivity(intent);
     }
 
