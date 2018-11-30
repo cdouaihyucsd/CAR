@@ -82,6 +82,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                     protected void populateViewHolder(DriverPostDetails.RequestViewHolder viewHolder, final User model, int position){
                         String name = model.getFirstName() + " " + model.getLastName();
                         viewHolder.setRiderName(name);
+
                         /*final String*/ riderID = model.getUserID();
 
                         //ACCEPT REQUEST
@@ -148,7 +149,8 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                     protected void populateViewHolder(DriverPostDetails.RequestViewHolder viewHolder, final User model, int position){
                         String name = model.getFirstName() + " " + model.getLastName();
                         viewHolder.setRiderName(name);
-                        final String riderID = model.getUserID();
+
+                        /*final String*/ riderID = model.getUserID();
 
                         //MESSAGE ACCEPTED RIDER
                         viewHolder.btnMessage.setOnClickListener(new View.OnClickListener() {
@@ -163,7 +165,8 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                         viewHolder.btnRemove.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Toast.makeText(DriverPostDetails.this, "RiderID: "+riderID, Toast.LENGTH_LONG).show();
+
+                                //Toast.makeText(DriverPostDetails.this, "RiderID: "+riderID, Toast.LENGTH_LONG).show();
 
                                 //REMOVE USER'S REQUEST IF DRIVER REJECTED
                                 //not myID, rather riderID
@@ -175,7 +178,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
-                                                        Toast.makeText(DriverPostDetails.this, "rejected successfully", Toast.LENGTH_LONG).show();
+                                                        //Toast.makeText(DriverPostDetails.this, "rejected successfully", Toast.LENGTH_LONG).show();
                                                     }
                                                 });
                                             }

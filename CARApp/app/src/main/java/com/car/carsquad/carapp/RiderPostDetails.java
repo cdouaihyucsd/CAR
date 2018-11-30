@@ -96,6 +96,27 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
+
+        mReference.child("accepted").child(postID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChild(myID)) {
+                    String request = dataSnapshot.child(myID).child("accept_type").getValue().toString();
+                    if(request.equals("accepted_rider")) {
+                        mRequestRide.setEnabled(true);
+                        mRequestRide.setText("Cancel Request");
+                        currentState = 1;
+                    } /*else {
+                        mRequestRide.setEnabled(true);
+                        mRequestRide.setText("Request Ride");
+                        currentState = 0;
+                    }*/
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 
     private void getIncomingIntent(){
@@ -227,6 +248,23 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                 }
             });
             mReference.child("request_obj").child(postID).child(myID).removeValue();
+
+
+
+            FirebaseDatabase.getInstance().getReference().child("accepted").child(postID).child(myID).removeValue()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            FirebaseDatabase.getInstance().getReference().child("accepted").child(myID).child(postID).removeValue()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            //Toast.makeText(DriverPostDetails.this, "rejected successfully", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                        }
+                    });
+            FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postID).child(myID).removeValue();
         }
     }
 
