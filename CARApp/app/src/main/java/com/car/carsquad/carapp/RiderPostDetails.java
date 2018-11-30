@@ -213,45 +213,30 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                     });
                 }
             });
-            databaseUser.child(myID).child("lastName").addListenerForSingleValueEvent(new ValueEventListener() {
+            //RETRIEVE MY INFO
+            FirebaseDatabase.getInstance().getReference().child("users").child(myID).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    riderLastName = dataSnapshot.getValue(String.class);
-                    requestingRider = new User(myID, riderFirstName, riderLastName, "","",0.0);
+                    requestingRider = dataSnapshot.getValue(User.class);
                     mReference.child("request_obj").child(postID).child(myID).setValue(requestingRider);
 
-                    databaseUser.child(myID).child("firstName").addListenerForSingleValueEvent(new ValueEventListener() {
+                    //TODO ADD POST TO REQUEST_OBJ POSTS
+                    //RETRIEVE POST INFO
+                    FirebaseDatabase.getInstance().getReference().child("post").child(postID).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            riderFirstName = dataSnapshot.getValue(String.class);
-                            requestingRider.setFirstName(riderFirstName);
-                            mReference.child("request_obj").child(postID).child(myID).setValue(requestingRider);
-
-
-                            //TODO ADD POST TO REQUEST_OBJ POSTS
-                            //RETRIEVE POST INFO
-                            FirebaseDatabase.getInstance().getReference().child("post").child(postID).addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    requestedRide = dataSnapshot.getValue(Post.class);
-                                    mReference.child("request_obj").child(myID).child(postID).setValue(requestedRide);
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
-
+                            requestedRide = dataSnapshot.getValue(Post.class);
+                            mReference.child("request_obj").child(myID).child(postID).setValue(requestedRide);
                         }
                         @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) { }
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
                     });
                 }
                 @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) { }
+                public void onCancelled(@NonNull DatabaseError databaseError) {}
             });
-
         }
 
         if (currentState == 1) {

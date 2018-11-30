@@ -215,9 +215,6 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
 
     private void acceptRider() {
 
-        //TODO DEBUG
-        //Toast.makeText(DriverPostDetails.this, "RiderID is: " + riderID, Toast.LENGTH_SHORT).show();
-
         FirebaseDatabase.getInstance().getReference().child("accepted").child(postID).child(riderID).child("accept_type")
                 .setValue("accepted_rider").addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -232,62 +229,29 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
         });
 
 
-/*
-        FirebaseDatabase.getInstance().getReference().child("request_obj").child(postID).child(riderID).child("lastName")
-                .addValueEventListener(new ValueEventListener() {
+        //RETRIEVE RIDER INFO
+        FirebaseDatabase.getInstance().getReference().child("users").child(riderID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                riderLastName2 = dataSnapshot.getValue(String.class);
-                acceptedRider = new User(riderID,riderFirstName2,riderLastName2,"","",0.0);
-                FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postID).child(riderID)
-                        .setValue(acceptedRider);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
-        });*/
-
-
-
-        mRiderRef.child(riderID).child("lastName").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                riderLastName = dataSnapshot.getValue(String.class);
-                requestingRider = new User(riderID, riderFirstName, riderLastName, "","",0.0);
+                requestingRider = dataSnapshot.getValue(User.class);
                 FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postID).child(riderID).setValue(requestingRider);
 
-                FirebaseDatabase.getInstance().getReference().child(riderID).child("firstName").addListenerForSingleValueEvent(new ValueEventListener() {
+                //RETRIEVE POST INFO
+                FirebaseDatabase.getInstance().getReference().child("post").child(postID).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        riderFirstName = dataSnapshot.getValue(String.class);
-                        requestingRider.setFirstName(riderFirstName);
-                        FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postID).child(riderID).setValue(requestingRider);
-
-
-                        //TODO ADD POST TO REQUEST_OBJ POSTS
-                        //RETRIEVE POST INFO
-                        FirebaseDatabase.getInstance().getReference().child("post").child(postID).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                acceptedRide = dataSnapshot.getValue(Post.class);
-                                FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(riderID).child(postID).setValue(acceptedRide);
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-
+                        acceptedRide = dataSnapshot.getValue(Post.class);
+                        FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(riderID).child(postID).setValue(acceptedRide);
                     }
                     @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) { }
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
                 });
             }
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { }
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
-
-
     }
 
     private void getIncomingIntent(){
