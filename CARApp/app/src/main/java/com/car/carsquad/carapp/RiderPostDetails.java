@@ -70,42 +70,6 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
         getIncomingIntent();
         myID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        /*
-        mMessageDriver.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference().child("chatroom");
-
-                //Add Rider and Driver to chatroom
-                chatRef.child(myID).setValue(myID).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        chatRef.child(myID).child("Room " + driverID).setValue(driverID);
-                    }
-                });
-                chatRef.child(driverID).setValue(driverID).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        chatRef.child(driverID).child("Room " + myID).setValue(myID);
-                    }
-                });
-
-                //Add chatroom to Rider and Driver
-                //final Map<String,Object> riderUpdate = new HashMap<>();
-                //Map<String,Object> driverUpdate = new HashMap<>();
-                //riderUpdate.put(driverID, "");
-                //driverUpdate.put(myID, "");
-
-                //chatRef.child(driverID).push();
-                //chatRef.child(myID).updateChildren(riderUpdate);
-                //chatRef.child(driverID).updateChildren(driverUpdate);
-
-                //chatRef.child(myID).child("Room " +driverID).setValue(driverID);
-                //chatRef.child(driverID).child("Room " +myID).setValue(myID);
-            }
-        });
-        */
-
 
         mReference.child("request").child(postID).addValueEventListener(new ValueEventListener() {
             @Override
@@ -238,18 +202,8 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
         //Add Rider and Driver to chatroom
         final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference();
 
-        chatRef.child("chatroom").child(myID).child("Room " + driverID).setValue(driverID).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                //chatRef.child("chatroom").child(myID).child("Room " + driverID).setValue(driverID);
-            }
-        });
-        chatRef.child("chatroom").child(driverID).child("Room " + myID).setValue(myID).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                //chatRef.child("chatroom").child(driverID).child("Room " + myID).setValue(myID);
-            }
-        });
+        chatRef.child("chatroom").child(myID).child("Room " + driverID).setValue(driverID);
+        chatRef.child("chatroom").child(driverID).child("Room " + myID).setValue(myID);
 
         Intent intent = new Intent(RiderPostDetails.this, MessageActivity.class);
         startActivity(intent);
