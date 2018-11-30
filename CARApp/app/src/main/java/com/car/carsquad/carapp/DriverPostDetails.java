@@ -32,11 +32,17 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
     private Button mDeletePost;
     private DatabaseReference mRequestDatabase, mRiderRef, mFriendsRef;
     String postID;
+    private String riderID;
     private String myID;
     RecyclerView riderRequest, riderAccepted;
     String riderFirstName;
     String riderLastName;
     User requestingRider;
+
+    String riderFirstName2;
+    String riderLastName2;
+    User requestingRider2;
+    User acceptedRider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,14 +82,14 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                     protected void populateViewHolder(DriverPostDetails.RequestViewHolder viewHolder, final User model, int position){
                         String name = model.getFirstName() + " " + model.getLastName();
                         viewHolder.setRiderName(name);
-                        final String riderID = model.getUserID();
+                        /*final String*/ riderID = model.getUserID();
 
                         //ACCEPT REQUEST
                         viewHolder.btnAccept.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 // TODO Auto-generated method stub
-                                //Toast.makeText(DriverPostDetails.this, "Accept button Clicked", Toast.LENGTH_LONG).show();
+                                Toast.makeText(DriverPostDetails.this, "Accept button Clicked", Toast.LENGTH_LONG).show();
 
                                 //ACCEPT RIDER
                                 acceptRider();
@@ -97,7 +103,6 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                                                         .removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
-                                                        Toast.makeText(DriverPostDetails.this, "rejected successfully", Toast.LENGTH_LONG).show();
                                                     }
                                                 });
                                             }
@@ -145,21 +150,20 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                         viewHolder.setRiderName(name);
                         final String riderID = model.getUserID();
 
-                        //ACCEPT REQUEST
+                        //MESSAGE ACCEPTED RIDER
                         viewHolder.btnMessage.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                // TODO Auto-generated method stub
+                                // TODO INITIATE CHAT ROOM
                                 Toast.makeText(DriverPostDetails.this, "message button Clicked", Toast.LENGTH_LONG).show();
-
 
                             }
                         });
-                        //REJECT REQUEST
+                        //REMOVE ACCEPTED RIDER
                         viewHolder.btnRemove.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                //Toast.makeText(DriverPostDetails.this, "reject button Clicked", Toast.LENGTH_LONG).show();
+                                Toast.makeText(DriverPostDetails.this, "RiderID: "+riderID, Toast.LENGTH_LONG).show();
 
                                 //REMOVE USER'S REQUEST IF DRIVER REJECTED
                                 //not myID, rather riderID
@@ -190,8 +194,6 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
         Button btnReject;
         Button btnMessage;
         Button btnRemove;
-
-        //private Button viewRideButton;
         public RequestViewHolder(View itemView){
             super(itemView);
             mView = itemView;
@@ -211,14 +213,14 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
     private void acceptRider() {
 
         //TODO DEBUG
-        Toast.makeText(DriverPostDetails.this, "ACCEPTED TO FIREBASE", Toast.LENGTH_LONG).show();
+        //Toast.makeText(DriverPostDetails.this, "RiderID is: " + riderID, Toast.LENGTH_SHORT).show();
 
-        FirebaseDatabase.getInstance().getReference().child("accepted").child(postID).child(myID).child("accept_type")
+        FirebaseDatabase.getInstance().getReference().child("accepted").child(postID).child(riderID).child("accept_type")
                 .setValue("accepted_rider").addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
 
-                FirebaseDatabase.getInstance().getReference().child("accepted").child(myID).child(postID).child("accept_type")
+                FirebaseDatabase.getInstance().getReference().child("accepted").child(riderID).child(postID).child("accept_type")
                         .setValue("accepted_post").addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) { }
@@ -226,19 +228,36 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
             }
         });
 
-        mRiderRef.child(myID).child("lastName").addListenerForSingleValueEvent(new ValueEventListener() {
+
+/*
+        FirebaseDatabase.getInstance().getReference().child("request_obj").child(postID).child(riderID).child("lastName")
+                .addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                riderLastName2 = dataSnapshot.getValue(String.class);
+                acceptedRider = new User(riderID,riderFirstName2,riderLastName2,"","",0.0);
+                FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postID).child(riderID)
+                        .setValue(acceptedRider);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });*/
+
+
+
+        mRiderRef.child(riderID).child("lastName").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 riderLastName = dataSnapshot.getValue(String.class);
-                requestingRider = new User(myID, riderFirstName, riderLastName, "","",0.0);
-                FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postID).child(myID).setValue(requestingRider);
+                requestingRider = new User(riderID, riderFirstName, riderLastName, "","",0.0);
+                FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postID).child(riderID).setValue(requestingRider);
 
-                FirebaseDatabase.getInstance().getReference().child(myID).child("firstName").addListenerForSingleValueEvent(new ValueEventListener() {
+                FirebaseDatabase.getInstance().getReference().child(riderID).child("firstName").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         riderFirstName = dataSnapshot.getValue(String.class);
                         requestingRider.setFirstName(riderFirstName);
-                        FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postID).child(myID).setValue(requestingRider);
+                        FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postID).child(riderID).setValue(requestingRider);
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) { }
