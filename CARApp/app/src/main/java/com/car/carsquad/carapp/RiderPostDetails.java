@@ -249,8 +249,6 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
             });
             mReference.child("request_obj").child(postID).child(myID).removeValue();
 
-
-
             FirebaseDatabase.getInstance().getReference().child("accepted").child(postID).child(myID).removeValue()
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override

@@ -317,12 +317,45 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-                DatabaseReference dbRequest = FirebaseDatabase.getInstance().getReference().child("request").child(postID);
-                dbRequest.setValue(null);
+                /*DatabaseReference dbRequest = FirebaseDatabase.getInstance().getReference().child("request").child(postID);
+                dbRequest.setValue(null);*/
 
+                //REMOVE ALL RIDERS ASSOCIATED WITH POST
+                final DatabaseReference mReference = FirebaseDatabase.getInstance().getReference();
+                mReference.child("request").child(postID).child(riderID).removeValue()
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                mReference.child("request").child(riderID).child(postID).child("request_type")
+                                        .removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) { }
+                                });
+                            }
+                        });
+                mReference.child("request_obj").child(postID).child(riderID).removeValue();
+
+                FirebaseDatabase.getInstance().getReference().child("accepted").child(postID).child(riderID).removeValue()
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                FirebaseDatabase.getInstance().getReference().child("accepted").child(riderID).child(postID).removeValue()
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                //Toast.makeText(DriverPostDetails.this, "rejected successfully", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                            }
+                        });
+                FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postID).child(riderID).removeValue();
+
+
+                //REMOVE POST FROM DATABASE
                 DatabaseReference dbPost = FirebaseDatabase.getInstance().getReference().child("post").child(postID);
                 dbPost.setValue(null);
 
+                //GO BACK TO DRIVER ACTIVITY
                 Intent intent = new Intent(DriverPostDetails.this, DriverActivity.class);
                 finish();
                 startActivity(intent);
