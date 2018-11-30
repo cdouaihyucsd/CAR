@@ -6,7 +6,7 @@
     <group android:name="bar">
         <path
             android:name="circle"
-            android:fillColor="@color/colorPrimaryDark"
+            android:fillColor="#040404"
             android:strokeWidth="1"
             android:pathData="M44,20a20,20 0 1,0 40,0a20,20 0 1,0 -40,0"/>
 
