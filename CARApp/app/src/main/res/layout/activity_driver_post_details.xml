@@ -50,14 +50,40 @@
         android:id="@+id/delete_ride_button"
         android:text="DELETE RIDE"/>
 
-    <android.support.v7.widget.RecyclerView
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:id="@+id/request_list">
+        android:layout_height="wrap_content"
+        android:text="RIDE REQUESTS"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/request_list"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_marginTop="10dp">
 
     </android.support.v7.widget.RecyclerView>
 
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ACCEPTED RIDERS"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/accepted_list"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_marginTop="10dp">
+
+    </android.support.v7.widget.RecyclerView>
 
     <ListView
         android:id="@+id/detour_list_view"

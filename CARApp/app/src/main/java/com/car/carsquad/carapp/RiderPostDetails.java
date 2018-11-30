@@ -1,6 +1,7 @@
 package com.car.carsquad.carapp;
 
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -73,28 +74,8 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
         //requestingRider = new User(myID, riderFirstName, riderLastName, "","",0.0);
         databaseUser = FirebaseDatabase.getInstance().getReference("users");
 
-        /*databaseUser.child(myID).child("firstName").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //riderFirstName = dataSnapshot.getValue(String.class);
-                //requestingRider.setFirstName(riderFirstName);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { }
-        });
 
-        databaseUser.child(myID).child("lastName").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //riderLastName = dataSnapshot.getValue(String.class);
-                //requestingRider.setLastName(riderFirstName);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { }
-        });
-        requestingRider = new User(myID, riderFirstName, riderLastName, "","",0.0);*/
-
-
+        //mReference.keepSynced(true);
         mReference.child("request").child(postID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -104,7 +85,11 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                         mRequestRide.setEnabled(true);
                         mRequestRide.setText("Cancel Request");
                         currentState = 1;
-                    }
+                    } /*else {
+                        mRequestRide.setEnabled(true);
+                        mRequestRide.setText("Request Ride");
+                        currentState = 0;
+                    }*/
                 }
             }
             @Override
@@ -205,9 +190,19 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     riderLastName = dataSnapshot.getValue(String.class);
-                    //requestingRider.setLastName(riderFirstName);
                     requestingRider = new User(myID, riderFirstName, riderLastName, "","",0.0);
                     mReference.child("request_obj").child(postID).child(myID).setValue(requestingRider);
+
+                    databaseUser.child(myID).child("firstName").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            riderFirstName = dataSnapshot.getValue(String.class);
+                            requestingRider.setFirstName(riderFirstName);
+                            mReference.child("request_obj").child(postID).child(myID).setValue(requestingRider);
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) { }
+                    });
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) { }
@@ -216,8 +211,8 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
         }
 
         if (currentState == 1) {
-            mReference.child("request").child(postID).child(myID)/*.child("request_type")*/
-                    .removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            mReference.child("request").child(postID).child(myID).removeValue()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     mReference.child("request").child(myID).child(postID).child("request_type")
