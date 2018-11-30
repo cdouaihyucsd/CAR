@@ -9,41 +9,19 @@
     android:background="#ddddda"
     android:theme="@style/AppTheme.NoActionBar">
 
-
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/accepted_rides_btn"
+            android:id="@+id/back_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Accepted Rides"
-            android:layout_gravity="bottom|start"
-            android:layout_marginStart="150dp"
-            android:layout_marginBottom="10dp"/>
-        <Button
-            android:id="@+id/current_rides_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Current Rides"
+            android:text="BACK TO RIDER"
             android:layout_gravity="bottom|start"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="10dp"/>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/search_ride_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:clickable="true"
-            android:src="@drawable/baseline_search_black_24dp"
-            app:backgroundTint="@color/AppBlue"
-            tools:layout_editor_absoluteX="295dp"
-            tools:layout_editor_absoluteY="0dp" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rider_post_view"
@@ -65,4 +43,3 @@
     </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>
-

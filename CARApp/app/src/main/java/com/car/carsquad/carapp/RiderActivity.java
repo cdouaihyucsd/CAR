@@ -52,6 +52,8 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private FloatingActionButton mSearch;
+    private Button mCurrentRides;
+    private Button mAcceptedRides;
     private RecyclerView mPostList;
 
     @Override
@@ -61,6 +63,11 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
 
         mSearch = (FloatingActionButton) findViewById(R.id.search_ride_button);
         mSearch.setOnClickListener(this);
+
+        mCurrentRides = (Button) findViewById(R.id.current_rides_btn);
+        mCurrentRides.setOnClickListener(this);
+        mAcceptedRides = (Button) findViewById(R.id.accepted_rides_btn);
+        mAcceptedRides.setOnClickListener(this);
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("post");
         mDatabase.keepSynced(true);
@@ -277,6 +284,12 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         if(view == mSearch){
             startActivity(new Intent(this, SearchActivity.class));
+        }
+        else if(view == mCurrentRides){
+            startActivity(new Intent(this, RiderCurrentRides.class));
+        }
+        else if(view == mAcceptedRides){
+            startActivity(new Intent(this, RiderAcceptedRides.class));
         }
     }
     //prevent user from pressing the back button to go back from the main app screen

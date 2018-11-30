@@ -38,11 +38,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
     String riderFirstName;
     String riderLastName;
     User requestingRider;
-
-    String riderFirstName2;
-    String riderLastName2;
-    User requestingRider2;
-    User acceptedRider;
+    Post acceptedRide;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +86,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                             @Override
                             public void onClick(View v) {
                                 // TODO Auto-generated method stub
-                                Toast.makeText(DriverPostDetails.this, "Accept button Clicked", Toast.LENGTH_LONG).show();
+                                //Toast.makeText(DriverPostDetails.this, "Accept button Clicked", Toast.LENGTH_LONG).show();
 
                                 //ACCEPT RIDER
                                 acceptRider();
@@ -104,11 +100,13 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                                                         .removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
+
                                                     }
                                                 });
                                             }
                                         });
                                 FirebaseDatabase.getInstance().getReference().child("request_obj").child(postID).child(riderID).removeValue();
+                                FirebaseDatabase.getInstance().getReference().child("request_obj").child(riderID).child(postID).removeValue();
                             }
                         });
                         //REJECT REQUEST
@@ -133,6 +131,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                                     }
                                 });
                                 FirebaseDatabase.getInstance().getReference().child("request_obj").child(postID).child(riderID).removeValue();
+                                FirebaseDatabase.getInstance().getReference().child("request_obj").child(riderID).child(postID).removeValue();
                             }
                         });
                     }
@@ -184,6 +183,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                                             }
                                         });
                                 FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postID).child(riderID).removeValue();
+                                FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(riderID).child(postID).removeValue();
                             }
                         });
                     }
@@ -261,6 +261,23 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                         riderFirstName = dataSnapshot.getValue(String.class);
                         requestingRider.setFirstName(riderFirstName);
                         FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postID).child(riderID).setValue(requestingRider);
+
+
+                        //TODO ADD POST TO REQUEST_OBJ POSTS
+                        //RETRIEVE POST INFO
+                        FirebaseDatabase.getInstance().getReference().child("post").child(postID).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                acceptedRide = dataSnapshot.getValue(Post.class);
+                                FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(riderID).child(postID).setValue(acceptedRide);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) { }
@@ -349,6 +366,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                             }
                         });
                 FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postID).child(riderID).removeValue();
+                FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(riderID).child(postID).removeValue();
 
 
                 //REMOVE POST FROM DATABASE

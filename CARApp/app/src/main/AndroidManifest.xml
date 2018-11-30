@@ -70,7 +70,6 @@
         <activity
             android:name=".MessageActivity"
             android:label="Message your buddies!" />
-
         <activity
             android:name=".ChatRoomActivity"
             android:label="Chat Room" />
@@ -90,8 +89,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".RiderPostDetails" />
-
-        <activity android:name=".DriverPostDetails"></activity>
+        <activity android:name=".DriverPostDetails" />
+        <activity
+            android:name=".RiderCurrentRides"
+            android:label="Your Requested Rides" />
+        <activity
+            android:name=".RiderAcceptedRides"
+            android:label="Your Accepted Rides" />
     </application>
 
 </manifest>

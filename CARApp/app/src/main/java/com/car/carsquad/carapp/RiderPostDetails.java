@@ -49,6 +49,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
     String riderFirstName;
     String riderLastName;
     User requestingRider;
+    Post requestedRide;
 
     //0 = not friend. 1 = request received
     int currentState = 0;
@@ -225,6 +226,23 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                             riderFirstName = dataSnapshot.getValue(String.class);
                             requestingRider.setFirstName(riderFirstName);
                             mReference.child("request_obj").child(postID).child(myID).setValue(requestingRider);
+
+
+                            //TODO ADD POST TO REQUEST_OBJ POSTS
+                            //RETRIEVE POST INFO
+                            FirebaseDatabase.getInstance().getReference().child("post").child(postID).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    requestedRide = dataSnapshot.getValue(Post.class);
+                                    mReference.child("request_obj").child(myID).child(postID).setValue(requestedRide);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+
                         }
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) { }
@@ -253,6 +271,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                         }
                     });
             mReference.child("request_obj").child(postID).child(myID).removeValue();
+            mReference.child("request_obj").child(myID).child(postID).removeValue();
 
             FirebaseDatabase.getInstance().getReference().child("accepted").child(postID).child(myID).removeValue()
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -268,6 +287,8 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                         }
                     });
             FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postID).child(myID).removeValue();
+            FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(myID).child(postID).removeValue();
+
         }
     }
 
