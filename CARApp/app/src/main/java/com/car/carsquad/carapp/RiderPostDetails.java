@@ -2,6 +2,7 @@ package com.car.carsquad.carapp;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,6 +26,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class RiderPostDetails extends AppCompatActivity implements View.OnClickListener {
@@ -65,6 +69,43 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
 
         getIncomingIntent();
         myID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        /*
+        mMessageDriver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference().child("chatroom");
+
+                //Add Rider and Driver to chatroom
+                chatRef.child(myID).setValue(myID).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        chatRef.child(myID).child("Room " + driverID).setValue(driverID);
+                    }
+                });
+                chatRef.child(driverID).setValue(driverID).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        chatRef.child(driverID).child("Room " + myID).setValue(myID);
+                    }
+                });
+
+                //Add chatroom to Rider and Driver
+                //final Map<String,Object> riderUpdate = new HashMap<>();
+                //Map<String,Object> driverUpdate = new HashMap<>();
+                //riderUpdate.put(driverID, "");
+                //driverUpdate.put(myID, "");
+
+                //chatRef.child(driverID).push();
+                //chatRef.child(myID).updateChildren(riderUpdate);
+                //chatRef.child(driverID).updateChildren(driverUpdate);
+
+                //chatRef.child(myID).child("Room " +driverID).setValue(driverID);
+                //chatRef.child(driverID).child("Room " +myID).setValue(myID);
+            }
+        });
+        */
+
 
         mReference.child("request").child(postID).addValueEventListener(new ValueEventListener() {
             @Override
@@ -194,6 +235,22 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
 
     private void messageDriver() {
         //TODO: do something more than just this (i.e initiate correct chat room)
+        //Add Rider and Driver to chatroom
+        final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference();
+
+        chatRef.child("chatroom").child(myID).child("Room " + driverID).setValue(driverID).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                //chatRef.child("chatroom").child(myID).child("Room " + driverID).setValue(driverID);
+            }
+        });
+        chatRef.child("chatroom").child(driverID).child("Room " + myID).setValue(myID).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                //chatRef.child("chatroom").child(driverID).child("Room " + myID).setValue(myID);
+            }
+        });
+
         Intent intent = new Intent(RiderPostDetails.this, MessageActivity.class);
         startActivity(intent);
     }
