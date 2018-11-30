@@ -2,10 +2,12 @@ package com.car.carsquad.carapp;
 
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -281,7 +283,27 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View view) {
         if (view == mRequestRide) {
-            requestRide();
+            if(!(myID.equals(driverID))) {
+                requestRide();
+            }
+            //can't request your own ride
+            else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(RiderPostDetails.this);
+                builder.setCancelable(true);
+                builder.setTitle("REQUEST FAILED");
+                builder.setMessage("You cannot request your own ride");
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                        Intent intent = new Intent(RiderPostDetails.this, RiderActivity.class);
+                        finish();
+                        startActivity(intent);
+                    }
+                });
+                builder.show();
+            }
         }
         else if (view == mMessageDriver){
             messageDriver();
