@@ -1,6 +1,9 @@
 package com.car.carsquad.carapp;
 
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +19,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,6 +34,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
 
     private DatabaseReference mDatabase;
     private DatabaseReference mReference;
+    private DatabaseReference databaseUser;
     private Button mMessageDriver;
     private Button mRequestRide;
     private Button mCancelRequest;
@@ -39,6 +44,9 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
     private String driverID;
     private String myID;
     private String postID;
+    String riderFirstName;
+    String riderLastName;
+    User requestingRider;
 
     //0 = not friend. 1 = request received
     int currentState = 0;
@@ -66,6 +74,11 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
         getIncomingIntent();
         myID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+        //requestingRider = new User(myID, riderFirstName, riderLastName, "","",0.0);
+        databaseUser = FirebaseDatabase.getInstance().getReference("users");
+
+
+        //mReference.keepSynced(true);
         mReference.child("request").child(postID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -75,7 +88,32 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                         mRequestRide.setEnabled(true);
                         mRequestRide.setText("Cancel Request");
                         currentState = 1;
-                    }
+                    } /*else {
+                        mRequestRide.setEnabled(true);
+                        mRequestRide.setText("Request Ride");
+                        currentState = 0;
+                    }*/
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+        mReference.child("accepted").child(postID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChild(myID)) {
+                    String request = dataSnapshot.child(myID).child("accept_type").getValue().toString();
+                    if(request.equals("accepted_rider")) {
+                        mRequestRide.setEnabled(true);
+                        mRequestRide.setText("Cancel Request");
+                        currentState = 1;
+                    } /*else {
+                        mRequestRide.setEnabled(true);
+                        mRequestRide.setText("Request Ride");
+                        currentState = 0;
+                    }*/
                 }
             }
             @Override
@@ -172,33 +210,71 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                     });
                 }
             });
-        }
-        if (currentState == 1) {
-            mReference.child("request").child(postID).child(myID).child("request_type")
-                    .removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            databaseUser.child(myID).child("lastName").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    mReference.child("request").child(myID).child(postID).child("request_type")
-                            .removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    riderLastName = dataSnapshot.getValue(String.class);
+                    requestingRider = new User(myID, riderFirstName, riderLastName, "","",0.0);
+                    mReference.child("request_obj").child(postID).child(myID).setValue(requestingRider);
+
+                    databaseUser.child(myID).child("firstName").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            mRequestRide.setEnabled(true);
-                            mRequestRide.setText("Request Ride");
-                            currentState = 0;
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            riderFirstName = dataSnapshot.getValue(String.class);
+                            requestingRider.setFirstName(riderFirstName);
+                            mReference.child("request_obj").child(postID).child(myID).setValue(requestingRider);
                         }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) { }
                     });
                 }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) { }
             });
+
+        }
+
+        if (currentState == 1) {
+            mReference.child("request").child(postID).child(myID).removeValue()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            mReference.child("request").child(myID).child(postID).child("request_type")
+                                    .removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    mRequestRide.setEnabled(true);
+                                    mRequestRide.setText("Request Ride");
+                                    currentState = 0;
+                                }
+                            });
+                        }
+                    });
+            mReference.child("request_obj").child(postID).child(myID).removeValue();
+
+            FirebaseDatabase.getInstance().getReference().child("accepted").child(postID).child(myID).removeValue()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            FirebaseDatabase.getInstance().getReference().child("accepted").child(myID).child(postID).removeValue()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            //Toast.makeText(DriverPostDetails.this, "rejected successfully", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                        }
+                    });
+            FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postID).child(myID).removeValue();
         }
     }
 
     private void messageDriver() {
         //TODO: do something more than just this (i.e initiate correct chat room)
         Intent intent = new Intent(RiderPostDetails.this, MessageActivity.class);
-        final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference();
-
-        chatRef.child("chatroom").child(myID).child("Room " + driverID).setValue(driverID);
-        chatRef.child("chatroom").child(driverID).child("Room " + myID).setValue(myID);
+        /*intent.putExtra("riderID", myID);
+        intent.putExtra("driverID", driverID);
+        intent.putExtra("driverFirstName", driverFirstName);*/
         startActivity(intent);
     }
 
