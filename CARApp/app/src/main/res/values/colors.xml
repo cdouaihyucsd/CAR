@@ -6,4 +6,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="AppBlue">#6bbfde</color>
     <color name="colorGrey">#bdbdbd</color>
+    <color name="testGrey">#bdbdbd</color>
 </resources>

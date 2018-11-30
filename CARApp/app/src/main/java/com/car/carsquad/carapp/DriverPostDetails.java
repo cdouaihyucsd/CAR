@@ -32,8 +32,17 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
     private Button mDeletePost;
     private DatabaseReference mRequestDatabase, mRiderRef, mFriendsRef;
     String postID;
+    private String riderID;
     private String myID;
-    RecyclerView riderRequest;
+    RecyclerView riderRequest, riderAccepted;
+    String riderFirstName;
+    String riderLastName;
+    User requestingRider;
+
+    String riderFirstName2;
+    String riderLastName2;
+    User requestingRider2;
+    User acceptedRider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,89 +63,215 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
         riderRequest.setHasFixedSize(true);
         riderRequest.setLayoutManager(new LinearLayoutManager(this));
 
+        riderAccepted = (RecyclerView) findViewById(R.id.accepted_list);
+        riderAccepted.setHasFixedSize(true);
+        riderAccepted.setLayoutManager(new LinearLayoutManager(this));
+
         //showRequestList();
 
     }
     @Override
     protected void onStart(){
         super.onStart();
+
+        DatabaseReference requestUserRef = FirebaseDatabase.getInstance().getReference().child("request_obj").child(postID);
         FirebaseRecyclerAdapter<User,DriverPostDetails.RequestViewHolder> firebaseRecyclerAdapter =
                 new FirebaseRecyclerAdapter<User, DriverPostDetails.RequestViewHolder>
-                        (User.class, R.layout.ride_request_cardview, DriverPostDetails.RequestViewHolder.class, mRequestDatabase){
+                        (User.class, R.layout.ride_request_cardview, DriverPostDetails.RequestViewHolder.class, requestUserRef/*mRequestDatabase*/){
                     @Override
                     protected void populateViewHolder(DriverPostDetails.RequestViewHolder viewHolder, final User model, int position){
                         String name = model.getFirstName() + " " + model.getLastName();
-                        //Toast.makeText(DriverPostDetails.this, name, Toast.LENGTH_LONG).show();
                         viewHolder.setRiderName(name);
 
+                        /*final String*/ riderID = model.getUserID();
+
+                        //ACCEPT REQUEST
                         viewHolder.btnAccept.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 // TODO Auto-generated method stub
                                 Toast.makeText(DriverPostDetails.this, "Accept button Clicked", Toast.LENGTH_LONG).show();
+
+                                //ACCEPT RIDER
+                                acceptRider();
+
+                                //REMOVE RIDER FROM REQUESTS (since already accepted)
+                                FirebaseDatabase.getInstance().getReference().child("request").child(postID).child(riderID).removeValue()
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                FirebaseDatabase.getInstance().getReference().child("request").child(riderID).child(postID).child("request_type")
+                                                        .removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                    }
+                                                });
+                                            }
+                                        });
+                                FirebaseDatabase.getInstance().getReference().child("request_obj").child(postID).child(riderID).removeValue();
                             }
                         });
+                        //REJECT REQUEST
                         viewHolder.btnReject.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Toast.makeText(DriverPostDetails.this, "reject button Clicked", Toast.LENGTH_LONG).show();
+                                //Toast.makeText(DriverPostDetails.this, "reject button Clicked", Toast.LENGTH_LONG).show();
 
                                 //REMOVE USER'S REQUEST IF DRIVER REJECTED
-                                /*FirebaseDatabase.getInstance().getReference().child("request").child(postID).child(myID).child("request_type")
-                                        .removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                //not myID, rather riderID
+                                FirebaseDatabase.getInstance().getReference().child("request").child(postID).child(riderID).removeValue()
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-                                        FirebaseDatabase.getInstance().getReference().child("request").child(myID).child(postID).child("request_type")
+                                        FirebaseDatabase.getInstance().getReference().child("request").child(riderID).child(postID).child("request_type")
                                                 .removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
-                                                Toast.makeText(DriverPostDetails.this, "rejected", Toast.LENGTH_LONG).show();
+                                                Toast.makeText(DriverPostDetails.this, "rejected successfully", Toast.LENGTH_LONG).show();
                                             }
                                         });
                                     }
-                                });*/
+                                });
+                                FirebaseDatabase.getInstance().getReference().child("request_obj").child(postID).child(riderID).removeValue();
                             }
                         });
                     }
                 };
         riderRequest.setAdapter(firebaseRecyclerAdapter);
+
+
+        //ACCEPTED RIDERS
+        DatabaseReference acceptedUserRef = FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postID);
+        FirebaseRecyclerAdapter<User,DriverPostDetails.RequestViewHolder> firebaseRecyclerAdapter2 =
+                new FirebaseRecyclerAdapter<User, DriverPostDetails.RequestViewHolder>
+                        (User.class, R.layout.ride_accepted_cardview, DriverPostDetails.RequestViewHolder.class, acceptedUserRef/*mRequestDatabase*/){
+                    @Override
+                    protected void populateViewHolder(DriverPostDetails.RequestViewHolder viewHolder, final User model, int position){
+                        String name = model.getFirstName() + " " + model.getLastName();
+                        viewHolder.setRiderName(name);
+
+                        /*final String*/ riderID = model.getUserID();
+
+                        //MESSAGE ACCEPTED RIDER
+                        viewHolder.btnMessage.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                // TODO INITIATE CHAT ROOM
+                                Toast.makeText(DriverPostDetails.this, "message button Clicked", Toast.LENGTH_LONG).show();
+
+                            }
+                        });
+                        //REMOVE ACCEPTED RIDER
+                        viewHolder.btnRemove.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                //Toast.makeText(DriverPostDetails.this, "RiderID: "+riderID, Toast.LENGTH_LONG).show();
+
+                                //REMOVE USER'S REQUEST IF DRIVER REJECTED
+                                //not myID, rather riderID
+                                FirebaseDatabase.getInstance().getReference().child("accepted").child(postID).child(riderID).removeValue()
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                FirebaseDatabase.getInstance().getReference().child("accepted").child(riderID).child(postID).removeValue()
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        //Toast.makeText(DriverPostDetails.this, "rejected successfully", Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+                                            }
+                                        });
+                                FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postID).child(riderID).removeValue();
+                            }
+                        });
+                    }
+                };
+        riderAccepted.setAdapter(firebaseRecyclerAdapter2);
     }
 
     public static class RequestViewHolder extends RecyclerView.ViewHolder{
         View mView;
         Button btnAccept;
         Button btnReject;
-        //private Button viewRideButton;
+        Button btnMessage;
+        Button btnRemove;
         public RequestViewHolder(View itemView){
             super(itemView);
             mView = itemView;
 
             btnAccept = (Button) itemView.findViewById(R.id.button_accept_request);
             btnReject = (Button) itemView.findViewById(R.id.button_reject_request);
+
+            btnMessage = (Button) itemView.findViewById(R.id.button_message);
+            btnRemove = (Button) itemView.findViewById(R.id.button_remove);
         }
         public void setRiderName(String name){
             TextView rider_name = (TextView)mView.findViewById(R.id.rider_name);
             rider_name.setText(name);
         }
+    }
+
+    private void acceptRider() {
+
+        //TODO DEBUG
+        //Toast.makeText(DriverPostDetails.this, "RiderID is: " + riderID, Toast.LENGTH_SHORT).show();
+
+        FirebaseDatabase.getInstance().getReference().child("accepted").child(postID).child(riderID).child("accept_type")
+                .setValue("accepted_rider").addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+                FirebaseDatabase.getInstance().getReference().child("accepted").child(riderID).child(postID).child("accept_type")
+                        .setValue("accepted_post").addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) { }
+                });
+            }
+        });
+
+
+/*
+        FirebaseDatabase.getInstance().getReference().child("request_obj").child(postID).child(riderID).child("lastName")
+                .addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                riderLastName2 = dataSnapshot.getValue(String.class);
+                acceptedRider = new User(riderID,riderFirstName2,riderLastName2,"","",0.0);
+                FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postID).child(riderID)
+                        .setValue(acceptedRider);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });*/
+
+
+
+        mRiderRef.child(riderID).child("lastName").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                riderLastName = dataSnapshot.getValue(String.class);
+                requestingRider = new User(riderID, riderFirstName, riderLastName, "","",0.0);
+                FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postID).child(riderID).setValue(requestingRider);
+
+                FirebaseDatabase.getInstance().getReference().child(riderID).child("firstName").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        riderFirstName = dataSnapshot.getValue(String.class);
+                        requestingRider.setFirstName(riderFirstName);
+                        FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postID).child(riderID).setValue(requestingRider);
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) { }
+                });
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+        });
 
 
     }
-
-    /*private void showRequestList(){
-        FirebaseRecyclerAdapter<User,DriverPostDetails.RequestViewHolder> firebaseRecyclerAdapter =
-                new FirebaseRecyclerAdapter<User, DriverPostDetails.RequestViewHolder>
-                        (User.class, R.layout.ride_request_cardview, DriverPostDetails.RequestViewHolder.class, mRequestDatabase){
-                    @Override
-                    protected void populateViewHolder(DriverPostDetails.RequestViewHolder viewHolder, final User model, int position){
-
-
-                        String name = dataSn
-                        Toast.makeText(DriverPostDetails.this, name, Toast.LENGTH_LONG).show();
-                        //viewHolder.setRiderName(name);
-                    }
-                };
-        riderRequest.setAdapter(firebaseRecyclerAdapter);
-    }*/
 
     private void getIncomingIntent(){
         if(getIntent().hasExtra("postID") && getIntent().hasExtra("startPt") && getIntent().hasExtra("endPt") &&
@@ -182,12 +317,45 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-                DatabaseReference dbRequest = FirebaseDatabase.getInstance().getReference().child("request").child(postID);
-                dbRequest.setValue(null);
+                /*DatabaseReference dbRequest = FirebaseDatabase.getInstance().getReference().child("request").child(postID);
+                dbRequest.setValue(null);*/
 
+                //REMOVE ALL RIDERS ASSOCIATED WITH POST
+                final DatabaseReference mReference = FirebaseDatabase.getInstance().getReference();
+                mReference.child("request").child(postID).child(riderID).removeValue()
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                mReference.child("request").child(riderID).child(postID).child("request_type")
+                                        .removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) { }
+                                });
+                            }
+                        });
+                mReference.child("request_obj").child(postID).child(riderID).removeValue();
+
+                FirebaseDatabase.getInstance().getReference().child("accepted").child(postID).child(riderID).removeValue()
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                FirebaseDatabase.getInstance().getReference().child("accepted").child(riderID).child(postID).removeValue()
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                //Toast.makeText(DriverPostDetails.this, "rejected successfully", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                            }
+                        });
+                FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postID).child(riderID).removeValue();
+
+
+                //REMOVE POST FROM DATABASE
                 DatabaseReference dbPost = FirebaseDatabase.getInstance().getReference().child("post").child(postID);
                 dbPost.setValue(null);
 
+                //GO BACK TO DRIVER ACTIVITY
                 Intent intent = new Intent(DriverPostDetails.this, DriverActivity.class);
                 finish();
                 startActivity(intent);

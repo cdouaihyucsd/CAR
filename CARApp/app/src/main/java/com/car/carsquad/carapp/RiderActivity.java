@@ -154,6 +154,7 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
     protected void onStart(){
         super.onStart();
         FirebaseRecyclerAdapter<Post,RiderActivity.PostViewHolder> firebaseRecyclerAdapter =
+                //mDatabase is database of POSTS
                 new FirebaseRecyclerAdapter<Post, RiderActivity.PostViewHolder>
                         (Post.class, R.layout.post_cardview_rider, RiderActivity.PostViewHolder.class, mDatabase){
                     @Override
@@ -214,13 +215,13 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                 return false;
             }
         });
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+        /*searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
                 populateSV();
                 return false;
             }
-        });
+        });*/
         return super.onCreateOptionsMenu(menu);
     }
 
