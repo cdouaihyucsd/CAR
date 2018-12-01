@@ -31,6 +31,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     private String user_name,room_name;
     private DatabaseReference root ;
+    private DatabaseReference root2;
     private String temp_key;
 
     private FirebaseAuth mAuth;
@@ -38,6 +39,10 @@ public class ChatRoomActivity extends AppCompatActivity {
     private DatabaseReference databaseUser;
 
     private String userId;
+    private String myID;
+    private String driverID;
+    private String startPt;
+    private String endPt;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,13 +88,21 @@ public class ChatRoomActivity extends AppCompatActivity {
             }
         });
 
-        // Get room name
-        DatabaseReference roomRef = FirebaseDatabase.getInstance().getReference("chatroom");
 
-        room_name = getIntent().getExtras().get("room_name").toString();
-        setTitle(" Room - "+room_name);
+        //room_name = getIntent().getExtras().get("room_name").toString();
+        //setTitle(" Room - "+room_name);
+        getIncomingIntent();
+        myID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        setTitle(" Room - "+ startPt.toUpperCase() + " - " + endPt.toUpperCase());
 
-        root = FirebaseDatabase.getInstance().getReference("chatroom").child(room_name);
+        /*
+        root = FirebaseDatabase.getInstance().getReference("chatroom").child(startPt.toUpperCase()
+                + " - " + endPt.toUpperCase());
+        */
+        root = FirebaseDatabase.getInstance().getReference("chatroom").child(myID)
+                .child(startPt.toUpperCase() + " - " + endPt.toUpperCase()+" - "+driverID);
+        root2 = FirebaseDatabase.getInstance().getReference("chatroom").child(driverID)
+                .child(startPt.toUpperCase() + " - " + endPt.toUpperCase()+ " - "+myID);
 
         btn_send_msg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,13 +111,16 @@ public class ChatRoomActivity extends AppCompatActivity {
                 Map<String,Object> map = new HashMap<String, Object>();
                 temp_key = root.push().getKey();
                 root.updateChildren(map);
+                root2.updateChildren(map);
 
                 DatabaseReference message_root = root.child(temp_key);
+                DatabaseReference message_root2 = root2.child(temp_key);
                 Map<String,Object> map2 = new HashMap<String, Object>();
                 map2.put("name",user_name);
                 map2.put("msg",input_msg.getText().toString());
                 input_msg.setText("");
                 message_root.updateChildren(map2);
+                message_root2.updateChildren(map2);
             }
         });
 
@@ -155,5 +171,11 @@ public class ChatRoomActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    private void getIncomingIntent(){
+        driverID = getIntent().getStringExtra("driverID");
+        startPt = getIntent().getStringExtra("startPt");
+        endPt = getIntent().getStringExtra("endPt");
     }
 }

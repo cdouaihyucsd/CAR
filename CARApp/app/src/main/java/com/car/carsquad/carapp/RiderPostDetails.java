@@ -39,6 +39,8 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
     private String driverID;
     private String myID;
     private String postID;
+    private String startPt;
+    private String endPt;
 
     //0 = not friend. 1 = request received
     int currentState = 0;
@@ -90,8 +92,8 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                 getIntent().hasExtra("driverID")){
 
             postID = getIntent().getStringExtra("postID");
-            String startPt = getIntent().getStringExtra("startPt");
-            String endPt = getIntent().getStringExtra("endPt");
+            startPt = getIntent().getStringExtra("startPt");
+            endPt = getIntent().getStringExtra("endPt");
             String date = getIntent().getStringExtra("date");
             String time = getIntent().getStringExtra("time");
             String cost = "$" + getIntent().getStringExtra("cost");
@@ -194,11 +196,27 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
 
     private void messageDriver() {
         //TODO: do something more than just this (i.e initiate correct chat room)
-        Intent intent = new Intent(RiderPostDetails.this, MessageActivity.class);
+        //Intent intent = new Intent(RiderPostDetails.this, MessageActivity.class);
         final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference();
 
-        chatRef.child("chatroom").child(myID).child("Room " + driverID).setValue(driverID);
-        chatRef.child("chatroom").child(driverID).child("Room " + myID).setValue(myID);
+        chatRef.child("chatroom").child(myID).child(startPt.toUpperCase()
+                + " - " + endPt.toUpperCase() + " - " + driverID).setValue(driverID);
+        chatRef.child("chatroom").child(driverID).child(startPt.toUpperCase()
+                + " - " + endPt.toUpperCase() + " - " + myID).setValue(myID);
+
+
+        /*
+        chatRef.child("chatroomUsers").child(myID).child("Room " + startPt.toUpperCase()
+                + " - " + endPt.toUpperCase()).setValue(driverID);
+        chatRef.child("chatroomUsers").child(driverID).child("Room " + startPt.toUpperCase() +
+                " - " + endPt.toUpperCase()).setValue(myID);
+        chatRef.child("chatroom").child(startPt.toUpperCase() + " - "
+                + endPt.toUpperCase()).setValue("");
+        */
+        Intent intent = new Intent(RiderPostDetails.this, ChatRoomActivity.class);
+        intent.putExtra("driverID", driverID);
+        intent.putExtra("startPt", startPt);
+        intent.putExtra("endPt", endPt);
         startActivity(intent);
     }
 
