@@ -204,15 +204,6 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
         chatRef.child("chatroom").child(driverID).child(startPt.toUpperCase()
                 + " - " + endPt.toUpperCase() + " - " + myID).setValue(myID);
 
-
-        /*
-        chatRef.child("chatroomUsers").child(myID).child("Room " + startPt.toUpperCase()
-                + " - " + endPt.toUpperCase()).setValue(driverID);
-        chatRef.child("chatroomUsers").child(driverID).child("Room " + startPt.toUpperCase() +
-                " - " + endPt.toUpperCase()).setValue(myID);
-        chatRef.child("chatroom").child(startPt.toUpperCase() + " - "
-                + endPt.toUpperCase()).setValue("");
-        */
         Intent intent = new Intent(RiderPostDetails.this, ChatRoomActivity.class);
         intent.putExtra("driverID", driverID);
         intent.putExtra("startPt", startPt);

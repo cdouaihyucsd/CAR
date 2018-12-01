@@ -53,7 +53,7 @@ public class MessageActivity extends AppCompatActivity {
         //add_room = (Button) findViewById(R.id.btn_add_room);
         chatList = (ListView) findViewById(R.id.listView);
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, chatArr);
-        room_name = (EditText) findViewById(R.id.room_name);
+        //room_name = (EditText) findViewById(R.id.room_name);
         chatList.setAdapter(arrayAdapter);
         myID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
