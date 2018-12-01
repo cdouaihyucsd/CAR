@@ -56,6 +56,8 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
     private Button mAcceptedRides;
     private RecyclerView mPostList;
 
+    LinearLayoutManager mLayoutManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,9 +74,14 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
         mDatabase = FirebaseDatabase.getInstance().getReference().child("post");
         mDatabase.keepSynced(true);
 
+        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
+
         mPostList = (RecyclerView) findViewById(R.id.rider_post_view);
         mPostList.setHasFixedSize(true);
-        mPostList.setLayoutManager(new LinearLayoutManager(this));
+        //mPostList.setLayoutManager(new LinearLayoutManager(this));
+        mPostList.setLayoutManager(mLayoutManager);
 
         //initialize fireBase
         firebaseAuth = firebaseAuth.getInstance();

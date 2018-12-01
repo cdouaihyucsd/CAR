@@ -25,12 +25,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
+import java.sql.Driver;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class DriverPostDetails extends AppCompatActivity implements View.OnClickListener{
 
     private Button mDeletePost;
-    private DatabaseReference mRequestDatabase, mRiderRef, mFriendsRef;
+    private DatabaseReference mRiderRef, mFriendsRef;
     String postID;
     private String riderID;
     private String currentRiderID;
@@ -50,7 +53,6 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
 
         getIncomingIntent();
 
-        mRequestDatabase = FirebaseDatabase.getInstance().getReference().child("request").child(postID);
         mRiderRef = FirebaseDatabase.getInstance().getReference().child("user");
         mFriendsRef = FirebaseDatabase.getInstance().getReference().child("friends");
         myID = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -74,7 +76,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
         DatabaseReference requestUserRef = FirebaseDatabase.getInstance().getReference().child("request_obj").child(postID);
         FirebaseRecyclerAdapter<User,DriverPostDetails.RequestViewHolder> firebaseRecyclerAdapter =
                 new FirebaseRecyclerAdapter<User, DriverPostDetails.RequestViewHolder>
-                        (User.class, R.layout.ride_request_cardview, DriverPostDetails.RequestViewHolder.class, requestUserRef/*mRequestDatabase*/){
+                        (User.class, R.layout.ride_request_cardview, DriverPostDetails.RequestViewHolder.class, requestUserRef){
                     @Override
                     protected void populateViewHolder(DriverPostDetails.RequestViewHolder viewHolder, final User model, int position){
                         String name = model.getFirstName() + " " + model.getLastName();
@@ -147,7 +149,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
         DatabaseReference acceptedUserRef = FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postID);
         FirebaseRecyclerAdapter<User,DriverPostDetails.RequestViewHolder> firebaseRecyclerAdapter2 =
                 new FirebaseRecyclerAdapter<User, DriverPostDetails.RequestViewHolder>
-                        (User.class, R.layout.ride_accepted_cardview, DriverPostDetails.RequestViewHolder.class, acceptedUserRef/*mRequestDatabase*/){
+                        (User.class, R.layout.ride_accepted_cardview, DriverPostDetails.RequestViewHolder.class, acceptedUserRef){
                     @Override
                     protected void populateViewHolder(DriverPostDetails.RequestViewHolder viewHolder, final User model, int position){
                         String name = model.getFirstName() + " " + model.getLastName();
@@ -310,40 +312,111 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-                /*DatabaseReference dbRequest = FirebaseDatabase.getInstance().getReference().child("request").child(postID);
-                dbRequest.setValue(null);*/
-
                 //REMOVE ALL RIDERS ASSOCIATED WITH POST
                 final DatabaseReference mReference = FirebaseDatabase.getInstance().getReference();
-                mReference.child("request").child(postID).child(riderID).removeValue()
+
+                //TODO STEP 1: POPULATE ARRAY STORING RIDER IDS
+
+                mReference.child("request").child(postID)
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        //TODO ARRAY POPULATE
+                        final ArrayList<String> userIdArray = new ArrayList<>();
+
+                        for(DataSnapshot idSnapshot : dataSnapshot.getChildren()){
+                            userIdArray.add(idSnapshot.getValue(String.class));
+                        }
+                        //Toast.makeText(DriverPostDetails.this, "Array empty: " + userIdArray.isEmpty(),Toast.LENGTH_LONG).show();
+
+                        //TODO STEP 2: DELETION LOOP
+                        for(String uid : userIdArray){
+                            mReference.child("request_obj").child(uid).child(postID).removeValue();
+                            mReference.child("request").child(uid).child(postID).removeValue();
+
+                            mReference.child("accepted_obj").child(uid).child(postID).removeValue();
+                            mReference.child("accepted").child(uid).child(postID).removeValue();
+
+                            //Toast.makeText(DriverPostDetails.this, uid, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+                mReference.child("accepted").child(postID)
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                //TODO ARRAY POPULATE
+                                final ArrayList<String> userIdArray = new ArrayList<>();
+
+                                for(DataSnapshot idSnapshot : dataSnapshot.getChildren()){
+                                    userIdArray.add(idSnapshot.getValue(String.class));
+                                    //Toast.makeText(DriverPostDetails.this, "Array empty: " + userIdArray.isEmpty(),Toast.LENGTH_LONG).show();
+                                }
+
+                                //Toast.makeText(DriverPostDetails.this, userIdArray.get(0), Toast.LENGTH_SHORT).show();
+                                //TODO STEP 2: DELETION LOOP
+                                for(String uid : userIdArray){
+                                    mReference.child("request_obj").child(uid).child(postID).removeValue();
+                                    mReference.child("request").child(uid).child(postID).removeValue();
+
+                                    mReference.child("accepted_obj").child(uid).child(postID).removeValue();
+                                    mReference.child("accepted").child(uid).child(postID).removeValue();
+
+                                    //Toast.makeText(DriverPostDetails.this, uid, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                //TODO STEP 3: REMOVE POSTS OKKKKK
+                mReference.child("request").child(postID).removeValue();
+                mReference.child("request_obj").child(postID).removeValue();
+                mReference.child("accepted").child(postID).removeValue();
+                mReference.child("accepted_obj").child(postID).removeValue();
+
+
+                /*
+                mReference.child("request").child(postID).removeValue()
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 mReference.child("request").child(riderID).child(postID).child("request_type")
                                         .removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
-                                    public void onComplete(@NonNull Task<Void> task) { }
+                                    public void onComplete(@NonNull Task<Void> task) {}
                                 });
                             }
                         });
-                mReference.child("request_obj").child(postID).child(riderID).removeValue();
 
-                FirebaseDatabase.getInstance().getReference().child("accepted").child(postID).child(riderID).removeValue()
+                mReference.child("request_obj").child(riderID).child(postID).removeValue();
+
+
+                FirebaseDatabase.getInstance().getReference().child("accepted").child(postID).removeValue()
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 FirebaseDatabase.getInstance().getReference().child("accepted").child(riderID).child(postID).removeValue()
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                //Toast.makeText(DriverPostDetails.this, "rejected successfully", Toast.LENGTH_LONG).show();
-                                            }
+                                            public void onComplete(@NonNull Task<Void> task) {}
                                         });
                             }
                         });
-                FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postID).child(riderID).removeValue();
-                FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(riderID).child(postID).removeValue();
 
+                FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(riderID).child(postID).removeValue();
+*/
 
                 //REMOVE POST FROM DATABASE
                 DatabaseReference dbPost = FirebaseDatabase.getInstance().getReference().child("post").child(postID);
