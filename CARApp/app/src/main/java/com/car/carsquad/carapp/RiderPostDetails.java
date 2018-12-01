@@ -50,6 +50,8 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
     String riderLastName;
     User requestingRider;
     Post requestedRide;
+    private String startPt;
+    private String endPt;
 
     //0 = not friend. 1 = request received
     int currentState = 0;
@@ -278,11 +280,21 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
     }
 
     private void messageDriver() {
+
+
         //TODO: do something more than just this (i.e initiate correct chat room)
-        Intent intent = new Intent(RiderPostDetails.this, MessageActivity.class);
-        /*intent.putExtra("riderID", myID);
+        //Intent intent = new Intent(RiderPostDetails.this, MessageActivity.class);
+        final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference();
+
+        chatRef.child("chatroom").child(myID).child(startPt.toUpperCase()
+                + " - " + endPt.toUpperCase() + " - " + driverID).setValue(driverID);
+        chatRef.child("chatroom").child(driverID).child(startPt.toUpperCase()
+                + " - " + endPt.toUpperCase() + " - " + myID).setValue(myID);
+
+        Intent intent = new Intent(RiderPostDetails.this, ChatRoomActivity.class);
         intent.putExtra("driverID", driverID);
-        intent.putExtra("driverFirstName", driverFirstName);*/
+        intent.putExtra("startPt", startPt);
+        intent.putExtra("endPt", endPt);
         startActivity(intent);
     }
 
