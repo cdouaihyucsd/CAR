@@ -133,8 +133,8 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                 getIntent().hasExtra("driverID")){
 
             postID = getIntent().getStringExtra("postID");
-            String startPt = getIntent().getStringExtra("startPt");
-            String endPt = getIntent().getStringExtra("endPt");
+            startPt = getIntent().getStringExtra("startPt");
+            endPt = getIntent().getStringExtra("endPt");
             String date = getIntent().getStringExtra("date");
             String time = getIntent().getStringExtra("time");
             String cost = "$" + getIntent().getStringExtra("cost");
