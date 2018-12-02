@@ -29,10 +29,8 @@ public class FCMReceiver extends FirebaseMessagingService {
 
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notifaction Body: " + remoteMessage.getNotification().getBody());
+            sendNotification(remoteMessage.getNotification().getBody(), getApplicationContext());
         }
-        // TODO: add custom notification SEE sendNotification
-        System.out.println("Message Received: " + remoteMessage.getNotification().getBody());
-        sendNotification(remoteMessage.getNotification().getBody(), getApplicationContext());
     }
 
     @Override
