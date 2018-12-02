@@ -364,15 +364,25 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
 
     private void messageDriver() {
 
-        //TODO: do something more than just this (i.e initiate correct chat room)
-        //Intent intent = new Intent(RiderPostDetails.this, MessageActivity.class);
         final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference();
 
         chatRef.child("chatroom").child(myID).child(startPt.toUpperCase()
-                + " - " + endPt.toUpperCase() + " - " + driverID).setValue(driverID);
-        chatRef.child("chatroom").child(driverID).child(startPt.toUpperCase()
-                + " - " + endPt.toUpperCase() + " - " + myID).setValue(myID);
-
+                + " - " + endPt.toUpperCase() + " - " + driverID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //ONLY INITIATE BRAND NEW ROOM IF CURRENT ROOM IS NULL
+                if(dataSnapshot == null) {
+                    chatRef.child("chatroom").child(myID).child(startPt.toUpperCase()
+                            + " - " + endPt.toUpperCase() + " - " + driverID).setValue(driverID);
+                    chatRef.child("chatroom").child(driverID).child(startPt.toUpperCase()
+                            + " - " + endPt.toUpperCase() + " - " + myID).setValue(myID);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+        
         Intent intent = new Intent(RiderPostDetails.this, ChatRoomActivity.class);
         intent.putExtra("driverID", driverID);
         intent.putExtra("startPt", startPt);
