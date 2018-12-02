@@ -131,6 +131,83 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
+
+        //TODO LISTENING TO DATABASE
+        //rider is either rejected or accepted (request will be removed in both cases)
+        mReference.child("request").child(myID).child(postID).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {}
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                mReference.child("accepted").child(postID).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        //IF NOT ACCEPTED, THEN SET BUTTON TO REQUEST AGAIN
+                        if(!dataSnapshot.hasChild(myID)) {
+                            mRequestRide.setEnabled(true);
+                            mRequestRide.setText("REQUEST RIDE");
+                            currentState = 0;
+                        }
+                        //IF ACCEPTED, THEN DO NOTHING
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
+            }
+        });
+        //RIDER should be kicked out of post details activity if ACCEPTED THEN REJECTED
+        mReference.child("accepted").child(myID).child(postID).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                mReference.child("accepted").child(postID).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        //IF REMOVED, THEN KICK OUT
+                        if(dataSnapshot.hasChild(myID)) {
+                            Toast.makeText(RiderPostDetails.this,"Your ride has been accepted",
+                                    Toast.LENGTH_LONG).show();
+                            //finish();
+                            //startActivity(new Intent(RiderPostDetails.this, MainCurrentRidesHolder.class));
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
+            }
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                mReference.child("accepted").child(postID).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        //IF REMOVED, THEN KICK OUT
+                        if(!dataSnapshot.hasChild(myID)) {
+                            Toast.makeText(RiderPostDetails.this,"You have been removed from the ride",
+                                    Toast.LENGTH_LONG).show();
+                            finish();
+                            //startActivity(new Intent(RiderPostDetails.this, MainCurrentRidesHolder.class));
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
+            }
+        });
     }
 
     private void getIncomingIntent(){
