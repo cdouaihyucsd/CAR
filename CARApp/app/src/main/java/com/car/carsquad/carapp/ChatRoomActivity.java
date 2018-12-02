@@ -62,6 +62,26 @@ public class ChatRoomActivity extends AppCompatActivity {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
         DatabaseReference fN = ref.child(userId).child("firstName");
 
+        Thread thread = new Thread() {
+
+            @Override
+            public void run() {
+                try {
+                    while (!isInterrupted()) {
+                        Thread.sleep(1000);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // update TextView here!
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+                }
+            }
+        };
+
+        thread.start();
         fN.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -121,6 +141,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                 input_msg.setText("");
                 message_root.updateChildren(map2);
                 message_root2.updateChildren(map2);
+
             }
         });
 
