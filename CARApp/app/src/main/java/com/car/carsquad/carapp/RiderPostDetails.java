@@ -56,7 +56,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
     Post requestedRide;
     private String startPt;
     private String endPt;
-
+    private String activityOrigin = "";
 
     //0 = not friend. 1 = request received
     int currentState = 0;
@@ -226,6 +226,10 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
             //call setDetails
             setDetails(postID, startPt, endPt, date, time, cost, driverID);
         }
+        if(getIntent().hasExtra("originActivity")){
+            activityOrigin = getIntent().getStringExtra("originActivity");
+            Toast.makeText(RiderPostDetails.this, activityOrigin, Toast.LENGTH_LONG).show();
+        }
     }
 
     private void setDetails(String postID,String startPt,String endPt,String date,String time, String cost,String driverID){
@@ -363,9 +367,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
     }
 
     private void messageDriver() {
-
         final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference();
-
         chatRef.child("chatroom").child(myID).child(startPt.toUpperCase()
                 + " - " + endPt.toUpperCase() + " - " + driverID).addValueEventListener(new ValueEventListener() {
             @Override
@@ -382,7 +384,6 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-        
         Intent intent = new Intent(RiderPostDetails.this, ChatRoomActivity.class);
         intent.putExtra("driverID", driverID);
         intent.putExtra("startPt", startPt);
@@ -453,5 +454,15 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
         return true;
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        if(activityOrigin.equals("RiderRequestedFragment") || activityOrigin.equals("RiderAcceptedFragment")){
+            finish();
+            startActivity(new Intent(RiderPostDetails.this, MainCurrentRidesHolder.class));
+        }
+        // code here to show dialog
+        super.onBackPressed();  // optional depending on your needs
+    }
 
 }

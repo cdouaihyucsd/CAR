@@ -67,6 +67,10 @@ public class RiderRequestedFragment extends Fragment {
                                 intent.putExtra("time", model.getTime());
                                 intent.putExtra("cost", model.getCost());
                                 intent.putExtra("driverID", model.getUserID());
+
+                                //TODO make next activity remember where it came from
+                                intent.putExtra("originActivity", "RiderRequestedFragment");
+
                                 //Toast.makeText(RiderActivity.this, "DriverID: " + model.getUserID(), Toast.LENGTH_LONG).show();
                                 getActivity().finish();
                                 startActivity(intent);
