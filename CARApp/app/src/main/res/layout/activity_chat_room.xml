@@ -32,6 +32,7 @@
         android:layout_alignRight="@+id/btn_send"
         android:layout_alignEnd="@+id/btn_send">
 
+
         <TextView
             android:layout_width="match_parent"
             android:padding="15dp"
