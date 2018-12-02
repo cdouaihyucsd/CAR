@@ -67,6 +67,7 @@ public class RiderAcceptedFragment extends Fragment {
                                 intent.putExtra("cost", model.getCost());
                                 intent.putExtra("driverID", model.getUserID());
                                 //Toast.makeText(RiderActivity.this, "DriverID: " + model.getUserID(), Toast.LENGTH_LONG).show();
+                                getActivity().finish();
                                 startActivity(intent);
                             }
                         });

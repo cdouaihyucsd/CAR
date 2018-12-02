@@ -4,6 +4,7 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
@@ -30,7 +31,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
+import java.util.HashMap;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class RiderPostDetails extends AppCompatActivity implements View.OnClickListener {
 
@@ -53,6 +57,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
     private String startPt;
     private String endPt;
 
+
     //0 = not friend. 1 = request received
     int currentState = 0;
 
@@ -60,6 +65,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rider_post_details);
+
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("post");
         mDatabase.keepSynced(true);
@@ -281,7 +287,6 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
 
     private void messageDriver() {
 
-
         //TODO: do something more than just this (i.e initiate correct chat room)
         //Intent intent = new Intent(RiderPostDetails.this, MessageActivity.class);
         final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference();
@@ -302,7 +307,34 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
         if (view == mRequestRide) {
             if(!(myID.equals(driverID))) {
-                requestRide();
+                //have not requested
+                String title = "";
+                String message = "Do you wish to proceed?";
+                if(currentState == 0){
+                    title = "Request Ride";
+                } else if (currentState == 1) {
+                    title = "Cancel Request";
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(RiderPostDetails.this);
+                builder.setCancelable(true);
+                builder.setTitle(title);
+                builder.setMessage(message);
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+                builder.setPositiveButton("Proceed", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        requestRide();
+                        finish();
+                        startActivity(new Intent(RiderPostDetails.this, MainCurrentRidesHolder.class));
+                    }
+                });
+                builder.show();
             }
             //can't request your own ride
             else {
@@ -333,4 +365,6 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
         onBackPressed();
         return true;
     }
+
+
 }

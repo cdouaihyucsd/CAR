@@ -84,6 +84,7 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                         // close drawer when item is tapped
+                        menuItem.setChecked(false);
                         mDrawerLayout.closeDrawers();
                         switch (menuItem.getItemId()) {
                             //logout from menu bar
@@ -98,6 +99,7 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
+                                        //menuItem.setChecked(false);
                                         dialogInterface.cancel();
                                     }
                                 });
@@ -126,22 +128,26 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                                                  }
                                             }
                                             @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError){}
+                                            public void onCancelled(@NonNull DatabaseError databaseError){ }
                                         });
                                     }
                                 });
                                 builder.show();
                                 break;
                             case R.id.messages:
+                                menuItem.setChecked(false);
                                 startActivity(new Intent(RiderActivity.this, MessageActivity.class));
                                 break;
                             case R.id.nav_account:
+                                menuItem.setChecked(false);
                                 startActivity(new Intent(RiderActivity.this, UpdateUserInfoActivity.class));
                                 break;
                             case R.id.nav_trips:
+                                menuItem.setChecked(false);
                                 startActivity(new Intent(RiderActivity.this, MainCurrentRidesHolder.class));
                                 break;
                         }
+                        menuItem.setChecked(false);
                         return true;
                     }
                 });
