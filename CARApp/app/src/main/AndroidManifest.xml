@@ -98,11 +98,19 @@
         <activity android:name=".RiderPostDetails" />
         <activity android:name=".DriverPostDetails" />
         <activity
-            android:name=".RiderCurrentRides"
+            android:name=".RiderRequestedRides"
             android:label="Your Requested Rides" />
         <activity
             android:name=".RiderAcceptedRides"
             android:label="Your Accepted Rides" />
+
+        <activity android:name=".MainCurrentRidesHolder"
+            android:parentActivityName=".RiderActivity"
+            android:label="CURRENT RIDES">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.car.carsquad.carapp.RiderActivity" />
+        </activity>
     </application>
 
 </manifest>

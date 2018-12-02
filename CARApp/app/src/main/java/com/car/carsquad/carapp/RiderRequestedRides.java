@@ -15,7 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class RiderCurrentRides extends AppCompatActivity implements View.OnClickListener {
+public class RiderRequestedRides extends AppCompatActivity implements View.OnClickListener {
 
     private Button mBack;
     DatabaseReference mCurrentRidesRef;
@@ -59,7 +59,7 @@ public class RiderCurrentRides extends AppCompatActivity implements View.OnClick
                         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(RiderCurrentRides.this, RiderPostDetails.class);
+                                Intent intent = new Intent(RiderRequestedRides.this, RiderPostDetails.class);
                                 //send information to next activity
                                 intent.putExtra("postID", model.getPostID());
                                 intent.putExtra("startPt", model.getStartPt());
@@ -121,7 +121,7 @@ public class RiderCurrentRides extends AppCompatActivity implements View.OnClick
     public void onClick(View view) {
         if(view == mBack){
             finish();
-            startActivity(new Intent(RiderCurrentRides.this, RiderActivity.class));
+            startActivity(new Intent(RiderRequestedRides.this, RiderActivity.class));
         }
     }
 }

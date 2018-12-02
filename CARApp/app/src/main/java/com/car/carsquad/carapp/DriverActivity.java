@@ -94,7 +94,6 @@ public class DriverActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
-
                         switch (menuItem.getItemId()) {
                             //logout from menu bar
                             case R.id.nav_logout:
@@ -132,6 +131,7 @@ public class DriverActivity extends AppCompatActivity {
                                 startActivity(new Intent(DriverActivity.this, UpdateUserInfoActivity.class));
                                 break;
                         }
+                        menuItem.setChecked(false);
                         return true;
                     }
                 });
