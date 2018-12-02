@@ -3,14 +3,11 @@ package com.car.carsquad.carapp;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -21,16 +18,11 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -51,9 +43,6 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
     private TextView textviewUserEmail;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
-    private FloatingActionButton mSearch;
-    private Button mCurrentRides;
-    private Button mAcceptedRides;
     private RecyclerView mPostList;
 
     LinearLayoutManager mLayoutManager;
@@ -62,14 +51,6 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rider);
-
-        mSearch = (FloatingActionButton) findViewById(R.id.search_ride_button);
-        mSearch.setOnClickListener(this);
-
-        mCurrentRides = (Button) findViewById(R.id.current_rides_btn);
-        mCurrentRides.setOnClickListener(this);
-        mAcceptedRides = (Button) findViewById(R.id.accepted_rides_btn);
-        mAcceptedRides.setOnClickListener(this);
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("post");
         mDatabase.keepSynced(true);
@@ -157,6 +138,9 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                             case R.id.nav_account:
                                 startActivity(new Intent(RiderActivity.this, UpdateUserInfoActivity.class));
                                 break;
+                            case R.id.nav_trips:
+                                startActivity(new Intent(RiderActivity.this, MainCurrentRidesHolder.class));
+                                break;
                         }
                         return true;
                     }
@@ -229,13 +213,6 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                 return false;
             }
         });
-        /*searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                populateSV();
-                return false;
-            }
-        });*/
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -288,17 +265,7 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
         startActivity(new Intent(this, MainActivity.class));
     }
     @Override
-    public void onClick(View view) {
-        if(view == mSearch){
-            startActivity(new Intent(this, SearchActivity.class));
-        }
-        else if(view == mCurrentRides){
-            startActivity(new Intent(this, RiderCurrentRides.class));
-        }
-        else if(view == mAcceptedRides){
-            startActivity(new Intent(this, RiderAcceptedRides.class));
-        }
-    }
+    public void onClick(View view) {}
     //prevent user from pressing the back button to go back from the main app screen
     @Override
     public void onBackPressed() {
