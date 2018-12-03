@@ -9,7 +9,9 @@ import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,6 +31,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     private Button btn_send_msg;
     private EditText input_msg;
     private TextView chat_conversation;
+    private ScrollView mScrollView;
 
     private String user_name,room_name;
     private DatabaseReference root ;
@@ -53,6 +56,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         btn_send_msg = (Button) findViewById(R.id.btn_send);
         input_msg = (EditText) findViewById(R.id.msg_input);
         chat_conversation = (TextView) findViewById(R.id.textView);
+        mScrollView = (ScrollView) findViewById(R.id.scrollView);
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -171,8 +175,11 @@ public class ChatRoomActivity extends AppCompatActivity {
             chat_msg = (String) ((DataSnapshot)i.next()).getValue();
             chat_user_name = (String) ((DataSnapshot)i.next()).getValue();
 
+            Toast.makeText(ChatRoomActivity.this, "Message Sent", Toast.LENGTH_SHORT).show();
             chat_conversation.append(Html.fromHtml("<font><b><u>" + chat_user_name + ":</u></b></font> " + chat_msg + " <br>"));
-
+            chat_conversation.invalidate();
+            mScrollView.setVisibility(View.GONE);
+            mScrollView.setVisibility(View.VISIBLE);
         }
 
 
