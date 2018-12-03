@@ -52,6 +52,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
     private DatabaseReference databaseCar;
     private String startPt;
     private String endPt;
+    private String driverID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,8 +190,30 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                                 riderID = model.getUserID();
 
                                 // TODO INITIATE CHAT ROOM
+                                final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference();
 
-                                
+                                chatRef.child("chatroom").child(myID).child(startPt.toUpperCase()
+                                        + " - " + endPt.toUpperCase() + " - " + driverID).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        //ONLY INITIATE BRAND NEW ROOM IF CURRENT ROOM IS NULL
+                                        if(dataSnapshot == null) {
+                                            chatRef.child("chatroom").child(myID).child(startPt.toUpperCase()
+                                                    + " - " + endPt.toUpperCase() + " - " + driverID).setValue(driverID);
+                                            chatRef.child("chatroom").child(driverID).child(startPt.toUpperCase()
+                                                    + " - " + endPt.toUpperCase() + " - " + myID).setValue(myID);
+                                        }
+                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    }
+                                });
+
+                                Intent intent = new Intent(DriverPostDetails.this, ChatRoomActivity.class);
+                                intent.putExtra("driverID", driverID);
+                                intent.putExtra("startPt", startPt);
+                                intent.putExtra("endPt", endPt);
+                                startActivity(intent);
 
 
                                 Toast.makeText(DriverPostDetails.this, "message button Clicked", Toast.LENGTH_LONG).show();
@@ -360,12 +383,12 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                 getIntent().hasExtra("date") && getIntent().hasExtra("time") && getIntent().hasExtra("cost") &&
                 getIntent().hasExtra("driverID")){
             postID = getIntent().getStringExtra("postID");
-            String startPt = getIntent().getStringExtra("startPt");
-            String endPt = getIntent().getStringExtra("endPt");
+            startPt = getIntent().getStringExtra("startPt");
+            endPt = getIntent().getStringExtra("endPt");
             String date = getIntent().getStringExtra("date");
             String time = getIntent().getStringExtra("time");
             String cost = "$" + getIntent().getStringExtra("cost");
-            String driverID = getIntent().getStringExtra("driverID");
+            driverID = getIntent().getStringExtra("driverID");
 
             setDetails(postID, startPt, endPt, date, time, cost, driverID);
         }
