@@ -8,11 +8,6 @@
     android:background="@color/colorPrimaryLight"
     android:orientation="vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#123456"/>
-
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,11 +28,12 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:layout_gravity="center"
             android:id="@+id/time_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="184dp"
+            android:layout_marginTop="8dp"
             android:drawablePadding="20dp"
             android:fontFamily="@font/work_sans"
             android:text="20:00"
@@ -50,18 +46,15 @@
         <TextView
             android:id="@+id/date_text_view"
             android:layout_width="wrap_content"
-            android:layout_height="21dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="172dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:fontFamily="@font/work_sans"
             android:text="November 26th"
             android:textColor="#ffffff"
             android:textSize="17sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/time_text_view"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -86,7 +79,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginBottom="96dp"
+            android:layout_marginTop="8dp"
             android:drawableLeft="@drawable/material_more"
             android:drawablePadding="20dp"
             android:drawableTint="@color/colorGrey"
@@ -94,14 +87,15 @@
             android:text="X stops along the way"
             android:textColor="@color/colorGrey"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/start_text_view" />
 
         <TextView
             android:id="@+id/end_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="68dp"
             android:drawableLeft="@drawable/material_place"
             android:drawablePadding="20dp"
@@ -112,7 +106,8 @@
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/post_detours" />
 
         <TextView
             android:id="@+id/cost_text_view"
@@ -120,7 +115,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start|left"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="152dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/curved_button_primarylight"
             android:backgroundTint="#5bc948"
@@ -131,8 +126,8 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/end_text_view"
+            app:layout_constraintVertical_bias="0.333" />
 
         <TextView
             android:id="@+id/seats_available_text_view"
@@ -149,8 +144,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.91"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.95" />
+            app:layout_constraintTop_toBottomOf="@+id/end_text_view"
+            app:layout_constraintVertical_bias="0.724" />
 
     </android.support.constraint.ConstraintLayout>
 
@@ -172,7 +167,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/accepted_list"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="170dp"
         android:layout_marginEnd="15dp"
         android:layout_marginStart="15dp">
     </android.support.v7.widget.RecyclerView>
@@ -195,7 +190,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/request_list"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="170dp"
         android:layout_marginEnd="15dp"
         android:layout_marginStart="15dp">
 

@@ -47,6 +47,8 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
     Post acceptedRide;
     ToggleButton showRequested;
     ToggleButton showAccepted;
+    TextView seatsAvailable;
+    private DatabaseReference databaseCar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,8 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
         ActionBar actionBar = getSupportActionBar();
         Objects.requireNonNull(actionBar).hide();
         setContentView(R.layout.activity_driver_post_details);
+
+        seatsAvailable = (TextView) findViewById(R.id.seats_available_text_view);
 
         mDeletePost = (Button) findViewById(R.id.delete_ride_button);
         mDeletePost.setOnClickListener(this);
@@ -68,6 +72,17 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
         mRiderRef = FirebaseDatabase.getInstance().getReference().child("user");
         mFriendsRef = FirebaseDatabase.getInstance().getReference().child("friends");
         myID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        databaseCar = FirebaseDatabase.getInstance().getReference("car");
+        //TODO set CAR INFO
+        databaseCar.child(myID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                seatsAvailable.setText(dataSnapshot.child("numSeats").getValue(String.class) + " seats available");
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
 
         //recycler view for user requests
         riderRequest = (RecyclerView) findViewById(R.id.request_list);

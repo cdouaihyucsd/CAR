@@ -41,9 +41,10 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
     private DatabaseReference mDatabase;
     private DatabaseReference mReference;
     private DatabaseReference databaseUser;
+    private DatabaseReference databaseCar;
+
     private Button mMessageDriver;
     private Button mRequestRide;
-    private Button mCancelRequest;
     String driverFirstName;
     String driverLastName;
     Double driverRating;
@@ -58,14 +59,23 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
     private String endPt;
     private String activityOrigin = "";
 
+    private TextView carBrand;
+    private TextView licenseNo;
+    private TextView seatsAvailable;
+
     //0 = not friend. 1 = request received
     int currentState = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActionBar actionBar = getSupportActionBar();
+        Objects.requireNonNull(actionBar).hide();
         setContentView(R.layout.activity_rider_post_details);
 
+        carBrand = (TextView) findViewById(R.id.car_text_view);
+        licenseNo = (TextView) findViewById(R.id.license_text_view);
+        seatsAvailable = (TextView) findViewById(R.id.seats_available_text_view);
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("post");
         mDatabase.keepSynced(true);
@@ -78,15 +88,26 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
         mRequestRide = (Button) findViewById(R.id.join_ride_button);
         mRequestRide.setOnClickListener(this);
 
-        mCancelRequest = (Button) findViewById(R.id.cancel_ride_button);
-        mCancelRequest.setOnClickListener(this);
-        mCancelRequest.setVisibility(View.INVISIBLE);
-
         getIncomingIntent();
         myID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         //requestingRider = new User(myID, riderFirstName, riderLastName, "","",0.0);
         databaseUser = FirebaseDatabase.getInstance().getReference("users");
+
+        databaseCar = FirebaseDatabase.getInstance().getReference("car");
+
+        //TODO set CAR INFO
+        databaseCar.child(driverID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                carBrand.setText("Brand: " + dataSnapshot.child("model").getValue(String.class));
+                licenseNo.setText("License No: " + dataSnapshot.child("licensePlate").getValue(String.class));
+                seatsAvailable.setText(dataSnapshot.child("numSeats").getValue(String.class) + " seats available");
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
+
 
 
         //mReference.keepSynced(true);

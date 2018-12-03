@@ -107,7 +107,7 @@ public class DriverProfileActivity extends AppCompatActivity implements View.OnC
             //send car info to database
             String carId = databaseCar.push().getKey();
             Car newCar = new Car(userId, carId, numSeats,carModel,licenseNo);
-            databaseCar.child(Objects.requireNonNull(carId)).setValue(newCar);
+            databaseCar.child(userId).setValue(newCar);
 
             //update user info
 
