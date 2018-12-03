@@ -192,16 +192,16 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                                 // TODO INITIATE CHAT ROOM
                                 final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference();
 
-                                chatRef.child("chatroom").child(myID).child(startPt.toUpperCase()
+                                chatRef.child("chatroom").child(riderID).child(startPt.toUpperCase()
                                         + " - " + endPt.toUpperCase() + " - " + driverID).addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         //ONLY INITIATE BRAND NEW ROOM IF CURRENT ROOM IS NULL
                                         if(dataSnapshot == null) {
-                                            chatRef.child("chatroom").child(myID).child(startPt.toUpperCase()
+                                            chatRef.child("chatroom").child(riderID).child(startPt.toUpperCase()
                                                     + " - " + endPt.toUpperCase() + " - " + driverID).setValue(driverID);
                                             chatRef.child("chatroom").child(driverID).child(startPt.toUpperCase()
-                                                    + " - " + endPt.toUpperCase() + " - " + myID).setValue(myID);
+                                                    + " - " + endPt.toUpperCase() + " - " + myID).setValue(riderID);
                                         }
                                     }
                                     @Override
