@@ -201,7 +201,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                                             chatRef.child("chatroom").child(riderID).child(startPt.toUpperCase()
                                                     + " - " + endPt.toUpperCase() + " - " + driverID).setValue(driverID);
                                             chatRef.child("chatroom").child(driverID).child(startPt.toUpperCase()
-                                                    + " - " + endPt.toUpperCase() + " - " + myID).setValue(riderID);
+                                                    + " - " + endPt.toUpperCase() + " - " + riderID).setValue(riderID);
                                         }
                                     }
                                     @Override
