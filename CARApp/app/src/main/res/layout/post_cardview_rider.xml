@@ -66,7 +66,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
             android:drawableLeft="@drawable/material_more"
             android:drawablePadding="20dp"
             android:drawableTint="@color/colorGrey"
@@ -74,16 +73,15 @@
             android:text="X stops along the way"
             android:textColor="@color/colorGrey"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/post_dest"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/post_start" />
 
         <TextView
             android:id="@+id/post_dest"
             android:layout_width="wrap_content"
-            android:layout_height="18dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="8dp"
             android:drawableLeft="@drawable/material_place"
             android:drawablePadding="20dp"
             android:drawableTint="@color/colorAccent"
@@ -93,14 +91,14 @@
             android:textSize="15sp"
             app:layout_constraintLeft_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/post_start" />
+            app:layout_constraintTop_toBottomOf="@+id/post_detours" />
 
         <TextView
             android:id="@+id/post_cost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="164dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/curved_button_primarylight"
             android:backgroundTint="#5bc948"
             android:fontFamily="@font/work_sans"
@@ -108,8 +106,8 @@
             android:text="$5"
             android:textColor="@color/colorPrimaryLight"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 <!--
         <Button
             android:id="@+id/view_ride_button"

@@ -4,7 +4,8 @@ public class Car {
 
     String userID;
     String carID;
-    String numSeats;
+    int numSeats;
+    int originalNumSeats;
     String model;
     String licensePlate;
 
@@ -12,7 +13,8 @@ public class Car {
         //default constructor
     }
 
-    public Car(String userID, String carID, String numSeats, String model, String licensePlate){
+    public Car(int originalNumSeats, String carID, int numSeats, String model, String licensePlate){
+        this.originalNumSeats = originalNumSeats;
         this.userID = userID;
         this.carID = carID;
         this.numSeats = numSeats;
@@ -20,13 +22,19 @@ public class Car {
         this.licensePlate = licensePlate;
     }
 
+    public int getOriginalNumSeats() {
+        return originalNumSeats;
+    }
+    public void setOriginalNumSeats(int originalNumSeats) {
+        this.originalNumSeats = originalNumSeats;
+    }
     public String getUserID() {
         return userID;
     }
     public String getCarID() {
         return carID;
     }
-    public String getNumSeats() {
+    public int getNumSeats() {
         return numSeats;
     }
     public String getModel() {

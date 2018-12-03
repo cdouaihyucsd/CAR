@@ -50,6 +50,8 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
     ToggleButton showAccepted;
     TextView seatsAvailable;
     private DatabaseReference databaseCar;
+    private String startPt;
+    private String endPt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +81,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
         databaseCar.child(myID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                seatsAvailable.setText(dataSnapshot.child("numSeats").getValue(String.class) + " seats available");
+                seatsAvailable.setText(dataSnapshot.child("numSeats").getValue(Integer.class) + " seats available");
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
@@ -148,7 +150,6 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                             @Override
                             public void onClick(View v) {
                                 riderID = model.getUserID();
-
                                 //REMOVE USER'S REQUEST IF DRIVER REJECTED
                                 //not myID, rather riderID
                                 FirebaseDatabase.getInstance().getReference().child("request").child(postID).child(riderID).removeValue()
@@ -158,9 +159,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                                                 FirebaseDatabase.getInstance().getReference().child("request").child(riderID).child(postID).child("request_type")
                                                         .removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        Toast.makeText(DriverPostDetails.this, "rejected successfully", Toast.LENGTH_LONG).show();
-                                                    }
+                                                    public void onComplete(@NonNull Task<Void> task) {}
                                                 });
                                             }
                                         });
@@ -182,16 +181,18 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                     protected void populateViewHolder(DriverPostDetails.RequestViewHolder viewHolder, final User model, int position){
                         String name = model.getFirstName() + " " + model.getLastName();
                         viewHolder.setRiderName(name);
-
                         /*final String*/ riderID = model.getUserID();
-
                         //MESSAGE ACCEPTED RIDER
                         viewHolder.btnMessage.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
                                 riderID = model.getUserID();
+
                                 // TODO INITIATE CHAT ROOM
+
+                                
+
+
                                 Toast.makeText(DriverPostDetails.this, "message button Clicked", Toast.LENGTH_LONG).show();
 
                             }
@@ -205,18 +206,16 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
 
                                 //Toast.makeText(DriverPostDetails.this, "RiderID: "+riderID, Toast.LENGTH_LONG).show();
 
-                                /*databaseCar.addListenerForSingleValueEvent(new ValueEventListener() {
+                                databaseCar.child(myID).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        int seatsAvail = Integer.parseInt(dataSnapshot.child("numSeats").getValue(String.class));
+                                        int seatsAvail = dataSnapshot.child("numSeats").getValue(Integer.class);
                                         seatsAvail = seatsAvail + 1;
-                                        HashMap<String, Object> car = new HashMap<>();
-                                        car.put("numSeats", Integer.toString(seatsAvail));
-                                        databaseCar.child(myID).updateChildren(car);
+                                        databaseCar.child(myID).child("numSeats").setValue(seatsAvail);
                                     }
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {}
-                                });*/
+                                });
 
                                 //REMOVE USER'S REQUEST IF DRIVER REJECTED
                                 //not myID, rather riderID
@@ -272,12 +271,12 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
         databaseCar.child(myID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                int seatsAvail = Integer.parseInt(dataSnapshot.child("numSeats").getValue(String.class));
+                int seatsAvail = dataSnapshot.child("numSeats").getValue(Integer.class);
                 if(seatsAvail > 0) {
                     seatsAvail = seatsAvail - 1;
-                    HashMap<String, Object> car = new HashMap<>();
-                    car.put("numSeats", Integer.toString(seatsAvail));
-                    databaseCar.child(myID).updateChildren(car);
+                    //HashMap<String, Object> car = new HashMap<>();
+                    //car.put("numSeats", Integer.toString(seatsAvail));
+                    databaseCar.child(myID).child("numSeats").setValue(seatsAvail);
 
                     FirebaseDatabase.getInstance().getReference().child("accepted").child(postID).child(riderID).child("accept_type")
                             .setValue("accepted_rider").addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -386,6 +385,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
     }
 
     private void deletePost(){
+
         AlertDialog.Builder builder = new AlertDialog.Builder(DriverPostDetails.this);
         builder.setCancelable(true);
         builder.setTitle("DELETING POST");
@@ -399,6 +399,16 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
         builder.setPositiveButton("Delete Post", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                databaseCar.child(myID).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        int seatsAvail = dataSnapshot.child("originalNumSeats").getValue(Integer.class);
+                        databaseCar.child(myID).child("numSeats").setValue(seatsAvail);
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {}
+                });
+
 
                 //REMOVE ALL RIDERS ASSOCIATED WITH POST
                 final DatabaseReference mReference = FirebaseDatabase.getInstance().getReference();

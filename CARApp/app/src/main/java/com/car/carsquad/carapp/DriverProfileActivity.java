@@ -98,15 +98,16 @@ public class DriverProfileActivity extends AppCompatActivity implements View.OnC
         String phoneNo = mPhoneNo.getText().toString().trim();
         String carModel = mCarModel.getText().toString().trim();
         String licenseNo = mLicensePlate.getText().toString().trim();
-        String numSeats = mNumSeats.getText().toString().trim();
+        int numSeats = Integer.parseInt(mNumSeats.getText().toString().trim());
+        int originalNum = numSeats;
 
         if(/*!TextUtils.isEmpty(firstName) && !TextUtils.isEmpty(lastName) &&*/
                 !TextUtils.isEmpty(phoneNo) && !TextUtils.isEmpty(carModel) &&
-                        !TextUtils.isEmpty(licenseNo)&& !TextUtils.isEmpty(numSeats)) {
+                        !TextUtils.isEmpty(licenseNo)&& !TextUtils.isEmpty(mNumSeats.getText().toString().trim())) {
 
             //send car info to database
             String carId = databaseCar.push().getKey();
-            Car newCar = new Car(userId, carId, numSeats,carModel,licenseNo);
+            Car newCar = new Car(originalNum, carId, numSeats,carModel,licenseNo);
             databaseCar.child(userId).setValue(newCar);
 
             //update user info
