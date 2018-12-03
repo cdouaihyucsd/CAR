@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -43,13 +45,23 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
     String riderLastName;
     User requestingRider;
     Post acceptedRide;
+    ToggleButton showRequested;
+    ToggleButton showAccepted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActionBar actionBar = getSupportActionBar();
+        Objects.requireNonNull(actionBar).hide();
         setContentView(R.layout.activity_driver_post_details);
+
         mDeletePost = (Button) findViewById(R.id.delete_ride_button);
         mDeletePost.setOnClickListener(this);
+
+        showRequested = (ToggleButton) findViewById(R.id.button_show_requested);
+        showRequested.setOnClickListener(this);
+        showAccepted = (ToggleButton) findViewById(R.id.button_show_accepted);
+        showAccepted.setOnClickListener(this);
 
         getIncomingIntent();
 
@@ -432,7 +444,30 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
     }
     @Override
     public void onClick(View view) {
-        deletePost();
+        if(view == mDeletePost) {
+            deletePost();
+        }
+        else if(view == showRequested) {
+            toggleRequested();
+        }
+        else if(view == showAccepted) {
+            toggleAccepted();
+        }
+    }
+
+    private void toggleRequested(){
+        if(riderRequest.getVisibility() != View.GONE) {
+            riderRequest.setVisibility(View.GONE);
+        } else if (riderRequest.getVisibility() == View.GONE){
+            riderRequest.setVisibility(View.VISIBLE);
+        }
+    }
+    private void toggleAccepted(){
+        if(riderAccepted.getVisibility() != View.GONE) {
+            riderAccepted.setVisibility(View.GONE);
+        } else if (riderAccepted.getVisibility() == View.GONE) {
+            riderAccepted.setVisibility(View.VISIBLE);
+        }
     }
 
 }

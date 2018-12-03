@@ -99,11 +99,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                         mRequestRide.setEnabled(true);
                         mRequestRide.setText("Cancel Request");
                         currentState = 1;
-                    } /*else {
-                        mRequestRide.setEnabled(true);
-                        mRequestRide.setText("Request Ride");
-                        currentState = 0;
-                    }*/
+                    }
                 }
             }
             @Override
@@ -120,11 +116,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                         mRequestRide.setEnabled(true);
                         mRequestRide.setText("Cancel Request");
                         currentState = 1;
-                    } /*else {
-                        mRequestRide.setEnabled(true);
-                        mRequestRide.setText("Request Ride");
-                        currentState = 0;
-                    }*/
+                    }
                 }
             }
             @Override
@@ -176,10 +168,12 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                 mReference.child("accepted").child(postID).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        //IF REMOVED, THEN KICK OUT
                         if(dataSnapshot.hasChild(myID)) {
-                            Toast.makeText(RiderPostDetails.this,"Your ride has been accepted",
-                                    Toast.LENGTH_LONG).show();
+                            if(activityOrigin.equals("RiderRequestedFragment")) {
+                                Toast.makeText(RiderPostDetails.this, "Your ride has been accepted!",
+                                        Toast.LENGTH_LONG).show();
+
+                            }
                             //finish();
                             //startActivity(new Intent(RiderPostDetails.this, MainCurrentRidesHolder.class));
                         }
@@ -228,7 +222,6 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
         }
         if(getIntent().hasExtra("originActivity")){
             activityOrigin = getIntent().getStringExtra("originActivity");
-            Toast.makeText(RiderPostDetails.this, activityOrigin, Toast.LENGTH_LONG).show();
         }
     }
 
