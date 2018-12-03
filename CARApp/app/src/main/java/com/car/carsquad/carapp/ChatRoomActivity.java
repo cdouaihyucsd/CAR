@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -62,6 +63,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
         DatabaseReference fN = ref.child(userId).child("firstName");
 
+
         fN.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -93,7 +95,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         //setTitle(" Room - "+room_name);
         getIncomingIntent();
         myID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        setTitle(" Room - "+ startPt.toUpperCase() + " - " + endPt.toUpperCase());
+        setTitle(startPt.toUpperCase() + " - " + endPt.toUpperCase());
 
         /*
         root = FirebaseDatabase.getInstance().getReference("chatroom").child(startPt.toUpperCase()
@@ -121,6 +123,8 @@ public class ChatRoomActivity extends AppCompatActivity {
                 input_msg.setText("");
                 message_root.updateChildren(map2);
                 message_root2.updateChildren(map2);
+
+
             }
         });
 
@@ -167,7 +171,8 @@ public class ChatRoomActivity extends AppCompatActivity {
             chat_msg = (String) ((DataSnapshot)i.next()).getValue();
             chat_user_name = (String) ((DataSnapshot)i.next()).getValue();
 
-            chat_conversation.append(chat_user_name +" : "+chat_msg +" \n");
+            chat_conversation.append(Html.fromHtml("<font><b><u>" + chat_user_name + ":</u></b></font> " + chat_msg + " <br>"));
+
         }
 
 
