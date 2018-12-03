@@ -102,7 +102,7 @@ public class DriverProfileActivity extends AppCompatActivity implements View.OnC
 
         if(/*!TextUtils.isEmpty(firstName) && !TextUtils.isEmpty(lastName) &&*/
                 !TextUtils.isEmpty(phoneNo) && !TextUtils.isEmpty(carModel) &&
-                !TextUtils.isEmpty(licenseNo)&& !TextUtils.isEmpty(numSeats)) {
+                        !TextUtils.isEmpty(licenseNo)&& !TextUtils.isEmpty(numSeats)) {
 
             //send car info to database
             String carId = databaseCar.push().getKey();
@@ -152,3 +152,4 @@ public class DriverProfileActivity extends AppCompatActivity implements View.OnC
         }
     }
 }
+

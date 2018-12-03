@@ -175,7 +175,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                 });
             }
         });
-        //RIDER should be kicked out of post details activity if ACCEPTED THEN REJECTED
+
         mReference.child("accepted").child(myID).child(postID).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
@@ -204,6 +204,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                     }
                 });
             }
+            //RIDER should be kicked out of post details activity if ACCEPTED THEN REJECTED
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 mReference.child("accepted").child(postID).addValueEventListener(new ValueEventListener() {
@@ -221,6 +222,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                     }
                 });
+
             }
         });
     }
@@ -480,3 +482,4 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
     }
 
 }
+
