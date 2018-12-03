@@ -35,12 +35,14 @@
         android:layout_alignRight="@+id/btn_send"
         android:layout_alignEnd="@+id/btn_send">
 
+
         <TextView
             android:layout_width="match_parent"
             android:padding="15dp"
             android:layout_height="200dp"
             android:autoSizeTextType="uniform"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/textView" />
+            android:id="@+id/textView"
+            android:fontFamily="@font/work_sans"/>
     </ScrollView>
 </RelativeLayout>
