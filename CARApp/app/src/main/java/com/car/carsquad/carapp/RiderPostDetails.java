@@ -319,7 +319,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                 }
             });
             //RETRIEVE MY INFO
-            FirebaseDatabase.getInstance().getReference().child("users").child(myID).addValueEventListener(new ValueEventListener() {
+            FirebaseDatabase.getInstance().getReference().child("users").child(myID).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     requestingRider = dataSnapshot.getValue(User.class);
@@ -327,7 +327,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
 
                     //TODO ADD POST TO REQUEST_OBJ POSTS
                     //RETRIEVE POST INFO
-                    FirebaseDatabase.getInstance().getReference().child("post").child(postID).addValueEventListener(new ValueEventListener() {
+                    FirebaseDatabase.getInstance().getReference().child("post").child(postID).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             requestedRide = dataSnapshot.getValue(Post.class);

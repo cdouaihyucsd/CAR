@@ -232,6 +232,9 @@ public class DriverActivity extends AppCompatActivity {
 
     //LOGOUT of the app
     private void logout() {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseDatabase.getInstance().getReference().child("users").child(userId)
+                .child("fcmToken").setValue("");
         //sign user out
         firebaseAuth.signOut();
         //end current activity and go back to main screen

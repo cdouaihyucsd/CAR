@@ -314,14 +314,14 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                         }
                     });
                     //RETRIEVE RIDER INFO
-                    FirebaseDatabase.getInstance().getReference().child("users").child(riderID).addValueEventListener(new ValueEventListener() {
+                    FirebaseDatabase.getInstance().getReference().child("users").child(riderID).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             requestingRider = dataSnapshot.getValue(User.class);
                             FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postID).child(riderID).setValue(requestingRider);
 
                             //RETRIEVE POST INFO
-                            FirebaseDatabase.getInstance().getReference().child("post").child(postID).addValueEventListener(new ValueEventListener() {
+                            FirebaseDatabase.getInstance().getReference().child("post").child(postID).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     acceptedRide = dataSnapshot.getValue(Post.class);

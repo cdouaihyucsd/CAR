@@ -22,6 +22,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,6 +31,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -264,6 +268,11 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
 
     //LOGOUT of the app
     private void logout() {
+        //TODO REMOVE FCM TOKEN
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseDatabase.getInstance().getReference().child("users").child(userId)
+                .child("fcmToken").setValue("");
+
         //sign user out
         firebaseAuth.signOut();
         //end current activity and go back to main screen

@@ -24,6 +24,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.Objects;
 
@@ -151,6 +153,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 DatabaseReference databaseUser =
                                         FirebaseDatabase.getInstance().getReference("users");
                                 final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+
+                                //TODO ADD FCM TOKEN
+                                FirebaseInstanceId.getInstance().getInstanceId()
+                                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                                String token = task.getResult().getToken();
+                                                //TODO UPDATE USER's FCM TOKEN
+                                                FirebaseDatabase.getInstance().getReference().child("users").child(userId)
+                                                        .child("fcmToken").setValue(token);
+                                            }
+                                        });
+
+
                                 databaseUser.child(userId).child("currentMode").addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
