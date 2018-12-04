@@ -1,6 +1,7 @@
 package com.car.carsquad.carapp;
 
 
+import android.bluetooth.BluetoothClass;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -113,41 +114,37 @@ public class ChatRoomActivity extends AppCompatActivity {
         btn_send_msg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(input_msg.length() > 0) {
+                    FirebaseDatabase.getInstance().getReference().child("users").child(driverID).child("fcmToken")
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    String  sender = user_name;
+                                    String  token = dataSnapshot.getValue(String.class);
+                                    String  message_text = input_msg.getText().toString();
+                                    Message message = new Message(sender, token, message_text);
+                                    Message.sendMessage(message, ChatRoomActivity.this);
+                                }
 
-                FirebaseDatabase.getInstance().getReference().child("users").child(driverID).child("fcmToken")
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                String  sender = user_name;
-                                String  token = dataSnapshot.getValue(String.class);
-                                String  message_text = input_msg.getText().toString();
-                                Message message = new Message(sender, token, message_text);
-                                Message.sendMessage(message, ChatRoomActivity.this);
-                            }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                }
+                            });
 
-                            }
-                        });
-
-
-                Map<String,Object> map = new HashMap<String, Object>();
-                temp_key = root.push().getKey();
-                root.updateChildren(map);
-                root2.updateChildren(map);
-
-                DatabaseReference message_root = root.child(temp_key);
-                DatabaseReference message_root2 = root2.child(temp_key);
-                Map<String,Object> map2 = new HashMap<String, Object>();
-                map2.put("name",user_name);
-                map2.put("msg",input_msg.getText().toString());
-                input_msg.setText("");
-                message_root.updateChildren(map2);
-                message_root2.updateChildren(map2);
-
-
-
+                    Map<String, Object> map = new HashMap<String, Object>();
+                    temp_key = root.push().getKey();
+                    root.updateChildren(map);
+                    root2.updateChildren(map);
+                    DatabaseReference message_root = root.child(temp_key);
+                    DatabaseReference message_root2 = root2.child(temp_key);
+                    Map<String, Object> map2 = new HashMap<String, Object>();
+                    map2.put("name", user_name);
+                    map2.put("msg", input_msg.getText().toString());
+                    input_msg.setText("");
+                    message_root.updateChildren(map2);
+                    message_root2.updateChildren(map2);
+                }
             }
         });
 
@@ -201,6 +198,12 @@ public class ChatRoomActivity extends AppCompatActivity {
             mScrollView.setVisibility(View.VISIBLE);
         }
 
+        mScrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                 mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+            }
+        });
 
     }
 
