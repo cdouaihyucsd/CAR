@@ -114,6 +114,24 @@ public class ChatRoomActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                FirebaseDatabase.getInstance().getReference().child("users").child(driverID).child("fcmToken")
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                String  sender = user_name;
+                                String  token = dataSnapshot.getValue(String.class);
+                                String  message_text = input_msg.getText().toString();
+                                Message message = new Message(sender, token, message_text);
+                                Message.sendMessage(message, ChatRoomActivity.this);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+
                 Map<String,Object> map = new HashMap<String, Object>();
                 temp_key = root.push().getKey();
                 root.updateChildren(map);
@@ -127,6 +145,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                 input_msg.setText("");
                 message_root.updateChildren(map2);
                 message_root2.updateChildren(map2);
+
 
 
             }

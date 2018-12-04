@@ -2,16 +2,18 @@ package com.car.carsquad.carapp;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class FCMReceiver extends FirebaseMessagingService {
     private static final String TAG = "FCMReceiver";
-    private static final String SERVER_URL = "http://acsweb.ucsd.edu/~jdfreili/car/handlerequests.php";
-
+    protected static final String SERVER_URL = "http://acsweb.ucsd.edu/~jdfreili/car/handlerequests.php";
+    protected static final String MESSAGE_SERVER_URL = "http://acsweb.ucsd.edu/~jdfreili/car/notifications/messages.php";
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -23,28 +25,36 @@ public class FCMReceiver extends FirebaseMessagingService {
             if(scheduleLater) {
                 scheduleJob();
             } else {
-                handleNow();
+                handleNow(remoteMessage);
             }
         }
 
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notifaction Body: " + remoteMessage.getNotification().getBody());
-            sendNotification(remoteMessage.getNotification().getBody(), getApplicationContext());
         }
     }
 
     @Override
     public void onNewToken(String token) {
         Log.d(TAG, "Refreshed token: " + token);
-        sendRegistrationToServer(token);
+//        sendRegistrationToServer(token);
     }
 
     private void scheduleJob() {
         // TODO scheduler?
     }
 
-    private void handleNow() {
-        Log.d(TAG, "Short lived task is done");
+    private void handleNow(RemoteMessage remoteMessage) {
+        Map<String, String> data = remoteMessage.getData();
+        String notification_type = data.get("type");
+        Notifier notify = new Notifier(getApplicationContext());
+        switch(notification_type) {
+            case Notifier .MESSAGE:
+                Log.d(TAG,"notification message: " + data.get("message"));
+                notify.addMessageNotification(data);
+                break;
+        }
+
     }
 
     private void sendRegistrationToServer(String token) {
@@ -54,14 +64,4 @@ public class FCMReceiver extends FirebaseMessagingService {
         uploader.addRequest(SERVER_URL, hm);
     }
 
-    private void sendNotification(String messageBody, Context context) {
-//        Intent intent = new Intent(this, context.getClass());
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        PendingIntent pendingIntent = PendingIntent.getActivities(this, 0, new Intent[]{intent}, PendingIntent.FLAG_ONE_SHOT);
-//        Log.d(TAG, "NOTIFICATION shown");
-//        Toast.makeText(context, messageBody, Toast.LENGTH_LONG).show();
-        Log.d(TAG, "sending notification");
-
-        // TODO: add notifier
-    }
 }
