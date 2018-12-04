@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -139,6 +140,9 @@ public class ChatRoomActivity extends AppCompatActivity {
                                     String  sender = user_name;
                                     String  token = dataSnapshot.getValue(String.class);
                                     String  message_text = input_msg.getText().toString();
+
+                                    Log.d("ChatRoomActivity", message_text);
+
                                     Message message = new Message(sender, token, message_text);
                                     Message.sendMessage(message, ChatRoomActivity.this);
                                 }

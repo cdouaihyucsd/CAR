@@ -286,7 +286,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-        databaseUser.child(driverID).child("driverRating").addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseUser.child(driverID).child("driverRating").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 driverRating = dataSnapshot.getValue(Double.class);
