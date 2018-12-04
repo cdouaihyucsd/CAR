@@ -210,7 +210,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                                 });
 
                                 Intent intent = new Intent(DriverPostDetails.this, ChatRoomActivity.class);
-                                intent.putExtra("driverID", driverID);
+                                intent.putExtra("driverID", riderID);
                                 intent.putExtra("startPt", startPt);
                                 intent.putExtra("endPt", endPt);
                                 startActivity(intent);
