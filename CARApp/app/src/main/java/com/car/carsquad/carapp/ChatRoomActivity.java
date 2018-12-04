@@ -199,8 +199,6 @@ public class ChatRoomActivity extends AppCompatActivity {
 
             chat_msg = (String) ((DataSnapshot)i.next()).getValue();
             chat_user_name = (String) ((DataSnapshot)i.next()).getValue();
-
-            Toast.makeText(ChatRoomActivity.this, "Message Sent", Toast.LENGTH_SHORT).show();
             chat_conversation.append(Html.fromHtml("<font><b><u>" + chat_user_name + ":</u></b></font> " + chat_msg + " <br>"));
             chat_conversation.invalidate();
             chat_conversation.setActivated(true);
