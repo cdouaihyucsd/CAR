@@ -172,33 +172,21 @@ public class ChatRoomActivity extends AppCompatActivity {
         root.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
                 append_chat_conversation(dataSnapshot);
             }
-
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
                 append_chat_conversation(dataSnapshot);
-
             }
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {}
 
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         });
-
     }
 
     private String chat_msg,chat_user_name;
@@ -215,6 +203,7 @@ public class ChatRoomActivity extends AppCompatActivity {
             Toast.makeText(ChatRoomActivity.this, "Message Sent", Toast.LENGTH_SHORT).show();
             chat_conversation.append(Html.fromHtml("<font><b><u>" + chat_user_name + ":</u></b></font> " + chat_msg + " <br>"));
             chat_conversation.invalidate();
+            chat_conversation.setActivated(true);
             mScrollView.setVisibility(View.GONE);
             mScrollView.setVisibility(View.VISIBLE);
         }

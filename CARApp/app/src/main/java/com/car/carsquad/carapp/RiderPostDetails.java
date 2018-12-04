@@ -108,6 +108,24 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
 
+        //REMOVE YOURSELF
+        mReference.child("post").child(postID).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {}
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                mReference.child("accepted").child(myID).child(postID).removeValue();
+                mReference.child("accepted_obj").child(myID).child(postID).removeValue();
+                mReference.child("request").child(myID).child(postID).removeValue();
+                mReference.child("request_obj").child(myID).child(postID).removeValue();
+            }
+        });
 
 
         //mReference.keepSynced(true);
