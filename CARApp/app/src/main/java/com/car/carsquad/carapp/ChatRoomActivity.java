@@ -3,8 +3,10 @@ package com.car.carsquad.carapp;
 
 import android.bluetooth.BluetoothClass;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.View;
@@ -113,6 +115,21 @@ public class ChatRoomActivity extends AppCompatActivity {
         btn_send_msg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                FirebaseDatabase.getInstance().getReference().child("users").child(driverID).child("fcmToken")
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String recipientToken = dataSnapshot.getValue(String.class);
+                        Toast.makeText(ChatRoomActivity.this, recipientToken, Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
                 if(input_msg.length() > 0) {
                     Map<String, Object> map = new HashMap<String, Object>();
                     temp_key = root.push().getKey();

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -158,7 +159,7 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
                 month++;
                 Log.d("DriverPostActivity", "onDateSet: mm/dd/yyyy: " + month + "/" + day + "/" + year);
                 String date = month + "/" + day + "/" + year;
-                mDisplayDate.setText(date);
+                mDisplayDate.setText("Date: " + date);
             }
         };
         mTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
@@ -166,7 +167,7 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                 Log.d("DriverPostActivity", "onTimeSet: hh:mm: " + hour + "/" + minute);
                 String time = checkDigit(hour) + ":" + checkDigit(minute);
-                mDisplayTime.setText(time);
+                mDisplayTime.setText("Time: " + time);
             }
         };
     }
