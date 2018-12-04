@@ -124,6 +124,11 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                 mReference.child("accepted_obj").child(myID).child(postID).removeValue();
                 mReference.child("request").child(myID).child(postID).removeValue();
                 mReference.child("request_obj").child(myID).child(postID).removeValue();
+
+                mReference.child("accepted").child(postID).child(myID).removeValue();
+                mReference.child("accepted_obj").child(postID).child(myID).removeValue();
+                mReference.child("request").child(postID).child(myID).removeValue();
+                mReference.child("request_obj").child(postID).child(myID).removeValue();
             }
         });
 
