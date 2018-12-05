@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -84,6 +85,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         userId = Objects.requireNonNull(user).getUid();
+        Log.d("ChatRoomActivity", "Sender Id: " + userId);
         databaseUser = FirebaseDatabase.getInstance().getReference("users");
 
         // Get First Name and Last Name for the current User
@@ -137,7 +139,7 @@ public class ChatRoomActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                final String input_message = input_msg.getText().toString();
+                final String input_message = input_msg.getText().toString().trim();
                 if(input_message.length() > 0) {
                     FirebaseDatabase.getInstance().getReference().child("users").child(driverID).child("fcmToken")
                             .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -167,7 +169,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                     Map<String, Object> map2 = new HashMap<String, Object>();
                     time = new SimpleDateFormat("HH:mm").format(new Timestamp(System.currentTimeMillis()));
                     map2.put("name", user_name);
-                    map2.put("msg", input_msg.getText().toString());
+                    map2.put("msg", input_message);
                     map2.put("userId", myID);
                     map2.put("time", time);
                     input_msg.setText("");
@@ -209,7 +211,7 @@ public class ChatRoomActivity extends AppCompatActivity {
             chat_user_name = (String) ((DataSnapshot)i.next()).getValue();
             chat_time = (String) ((DataSnapshot)i.next()).getValue();
             chat_userID = (String) ((DataSnapshot)i.next()).getValue();
-
+            Log.d("ChatRoomActivity", "Message id: " + chat_userID);
             Message message = new Message(new User(chat_user_name,"", chat_userID, chat_time), chat_msg);
             messageList.add(message);
             mMessageAdapter.notifyItemInserted(mMessageAdapter.getItemCount());
