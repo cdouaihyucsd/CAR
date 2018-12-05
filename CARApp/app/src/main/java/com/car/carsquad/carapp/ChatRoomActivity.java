@@ -118,29 +118,15 @@ public class ChatRoomActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                FirebaseDatabase.getInstance().getReference().child("users").child(driverID).child("fcmToken")
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        String recipientToken = dataSnapshot.getValue(String.class);
-                        Toast.makeText(ChatRoomActivity.this, recipientToken, Toast.LENGTH_LONG).show();
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-
-
-                if(input_msg.length() > 0) {
+                final String input_message = input_msg.getText().toString();
+                if(input_message.length() > 0) {
                     FirebaseDatabase.getInstance().getReference().child("users").child(driverID).child("fcmToken")
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     String  sender = user_name;
                                     String  token = dataSnapshot.getValue(String.class);
-                                    String  message_text = input_msg.getText().toString();
-
+                                    String  message_text = input_message;
                                     Log.d("ChatRoomActivity", message_text);
 
                                     Message message = new Message(sender, token, message_text);

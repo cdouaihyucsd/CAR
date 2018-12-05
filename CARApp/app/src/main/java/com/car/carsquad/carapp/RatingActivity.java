@@ -33,6 +33,10 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
     public RatingBar ratingBar;
     private Button skipBtn;
     private Button submitBtn;
+    private String driverId;
+    private int ratingCount;
+    private double rating;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,12 +64,46 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
 
             //TODO REMOVE YOURSELF FROM THE COMPLETED TREE
             updateDriverRating();
+            startActivity(new Intent(this, MainCurrentRidesHolder.class));
         }
     }
     private void updateDriverRating(){
-        double rating;
-        int ratingCount;
+        DatabaseReference riderDB = FirebaseDatabase.getInstance().getReference().child("users");
 
+        riderDB.child(driverId).child("driverRating").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                rating = dataSnapshot.getValue(Double.class);
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        riderDB.child(driverId).child("driverRatingCount").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ratingCount = dataSnapshot.getValue(int.class);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        double total = rating * ratingCount;
+        double newRating = (ratingBar.getRating() + total)/ratingCount+1;
+
+        riderDB.child(driverId).child("driverRating").setValue(newRating);
+        riderDB.child(driverId).child("driverRatingCount").setValue(ratingCount+1);
+    }
+
+    private void getIncomingIntent(){
+        if(getIntent().hasExtra("driverID")){
+            driverId = getIntent().getStringExtra("driverID");
+        }
     }
 }

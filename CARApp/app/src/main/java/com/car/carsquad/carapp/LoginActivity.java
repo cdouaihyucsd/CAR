@@ -154,7 +154,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                         FirebaseDatabase.getInstance().getReference("users");
                                 final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-
                                 //TODO ADD FCM TOKEN
                                 FirebaseInstanceId.getInstance().getInstanceId()
                                         .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -166,7 +165,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                                         .child("fcmToken").setValue(token);
                                             }
                                         });
-
 
                                 databaseUser.child(userId).child("currentMode").addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override

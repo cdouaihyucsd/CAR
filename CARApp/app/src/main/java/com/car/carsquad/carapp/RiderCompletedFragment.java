@@ -88,6 +88,7 @@ public class RiderCompletedFragment extends Fragment {
 
     }
 
+
     public static class PostViewHolder extends RecyclerView.ViewHolder {
         View mView;
         Button mRateDriver;
@@ -101,7 +102,7 @@ public class RiderCompletedFragment extends Fragment {
 
         public void setDest(String dest) {
             TextView post_dest = (TextView) mView.findViewById(R.id.destination);
-            post_dest.setText(dest);
+            post_dest.setText("Your trip to " + dest);
         }
 
         public void setDate(String depDate) {

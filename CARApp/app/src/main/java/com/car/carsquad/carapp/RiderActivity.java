@@ -27,8 +27,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -37,11 +35,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Objects;
+import de.hdodenhof.circleimageview.CircleImageView;
+
 
 public class RiderActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -51,6 +50,9 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
 
     //UI references
     private TextView textviewUserEmail;
+    private CircleImageView navProfile;
+    private TextView profileName;
+    private DatabaseReference userRef;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private RecyclerView mPostList;
@@ -89,6 +91,40 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+        View navViewWithHeader = navigationView.inflateHeaderView(R.layout.navigation_header);
+        navProfile = navViewWithHeader.findViewById(R.id.nav_profile_image);
+        profileName =  navViewWithHeader.findViewById(R.id.nav_name);
+
+        userRef = FirebaseDatabase.getInstance().getReference().child("users")
+                .child(firebaseAuth.getCurrentUser().getUid());
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists())
+                {
+                    String firstName = dataSnapshot.child("firstName").getValue().toString();
+                    String lastName = dataSnapshot.child("lastName").getValue().toString();
+                    String name = firstName + " " + lastName;
+                    profileName.setText(name);
+                    Object url = dataSnapshot.child("profile_image").getValue();
+                    if(url != null)
+                    {
+                        String image = url.toString();
+                        if (image != null && !image.equals("0"))
+                            Picasso.get().load(image).placeholder(R.drawable.profile).into(navProfile);
+                        else
+                            navProfile.setImageResource(R.drawable.profile);
+                    }
+                    else
+                        navProfile.setImageResource(R.drawable.profile);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override

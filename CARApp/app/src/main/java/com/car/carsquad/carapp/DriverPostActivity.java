@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,8 +29,12 @@ import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.sql.Driver;
 import java.util.Calendar;
 import java.util.Objects;
@@ -55,6 +60,7 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
     private Button mCancelPost;
     String date;
     String time;
+    int availableSeats;
 
     MyLatLng startLoc;
     MyLatLng endLoc;
@@ -135,7 +141,7 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth, mDateSetListener,
                         year, month, day);
                 Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.getDatePicker().setMinDate(System.currentTimeMillis()-1000);
+                dialog.getDatePicker().setMinDate(System.currentTimeMillis()-10000);
                 dialog.show();
             }
         });
@@ -179,17 +185,33 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
     }
     private void postRide(){
         String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-        String departureDate = date;//mDisplayDate.getText().toString().trim();
-        String departureTime = time;//mDisplayTime.getText().toString().trim();
+        final String departureDate = date;//mDisplayDate.getText().toString().trim();
+        final String departureTime = time;//mDisplayTime.getText().toString().trim();
 
-        String cost = mCost.getText().toString().trim();
+        final String cost = mCost.getText().toString().trim();
 
         if(!TextUtils.isEmpty(startPt) && !TextUtils.isEmpty(endPt) &&
                 !TextUtils.isEmpty(departureDate) && !TextUtils.isEmpty(departureTime)) {
 
-            String postId = databasePosts.push().getKey();
-            Post newPost = new Post(userId, postId,startPt,endPt,departureDate,departureTime, cost, startLoc, endLoc);
-            databasePosts.child(Objects.requireNonNull(postId)).setValue(newPost);
+            //retrieve available seats
+            FirebaseDatabase.getInstance().getReference().child("car").child(userId).child("originalNumSeats")
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    availableSeats = dataSnapshot.getValue(Integer.class);
+                    String postId = databasePosts.push().getKey();
+                    Post newPost = new Post(FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                            postId,startPt,endPt,departureDate,departureTime, cost, startLoc, endLoc, availableSeats);
+
+                    databasePosts.child(Objects.requireNonNull(postId)).setValue(newPost);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
             finish();
             startActivity(new Intent(this, DriverActivity.class));
             Toast.makeText(this, "Your ride has been posted", Toast.LENGTH_LONG).show();

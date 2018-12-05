@@ -42,6 +42,7 @@ import android.support.v7.widget.SearchView;
 import java.sql.Driver;
 import java.util.HashMap;
 import java.util.Objects;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DriverActivity extends AppCompatActivity {
 
@@ -50,7 +51,10 @@ public class DriverActivity extends AppCompatActivity {
     private FloatingActionButton mDeletePost;
 
     private RecyclerView mPostList;
+    private CircleImageView navProfile;
+    private TextView profileName;
     private DatabaseReference mDatabase;
+    private DatabaseReference userRef;
     //Firebase object
     private FirebaseAuth firebaseAuth;
 
@@ -88,6 +92,40 @@ public class DriverActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         NavigationView navigationView = findViewById(R.id.nav_view2);
+        View navViewWithHeader = navigationView.inflateHeaderView(R.layout.navigation_header);
+        navProfile = navViewWithHeader.findViewById(R.id.nav_profile_image);
+        profileName =  navViewWithHeader.findViewById(R.id.nav_name);
+
+        userRef = FirebaseDatabase.getInstance().getReference().child("users")
+                .child(firebaseAuth.getCurrentUser().getUid());
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists())
+                {
+                    String firstName = dataSnapshot.child("firstName").getValue().toString();
+                    String lastName = dataSnapshot.child("lastName").getValue().toString();
+                    String name = firstName + " " + lastName;
+                    profileName.setText(name);
+                    Object url = dataSnapshot.child("profile_image").getValue();
+                    if(url != null)
+                    {
+                        String image = url.toString();
+                        if (image != null && !image.equals("0"))
+                            Picasso.get().load(image).placeholder(R.drawable.profile).into(navProfile);
+                        else
+                            navProfile.setImageResource(R.drawable.profile);
+                    }
+                    else
+                        navProfile.setImageResource(R.drawable.profile);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -232,9 +270,11 @@ public class DriverActivity extends AppCompatActivity {
 
     //LOGOUT of the app
     private void logout() {
+        //TODO REMOVE FCM TOKEN
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseDatabase.getInstance().getReference().child("users").child(userId)
                 .child("fcmToken").setValue("");
+
         //sign user out
         firebaseAuth.signOut();
         //end current activity and go back to main screen

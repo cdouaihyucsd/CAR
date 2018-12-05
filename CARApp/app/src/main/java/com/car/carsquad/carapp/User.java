@@ -13,9 +13,10 @@ public class User {
     public String phoneNo;
     public String isDriver;
     public double driverRating;
-    public int driverRatingCount;
-    public String currentMode;
     public String fcmToken;
+    public int driverRatingCount;
+
+    public String currentMode;
 
     //link to database
     //private DatabaseReference mDatabase;
@@ -61,11 +62,19 @@ public class User {
         this.fcmToken = fcmToken;
         this.driverRatingCount = driverRatingCount;
     }
-    public String getFcmToken() { return fcmToken; }
+
+    public void setDriverRatingCount(int driverRatingCount) {
+        this.driverRatingCount = driverRatingCount;
+    }
+    public int getDriverRatingCount() {
+        return driverRatingCount;
+    }
     public void setFcmToken(String fcmToken) {
         this.fcmToken = fcmToken;
     }
-
+    public String getFcmToken() {
+        return fcmToken;
+    }
     public String getUserID() {
         return userID;
     }
@@ -101,14 +110,6 @@ public class User {
     }
     public void setDriverRating(double driverRating) {
         this.driverRating = driverRating;
-    }
-
-    public double getDriverRatingCount() {
-        return driverRatingCount;
-    }
-
-    public void setDriverRatingCount(int driverRatingCount) {
-        this.driverRatingCount = driverRatingCount;
     }
 
     public String getCurrentMode() {
