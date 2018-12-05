@@ -28,6 +28,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -55,6 +57,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     private String userId;
     private String myID;
+    private String time;
     private String driverID;
     private String startPt;
     private String endPt;
@@ -162,9 +165,11 @@ public class ChatRoomActivity extends AppCompatActivity {
                     DatabaseReference message_root = root.child(temp_key);
                     DatabaseReference message_root2 = root2.child(temp_key);
                     Map<String, Object> map2 = new HashMap<String, Object>();
+                    time = new SimpleDateFormat("HH:mm").format(new Timestamp(System.currentTimeMillis()));
                     map2.put("name", user_name);
                     map2.put("msg", input_msg.getText().toString());
                     map2.put("userId", myID);
+                    map2.put("time", time);
                     input_msg.setText("");
                     message_root.updateChildren(map2);
                     message_root2.updateChildren(map2);
@@ -192,7 +197,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         });
     }
 
-    private String chat_msg,chat_user_name, chat_userID;
+    private String chat_msg,chat_user_name, chat_userID, chat_time;
 
     private void append_chat_conversation(DataSnapshot dataSnapshot) {
 
@@ -202,23 +207,13 @@ public class ChatRoomActivity extends AppCompatActivity {
 
             chat_msg = (String) ((DataSnapshot)i.next()).getValue();
             chat_user_name = (String) ((DataSnapshot)i.next()).getValue();
+            chat_time = (String) ((DataSnapshot)i.next()).getValue();
             chat_userID = (String) ((DataSnapshot)i.next()).getValue();
-//            chat_conversation.append(Html.fromHtml("<font><b><u>" + chat_user_name + ":</u></b></font> " + chat_msg + " <br>"));
-////            chat_conversation.invalidate();
-////            chat_conversation.setActivated(true);
-////            mScrollView.setVisibility(View.GONE);
-////            mScrollView.setVisibility(View.VISIBLE);
-            Message message = new Message(new User(chat_user_name,"", chat_userID), chat_msg);
+
+            Message message = new Message(new User(chat_user_name,"", chat_userID, chat_time), chat_msg);
             messageList.add(message);
             mMessageAdapter.notifyItemInserted(mMessageAdapter.getItemCount());
         }
-
-//        mScrollView.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                 mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
-//            }
-//        });
 
     }
 

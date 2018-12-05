@@ -22,13 +22,11 @@ public class ReceiveMessageHolder extends RecyclerView.ViewHolder {
     void bind(Message message) {
         messageText.setText(message.getMessage());
 
-        // Format the stored timestamp into a readable String using method.
-        String time = new SimpleDateFormat("HH:mm").format(message.getTimestamp());
+//        String time = new SimpleDateFormat("HH:mm").format(message.getTimestamp());
 
-        timeText.setText(time);
+        timeText.setText(message.getTimestamp());
         nameText.setText(message.getSenderUser().getFirstName()+ " " + message.getSenderUser().getLastName());
 
-        // Insert the profile image from the URL into the ImageView.
 //        Utils.displayRoundImageFromUrl(mContext, message.getSender().getProfileUrl(), profileImage);
     }
 }

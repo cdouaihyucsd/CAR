@@ -15,7 +15,7 @@ public class Message {
 
     private String sender, recipToken, message;
     private User senderUser;
-    private Timestamp timestamp;
+    private String timestamp;
 
     public Message(String sender, String recipient, String message) {
         this.sender = sender;
@@ -44,14 +44,14 @@ public class Message {
         return senderUser;
     }
 
-    public Timestamp getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
     public Message(User sender, String message) {
         senderUser = sender;
         this.message = message;
-        timestamp = new Timestamp(System.currentTimeMillis());
+        timestamp = sender.time;
 
     }
 

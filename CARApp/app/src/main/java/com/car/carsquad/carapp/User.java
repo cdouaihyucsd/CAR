@@ -4,10 +4,13 @@ package com.car.carsquad.carapp;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.sql.Timestamp;
+
 public class User {
 
     //User fields
     public String userID;
+    public String time;
     public String firstName;
     public String lastName;
     public String phoneNo;
@@ -49,10 +52,11 @@ public class User {
         this.fcmToken = fcmToken;
     }
 
-    public User(String firstName, String lastName, String userID) {
+    public User(String firstName, String lastName, String userID, String time) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userID = userID;
+        this.time = time;
     }
 
     public String getFcmToken() { return fcmToken; }

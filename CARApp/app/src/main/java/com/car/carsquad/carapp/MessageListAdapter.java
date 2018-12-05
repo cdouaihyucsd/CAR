@@ -30,7 +30,6 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         return mMessageList.size();
     }
 
-    // Determines the appropriate ViewType according to the sender of the message.
     @Override
     public int getItemViewType(int position) {
         Message message = (Message) mMessageList.get(position);
@@ -44,7 +43,6 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         }
     }
 
-    // Inflates the appropriate layout according to the ViewType.
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
@@ -62,7 +60,6 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         return null;
     }
 
-    // Passes the message object to a ViewHolder so that the contents can be bound to UI.
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Message message = (Message) mMessageList.get(position);
@@ -89,10 +86,9 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         void bind(Message message) {
             messageText.setText(message.getMessage());
 
-            // Format the stored timestamp into a readable String using method.
-            String time = new SimpleDateFormat("HH:mm").format(message.getTimestamp());
+//            String time = new SimpleDateFormat("HH:mm").format(message.getTimestamp());
 
-            timeText.setText(time);
+            timeText.setText(message.getTimestamp());
         }
     }
 
@@ -112,13 +108,12 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         void bind(Message message) {
             messageText.setText(message.getMessage());
 
-            // Format the stored timestamp into a readable String using method.
-            String time = new SimpleDateFormat("HH:mm").format(message.getTimestamp());
-            timeText.setText(time);
+//            String time = new SimpleDateFormat("HH:mm").format(message.getTimestamp());
+            timeText.setText(message.getTimestamp());
 
             nameText.setText(message.getSenderUser().getFirstName()+ " " + message.getSenderUser().getLastName());
 
-            // Insert the profile image from the URL into the ImageView.
+
 //            Utils.displayRoundImageFromUrl(mContext, message.getSender().getProfileUrl(), profileImage);
         }
     }
