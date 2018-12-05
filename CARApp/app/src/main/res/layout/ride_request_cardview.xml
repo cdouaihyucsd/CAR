@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:layout_margin="10dp"
+    android:layout_height="55dp"
+    android:layout_margin="5dp"
     android:orientation="vertical"
     app:cardCornerRadius="12dp"
     app:cardBackgroundColor="#c4efcd">
@@ -17,10 +17,9 @@
 
         <TextView
             android:id="@+id/rider_name"
-            android:layout_width="wrap_content"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
             android:drawablePadding="20dp"
             android:fontFamily="@font/work_sans"
             android:text="Rider's name"
@@ -29,6 +28,20 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/rider_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:drawablePadding="20dp"
+            android:text="Rider's ratings"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:drawableRight="@drawable/ic_star_black"
+            android:drawableTint="#4a86e8"/>
 
         <Button
             android:id="@+id/button_accept_request"
@@ -36,12 +49,14 @@
             android:layout_height="30dp"
             android:layout_marginStart="200dp"
             android:layout_marginTop="12dp"
+            android:layout_marginEnd="8dp"
             android:background="@color/colorGrey"
             android:backgroundTint="#99C316"
             android:clickable="true"
             android:text="Accept"
             android:textSize="10sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/button_reject_request"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

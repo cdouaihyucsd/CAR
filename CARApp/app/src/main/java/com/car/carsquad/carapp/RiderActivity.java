@@ -127,7 +127,7 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
 
             }
         });
-        userRef.child("driverRating").addValueEventListener(new ValueEventListener() {
+        userRef.child("riderRating").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue(Double.class) != null) {

@@ -34,6 +34,7 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
     private Button skipBtn;
     private Button submitBtn;
     private String driverId;
+    private String postId;
     private int ratingCount;
     private double rating;
 
@@ -63,6 +64,9 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
 
             //RATE DRIVER
             updateDriverRating();
+
+            String myId = FirebaseAuth.getInstance().getUid();
+            FirebaseDatabase.getInstance().getReference().child("completed").child(myId).child(postId).removeValue();
             finish();
             startActivity(new Intent(this, MainCurrentRidesHolder.class));
         }
@@ -94,8 +98,9 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void getIncomingIntent(){
-        if(getIntent().hasExtra("driverID")){
+        if(getIntent().hasExtra("driverID") && getIntent().hasExtra("postID")){
             driverId = getIntent().getStringExtra("driverID");
+            postId = getIntent().getStringExtra("postID");
         }
     }
 }

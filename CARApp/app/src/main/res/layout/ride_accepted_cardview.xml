@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:layout_margin="10dp"
+    android:layout_height="55dp"
+    android:layout_margin="5dp"
     android:orientation="vertical"
     app:cardCornerRadius="12dp">
 
@@ -16,10 +16,10 @@
 
         <TextView
             android:id="@+id/rider_name"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="4dp"
             android:drawablePadding="20dp"
             android:fontFamily="@font/work_sans"
             android:text="Rider's name"
@@ -29,13 +29,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/rider_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="28dp"
+            android:drawableRight="@drawable/ic_star_black"
+            android:drawablePadding="20dp"
+            android:drawableTint="#123456"
+            android:text="ratings"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <Button
             android:id="@+id/button_message"
             android:layout_width="50dp"
             android:layout_height="30dp"
             android:layout_marginStart="205dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="76dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:background="@color/colorGrey"
             android:backgroundTint="#000000"
             android:clickable="true"
@@ -43,17 +59,19 @@
             android:textColor="#ffffff"
             android:textSize="8sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/button_remove"
-            app:layout_constraintHorizontal_bias="0.702"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button_finish"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.166" />
 
         <Button
             android:id="@+id/button_remove"
             android:layout_width="50dp"
             android:layout_height="30dp"
             android:layout_marginTop="12dp"
-            android:layout_marginEnd="60dp"
+            android:layout_marginEnd="8dp"
             android:background="@color/colorGrey"
             android:backgroundTint="#f2a242"
             android:clickable="true"
@@ -61,24 +79,24 @@
             android:textColor="#000000"
             android:textSize="8sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/button_finish"
+            app:layout_constraintEnd_toStartOf="@+id/button_message"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/button_finish"
-            android:layout_width="50dp"
+            android:layout_width="52dp"
             android:layout_height="30dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="16dp"
             android:background="@color/colorGrey"
-            android:backgroundTint="#f2a242"
+            android:backgroundTint="#4a86e8"
             android:clickable="true"
-            android:text="FINISH RIDE"
+            android:text="DROP OFF"
             android:textColor="#000000"
             android:textSize="8sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
     </android.support.constraint.ConstraintLayout>
 
