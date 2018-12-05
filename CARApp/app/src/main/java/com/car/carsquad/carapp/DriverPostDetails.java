@@ -84,33 +84,17 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        seatsAvailable.setText(dataSnapshot.getValue(Integer.class).toString() + " seats available");
+                        if(dataSnapshot.getValue(Integer.class) != null) {
+                            seatsAvailable.setText(dataSnapshot.getValue(Integer.class).toString() + " seats available");
+                        } else {
+                            seatsAvailable.setText("Ride Canceled");
+                        }
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
                     }
                 });
-
-        /*databaseCar.child(myID).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //get number of available seats
-                FirebaseDatabase.getInstance().getReference().child("post").child(postID).child("availableSeats")
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                seatsAvailable.setText(dataSnapshot.getValue(Integer.class).toString() + " seats available");
-                            }
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
-        });*/
 
         //recycler view for user requests
         riderRequest = (RecyclerView) findViewById(R.id.request_list);
@@ -459,16 +443,6 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
         builder.setPositiveButton("Delete Post", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                /*databaseCar.child(myID).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        int seatsAvail = dataSnapshot.child("originalNumSeats").getValue(Integer.class);
-                        databaseCar.child(myID).child("numSeats").setValue(seatsAvail);
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {}
-                });*/
-
 
                 //REMOVE ALL RIDERS ASSOCIATED WITH POST
                 final DatabaseReference mReference = FirebaseDatabase.getInstance().getReference();

@@ -111,7 +111,11 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                         .addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                seatsAvailable.setText(dataSnapshot.getValue(Integer.class).toString() + " seats available");
+                                if(dataSnapshot.getValue(Integer.class)!= null){
+                                    seatsAvailable.setText(dataSnapshot.getValue(Integer.class).toString() + " seats available");
+                                } else {
+                                    seatsAvailable.setText("Ride Canceled");
+                                }
                             }
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
