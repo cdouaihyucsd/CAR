@@ -80,7 +80,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
         databaseCar = FirebaseDatabase.getInstance().getReference("car");
 
         //TODO set CAR INFO
-        FirebaseDatabase.getInstance().getReference().child("post").child(postID).child("availableSeats")
+        FirebaseDatabase.getInstance().getReference().child("seatsAvailable").child(postID).child("seatsAvail")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -234,14 +234,14 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
 
                                 //Toast.makeText(DriverPostDetails.this, "RiderID: "+riderID, Toast.LENGTH_LONG).show();
 
-                                FirebaseDatabase.getInstance().getReference().child("post").child(postID).child("availableSeats")
+                                FirebaseDatabase.getInstance().getReference().child("seatsAvailable").child(postID).child("seatsAvail")
                                         .addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         int seatsAvail = dataSnapshot.getValue(Integer.class);
                                         seatsAvail = seatsAvail + 1;
-                                        FirebaseDatabase.getInstance().getReference().child("post")
-                                                .child(postID).child("availableSeats").setValue(seatsAvail);
+                                        FirebaseDatabase.getInstance().getReference().child("seatsAvailable")
+                                                .child(postID).child("seatsAvail").setValue(seatsAvail);
                                     }
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {}
@@ -314,14 +314,14 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
     }
 
     private void acceptRider() {
-        FirebaseDatabase.getInstance().getReference().child("post").child(postID).child("availableSeats")
+        FirebaseDatabase.getInstance().getReference().child("seatsAvailable").child(postID).child("seatsAvail")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int seatsAvail = dataSnapshot.getValue(Integer.class);
                 if(seatsAvail > 0) {
                     seatsAvail = seatsAvail - 1;
-                    FirebaseDatabase.getInstance().getReference().child("post").child(postID).child("availableSeats").setValue(seatsAvail);
+                    FirebaseDatabase.getInstance().getReference().child("seatsAvailable").child(postID).child("seatsAvail").setValue(seatsAvail);
 
                     FirebaseDatabase.getInstance().getReference().child("accepted").child(postID).child(riderID).child("accept_type")
                             .setValue("accepted_rider").addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -445,9 +445,12 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
+                //TODO REMOVE POST'S SEATSAVAIL
+                FirebaseDatabase.getInstance().getReference().child("seatsAvailable")
+                        .child(postID).removeValue();
+
                 //REMOVE ALL RIDERS ASSOCIATED WITH POST
                 final DatabaseReference mReference = FirebaseDatabase.getInstance().getReference();
-
                 //TODO STEP 1: POPULATE ARRAY STORING RIDER IDS
                 mReference.child("accepted").child(postID)
                         .addValueEventListener(new ValueEventListener() {

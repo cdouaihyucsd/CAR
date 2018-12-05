@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -107,7 +108,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                 licenseNo.setText("License No: " + dataSnapshot.child("licensePlate").getValue(String.class));
 
                 //get number of available seats
-                FirebaseDatabase.getInstance().getReference().child("post").child(postID).child("availableSeats")
+                FirebaseDatabase.getInstance().getReference().child("seatsAvailable").child(postID).child("seatsAvail")
                         .addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -295,6 +296,36 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
 
             }
         });
+
+        //TODO RIDER kicked out of post details activity if post is removed
+        mReference.child("post").child(postID).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                /*AlertDialog.Builder builder = new AlertDialog.Builder(RiderPostDetails.this);
+                builder.setCancelable(true);
+                builder.setTitle("RIDE DELETED");
+                builder.setMessage("The driver has removed the ride");
+                builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+                builder.show();*/
+                Toast.makeText(RiderPostDetails.this, "The driver has removed the ride",
+                        Toast.LENGTH_LONG).show();
+                finish();
+            }
+        });
+
     }
 
     private void getIncomingIntent(){
@@ -397,7 +428,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
 
                     //TODO ADD POST TO REQUEST_OBJ POSTS
                     //RETRIEVE POST INFO
-                    FirebaseDatabase.getInstance().getReference().child("post").child(postID).addValueEventListener(new ValueEventListener() {
+                    FirebaseDatabase.getInstance().getReference().child("post").child(postID).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             requestedRide = dataSnapshot.getValue(Post.class);
@@ -417,14 +448,14 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
         if (currentState == 1) {
             //RIDE IS CANCELED. ADD SEATS BACK
 
-            FirebaseDatabase.getInstance().getReference().child("post").child(postID).child("availableSeats")
+            FirebaseDatabase.getInstance().getReference().child("seatsAvailable").child(postID).child("seatsAvail")
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             int seatsAvail = dataSnapshot.getValue(Integer.class);
                             seatsAvail = seatsAvail + 1;
-                            FirebaseDatabase.getInstance().getReference().child("post").child(postID)
-                                    .child("availableSeats").setValue(seatsAvail);
+                            FirebaseDatabase.getInstance().getReference().child("seatsAvailable")
+                                    .child(postID).child("seatsAvail").setValue(seatsAvail);
                         }
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {

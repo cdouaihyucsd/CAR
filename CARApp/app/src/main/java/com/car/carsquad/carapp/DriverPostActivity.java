@@ -193,23 +193,24 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
         if(!TextUtils.isEmpty(startPt) && !TextUtils.isEmpty(endPt) &&
                 !TextUtils.isEmpty(departureDate) && !TextUtils.isEmpty(departureTime)) {
 
-            //retrieve available seats
-            FirebaseDatabase.getInstance().getReference().child("car").child(userId).child("originalNumSeats")
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
+            //TODO CREATE THE POST
+            final String postId = databasePosts.push().getKey();
+            Post newPost = new Post(FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                    postId,startPt,endPt,departureDate,departureTime, cost, startLoc, endLoc);
+
+            databasePosts.child(Objects.requireNonNull(postId)).setValue(newPost);
+
+            //TODO KEEP TRACK OF NUM SEATS
+
+            FirebaseDatabase.getInstance().getReference().child("car").child(userId)
+                    .child("originalNumSeats").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    availableSeats = dataSnapshot.getValue(Integer.class);
-                    String postId = databasePosts.push().getKey();
-                    Post newPost = new Post(FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                            postId,startPt,endPt,departureDate,departureTime, cost, startLoc, endLoc, availableSeats);
-
-                    databasePosts.child(Objects.requireNonNull(postId)).setValue(newPost);
+                    FirebaseDatabase.getInstance().getReference().child("seatsAvailable")
+                            .child(postId).child("seatsAvail").setValue(dataSnapshot.getValue(Integer.class));
                 }
-
                 @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
+                public void onCancelled(@NonNull DatabaseError databaseError) {}
             });
 
             finish();
