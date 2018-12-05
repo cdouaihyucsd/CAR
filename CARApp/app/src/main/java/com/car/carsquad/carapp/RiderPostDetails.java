@@ -396,8 +396,6 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                     Double pts = ((double) Math.round(driverRating * 100)/100);
                     ratingTV.setText(String.valueOf(pts));
                 }
-                
-                ratingTV.setText(driverRating.toString().substring(0,4));
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
