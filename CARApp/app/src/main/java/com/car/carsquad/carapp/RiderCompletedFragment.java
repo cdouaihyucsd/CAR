@@ -76,6 +76,7 @@ public class RiderCompletedFragment extends Fragment {
 
                                         //send information to next activity
                                         intent.putExtra("driverID", driverID);
+                                        intent.putExtra("postID",postID);
                                         getActivity().finish();
                                         startActivity(intent);
                                     }
