@@ -423,7 +423,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                 }
             });
             //RETRIEVE MY INFO
-            FirebaseDatabase.getInstance().getReference().child("users").child(myID).addValueEventListener(new ValueEventListener() {
+            FirebaseDatabase.getInstance().getReference().child("users").child(myID).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     requestingRider = dataSnapshot.getValue(User.class);
