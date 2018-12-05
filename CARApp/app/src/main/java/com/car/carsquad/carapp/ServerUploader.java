@@ -40,7 +40,6 @@ public class ServerUploader {
                     @Override
                     public void onResponse(String response) {
                         mServerResponse = response;
-                        show();
                     }
                 },
                 new Response.ErrorListener() {

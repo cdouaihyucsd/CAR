@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -52,6 +53,8 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
     private TimePickerDialog.OnTimeSetListener mTimeSetListener;
     private Button mPostRide;
     private Button mCancelPost;
+    String date;
+    String time;
 
     MyLatLng startLoc;
     MyLatLng endLoc;
@@ -157,16 +160,16 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month++;
                 Log.d("DriverPostActivity", "onDateSet: mm/dd/yyyy: " + month + "/" + day + "/" + year);
-                String date = month + "/" + day + "/" + year;
-                mDisplayDate.setText(date);
+                date = month + "/" + day + "/" + year;
+                mDisplayDate.setText("DATE: " + date);
             }
         };
         mTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                 Log.d("DriverPostActivity", "onTimeSet: hh:mm: " + hour + "/" + minute);
-                String time = checkDigit(hour) + ":" + checkDigit(minute);
-                mDisplayTime.setText(time);
+                time = checkDigit(hour) + ":" + checkDigit(minute);
+                mDisplayTime.setText("TIME: " + time);
             }
         };
     }
@@ -176,8 +179,9 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
     }
     private void postRide(){
         String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-        String departureDate = mDisplayDate.getText().toString().trim();
-        String departureTime = mDisplayTime.getText().toString().trim();
+        String departureDate = date;//mDisplayDate.getText().toString().trim();
+        String departureTime = time;//mDisplayTime.getText().toString().trim();
+
         String cost = mCost.getText().toString().trim();
 
         if(!TextUtils.isEmpty(startPt) && !TextUtils.isEmpty(endPt) &&

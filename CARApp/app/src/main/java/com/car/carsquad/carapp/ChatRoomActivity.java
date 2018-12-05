@@ -1,11 +1,15 @@
 package com.car.carsquad.carapp;
 
 
+import android.bluetooth.BluetoothClass;
 import android.os.Bundle;
+
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -114,54 +118,75 @@ public class ChatRoomActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Map<String,Object> map = new HashMap<String, Object>();
-                temp_key = root.push().getKey();
-                root.updateChildren(map);
-                root2.updateChildren(map);
+                FirebaseDatabase.getInstance().getReference().child("users").child(driverID).child("fcmToken")
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String recipientToken = dataSnapshot.getValue(String.class);
+                        Toast.makeText(ChatRoomActivity.this, recipientToken, Toast.LENGTH_LONG).show();
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                DatabaseReference message_root = root.child(temp_key);
-                DatabaseReference message_root2 = root2.child(temp_key);
-                Map<String,Object> map2 = new HashMap<String, Object>();
-                map2.put("name",user_name);
-                map2.put("msg",input_msg.getText().toString());
-                input_msg.setText("");
-                message_root.updateChildren(map2);
-                message_root2.updateChildren(map2);
+                    }
+                });
 
 
+                if(input_msg.length() > 0) {
+                    FirebaseDatabase.getInstance().getReference().child("users").child(driverID).child("fcmToken")
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    String  sender = user_name;
+                                    String  token = dataSnapshot.getValue(String.class);
+                                    String  message_text = input_msg.getText().toString();
+
+                                    Log.d("ChatRoomActivity", message_text);
+
+                                    Message message = new Message(sender, token, message_text);
+                                    Message.sendMessage(message, ChatRoomActivity.this);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+
+                    Map<String, Object> map = new HashMap<String, Object>();
+                    temp_key = root.push().getKey();
+                    root.updateChildren(map);
+                    root2.updateChildren(map);
+                    DatabaseReference message_root = root.child(temp_key);
+                    DatabaseReference message_root2 = root2.child(temp_key);
+                    Map<String, Object> map2 = new HashMap<String, Object>();
+                    map2.put("name", user_name);
+                    map2.put("msg", input_msg.getText().toString());
+                    input_msg.setText("");
+                    message_root.updateChildren(map2);
+                    message_root2.updateChildren(map2);
+                }
             }
         });
 
         root.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
                 append_chat_conversation(dataSnapshot);
             }
-
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
                 append_chat_conversation(dataSnapshot);
-
             }
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {}
 
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         });
-
     }
 
     private String chat_msg,chat_user_name;
@@ -174,14 +199,19 @@ public class ChatRoomActivity extends AppCompatActivity {
 
             chat_msg = (String) ((DataSnapshot)i.next()).getValue();
             chat_user_name = (String) ((DataSnapshot)i.next()).getValue();
-
-            Toast.makeText(ChatRoomActivity.this, "Message Sent", Toast.LENGTH_SHORT).show();
             chat_conversation.append(Html.fromHtml("<font><b><u>" + chat_user_name + ":</u></b></font> " + chat_msg + " <br>"));
             chat_conversation.invalidate();
+            chat_conversation.setActivated(true);
             mScrollView.setVisibility(View.GONE);
             mScrollView.setVisibility(View.VISIBLE);
         }
 
+        mScrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                 mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+            }
+        });
 
     }
 

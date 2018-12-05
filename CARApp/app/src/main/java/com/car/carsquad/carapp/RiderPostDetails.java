@@ -137,6 +137,29 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
             }
         });
 
+        //REMOVE YOURSELF
+        mReference.child("post").child(postID).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {}
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                mReference.child("accepted").child(myID).child(postID).removeValue();
+                mReference.child("accepted_obj").child(myID).child(postID).removeValue();
+                mReference.child("request").child(myID).child(postID).removeValue();
+                mReference.child("request_obj").child(myID).child(postID).removeValue();
+
+                mReference.child("accepted").child(postID).child(myID).removeValue();
+                mReference.child("accepted_obj").child(postID).child(myID).removeValue();
+                mReference.child("request").child(postID).child(myID).removeValue();
+                mReference.child("request_obj").child(postID).child(myID).removeValue();
+            }
+        });
 
 
         //mReference.keepSynced(true);
@@ -315,7 +338,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-        databaseUser.child(driverID).child("driverRating").addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseUser.child(driverID).child("driverRating").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 driverRating = dataSnapshot.getValue(Double.class);
@@ -501,7 +524,25 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
             }
         }
         else if (view == mMessageDriver){
-            messageDriver();
+            if(!(myID.equals(driverID))) {
+                messageDriver();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(RiderPostDetails.this);
+                builder.setCancelable(true);
+                builder.setTitle("MESSAGE FAILED");
+                builder.setMessage("You cannot message yourself");
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                        Intent intent = new Intent(RiderPostDetails.this, RiderActivity.class);
+                        finish();
+                        startActivity(intent);
+                    }
+                });
+                builder.show();
+            }
         }
     }
 
