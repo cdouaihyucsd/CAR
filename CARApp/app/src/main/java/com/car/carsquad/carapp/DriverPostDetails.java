@@ -259,6 +259,16 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                                 FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(riderID).child(postID).removeValue();
                             }
                         });
+
+                        //FINISH RIDER RIDE
+                        viewHolder.btnFinish.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                //finish();
+                                Intent intent = new Intent(DriverPostDetails.this, DriverFinishedRideActivity.class);
+                                startActivity(new Intent(DriverPostDetails.this, DriverFinishedRideActivity.class));
+                            }
+                        });
                     }
                 };
         riderAccepted.setAdapter(firebaseRecyclerAdapter2);
@@ -270,6 +280,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
         Button btnReject;
         Button btnMessage;
         Button btnRemove;
+        Button btnFinish;
         String currentID;
 
         public RequestViewHolder(View itemView){
@@ -281,6 +292,8 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
 
             btnMessage = (Button) itemView.findViewById(R.id.button_message);
             btnRemove = (Button) itemView.findViewById(R.id.button_remove);
+            btnFinish = (Button) itemView.findViewById(R.id.button_finish);
+
 
             //currentID = currentRiderID;
         }
