@@ -53,25 +53,36 @@ public class DriverFinishedRideActivity extends AppCompatActivity implements Vie
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Post completedPost = dataSnapshot.getValue(Post.class);
-                    finishDB.child(riderId).child(postId)/*.child("compPost")*/.setValue(completedPost);
-                    //finishDB.child(riderId).child(postId).child("paymentType").setValue("card");
+                    finishDB.child(riderId).child(postId).setValue(completedPost);
+                    finishDB.child(riderId).child(postId).child("paymentType").setValue("card");
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {}
             });
+            //remove user from accepted list
+            FirebaseDatabase.getInstance().getReference().child("accepted").child(postId).child(riderId).removeValue();
+            FirebaseDatabase.getInstance().getReference().child("accepted").child(riderId).child(postId).removeValue();
+            FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postId).child(riderId).removeValue();
+            FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(riderId).child(postId).removeValue();
             finish();
         } else if (view == payCash) {
             FirebaseDatabase.getInstance().getReference().child("post").child(postId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Post completedPost = dataSnapshot.getValue(Post.class);
-                    finishDB.child(riderId).child(postId)./*child("compPost").*/setValue(completedPost);
-                    //finishDB.child(riderId).child(postId).child("paymentType").setValue("cash");
+                    finishDB.child(riderId).child(postId).setValue(completedPost);
+                    finishDB.child(riderId).child(postId).child("paymentType").setValue("cash");
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {}
             });
+            //remove user from accepted list
+            FirebaseDatabase.getInstance().getReference().child("accepted").child(postId).child(riderId).removeValue();
+            FirebaseDatabase.getInstance().getReference().child("accepted").child(riderId).child(postId).removeValue();
+            FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postId).child(riderId).removeValue();
+            FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(riderId).child(postId).removeValue();
             finish();
+
         } else if (view == mCancel) {
             finish();
         }
