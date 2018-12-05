@@ -1,7 +1,7 @@
 package com.car.carsquad.carapp;
 
 import android.content.Intent;
-import android.provider.ContactsContract;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,19 +9,30 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.HashMap;
 import java.util.Objects;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UpdateUserInfoActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -29,15 +40,22 @@ public class UpdateUserInfoActivity extends AppCompatActivity implements View.On
     private DatabaseReference databaseUser;
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
+    private StorageReference userImageRef;
+    private DatabaseReference currUserRef;
 
     //UI references
     private EditText mFirstName;
     private EditText mLastName;
     private EditText mPhoneNo;
+    private CircleImageView profileImage;
+    final static int requestGallery = 1;
 
     private Button mSubmitInfo;
     private Button mCancel;
     private String userId;
+    private String currFirst;
+    private String currLast;
+    private String currPhone;
     private double driverRating;
 
     @Override
@@ -51,6 +69,8 @@ public class UpdateUserInfoActivity extends AppCompatActivity implements View.On
         FirebaseUser user = mAuth.getCurrentUser();
         userId = Objects.requireNonNull(user).getUid();
         databaseUser = FirebaseDatabase.getInstance().getReference("users");
+        currUserRef = databaseUser.child(userId);
+        userImageRef = FirebaseStorage.getInstance().getReference().child("profile_images");
 
         //UI References
         mFirstName = (EditText) findViewById(R.id.user_first_name);
@@ -58,9 +78,109 @@ public class UpdateUserInfoActivity extends AppCompatActivity implements View.On
         mPhoneNo = (EditText) findViewById(R.id.user_phone_number);
         mSubmitInfo = (Button) findViewById(R.id.submit_user_info);
         mCancel = (Button) findViewById(R.id.cancel_update_info);
+        profileImage = (CircleImageView) findViewById(R.id.post_image_rider) ;
+        DatabaseReference currUser = databaseUser.child(userId);
+        currUser.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists())
+                {
+                    currFirst = dataSnapshot.child("firstName").getValue().toString();
+                    currLast = dataSnapshot.child("lastName").getValue().toString();
+                    currPhone = dataSnapshot.child("phoneNo").getValue().toString();
+                    mFirstName.setText(currFirst,TextView.BufferType.EDITABLE);
+                    mLastName.setText(currLast,TextView.BufferType.EDITABLE);
+                    mPhoneNo.setText(currPhone,TextView.BufferType.EDITABLE);
+                    Object url = dataSnapshot.child("profile_image").getValue();
+                    if(url != null){
+                        String image = url.toString();
+                        if(image != null && !image.equals("0"))
+                            Picasso.get().load(image).placeholder(R.drawable.profile).into(profileImage);
+                        else
+                            profileImage.setImageResource(R.drawable.profile);
+                    }
+                    else
+                        profileImage.setImageResource(R.drawable.profile);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         mSubmitInfo.setOnClickListener(this);
         mCancel.setOnClickListener(this);
+        profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent gallery = new Intent();
+                gallery.setAction(Intent.ACTION_GET_CONTENT);
+                gallery.setType("image/*");
+                startActivityForResult(gallery,requestGallery);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode,resultCode,data);
+        if(requestCode == requestGallery && resultCode == RESULT_OK && !data.equals(null))
+        {
+            Uri imageUri = data.getData();
+            CropImage.activity(imageUri).setGuidelines(CropImageView.Guidelines.ON)
+                    .setAspectRatio(1,1).start(this);
+
+
+        }
+        if(requestCode==CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if(resultCode == RESULT_OK){
+                Uri resultUri = result.getUri();
+                final StorageReference filePath = userImageRef.child(userId+".jpg");
+                filePath.putFile(resultUri).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                    @Override
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        if (!task.isSuccessful())
+                        {
+                            throw task.getException();
+                        }
+                        return filePath.getDownloadUrl();
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if(task.isSuccessful())
+                        {
+                            Uri downloadUri = task.getResult();
+                            final String downloadUrl = downloadUri.toString();
+                            currUserRef.child("profile_image").setValue(downloadUrl);
+                            DatabaseReference currUser = databaseUser.child(userId);
+                            currUser.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if(dataSnapshot.exists())
+                                    {
+                                        String image = dataSnapshot.child("profile_image").getValue().toString();
+                                        if(image != null)
+                                            Picasso.get().load(image).placeholder(R.drawable.profile).into(profileImage);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                    }
+                });
+
+
+            }
+        }
     }
 
     private void updateInfo(){

@@ -22,8 +22,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,11 +29,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Objects;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RiderActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -45,6 +44,9 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
 
     //UI references
     private TextView textviewUserEmail;
+    private CircleImageView navProfile;
+    private TextView profileName;
+    private DatabaseReference userRef;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private RecyclerView mPostList;
@@ -83,6 +85,32 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+        View navViewWithHeader = navigationView.inflateHeaderView(R.layout.navigation_header);
+        navProfile = navViewWithHeader.findViewById(R.id.nav_profile_image);
+        profileName =  navViewWithHeader.findViewById(R.id.nav_name);
+
+        userRef = FirebaseDatabase.getInstance().getReference().child("users")
+                .child(firebaseAuth.getCurrentUser().getUid());
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists())
+                {
+                    String firstName = dataSnapshot.child("firstName").getValue().toString();
+                    String lastName = dataSnapshot.child("lastName").getValue().toString();
+                    String name = firstName + " " + lastName;
+                    profileName.setText(name);
+                    String image = dataSnapshot.child("profile_image").getValue().toString();
+                    if(image != null)
+                        Picasso.get().load(image).placeholder(R.drawable.profile).into(navProfile);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -268,11 +296,6 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
 
     //LOGOUT of the app
     private void logout() {
-        //TODO REMOVE FCM TOKEN
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        FirebaseDatabase.getInstance().getReference().child("users").child(userId)
-                .child("fcmToken").setValue("");
-
         //sign user out
         firebaseAuth.signOut();
         //end current activity and go back to main screen

@@ -11,27 +11,29 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#000">
+        android:background="#000"
+        app:layout_constraintBottom_toBottomOf="@+id/post_detours"
+        app:layout_constraintTop_toBottomOf="@+id/post_detours">
 
         <Button
             android:id="@+id/delete_ride_button"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
+            android:layout_height="0dp"
             android:layout_gravity="center"
+            android:layout_marginTop="3dp"
             android:backgroundTint="#000000"
             android:fontFamily="@font/work_sans"
             android:text="CANCEL RIDE"
             android:textColor="#e81717"
             android:textSize="12sp"
-            android:layout_marginTop="3dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:layout_gravity="center"
             android:id="@+id/time_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginStart="184dp"
             android:layout_marginTop="8dp"
             android:drawablePadding="20dp"

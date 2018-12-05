@@ -15,7 +15,6 @@ public class User {
     public double driverRating;
 
     public String currentMode;
-    public String fcmToken;
 
     //link to database
     //private DatabaseReference mDatabase;
@@ -35,23 +34,6 @@ public class User {
         this.isDriver = isDriver;
         this.driverRating = driverRating;
         this.currentMode = "rider";
-    }
-
-    public User(String userID, String firstName, String lastName, String phoneNo,
-                String isDriver, double driverRating, String fcmToken){
-        this.userID = userID;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNo = phoneNo;
-        this.isDriver = isDriver;
-        this.driverRating = driverRating;
-        this.currentMode = "rider";
-        this.fcmToken = fcmToken;
-    }
-
-    public String getFcmToken() { return fcmToken; }
-    public void setFcmToken(String fcmToken) {
-        this.fcmToken = fcmToken;
     }
 
     public String getUserID() {

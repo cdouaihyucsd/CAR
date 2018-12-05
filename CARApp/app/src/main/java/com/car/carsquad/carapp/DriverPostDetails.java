@@ -210,7 +210,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                                 });
 
                                 Intent intent = new Intent(DriverPostDetails.this, ChatRoomActivity.class);
-                                intent.putExtra("driverID", driverID);
+                                intent.putExtra("driverID", riderID);
                                 intent.putExtra("startPt", startPt);
                                 intent.putExtra("endPt", endPt);
                                 startActivity(intent);
@@ -438,7 +438,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
 
                 //TODO STEP 1: POPULATE ARRAY STORING RIDER IDS
                 mReference.child("accepted").child(postID)
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                        .addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 

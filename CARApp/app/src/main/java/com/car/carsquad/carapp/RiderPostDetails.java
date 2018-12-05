@@ -28,6 +28,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -35,6 +36,8 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RiderPostDetails extends AppCompatActivity implements View.OnClickListener {
 
@@ -106,6 +109,32 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("users")
+                .child(driverID);
+        final CircleImageView pic = findViewById(R.id.post_details_image_r);
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Object url = dataSnapshot.child("profile_image").getValue();
+                    if(url != null)
+                    {
+                        String image = url.toString();
+                        if (image != null && !image.equals("0"))
+                            Picasso.get().load(image).placeholder(R.drawable.profile).into(pic);
+                        else
+                            pic.setImageResource(R.drawable.profile);
+                    }
+                    else
+                        pic.setImageResource(R.drawable.profile);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
         });
 
 
@@ -319,7 +348,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                 }
             });
             //RETRIEVE MY INFO
-            FirebaseDatabase.getInstance().getReference().child("users").child(myID).addListenerForSingleValueEvent(new ValueEventListener() {
+            FirebaseDatabase.getInstance().getReference().child("users").child(myID).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     requestingRider = dataSnapshot.getValue(User.class);
@@ -327,7 +356,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
 
                     //TODO ADD POST TO REQUEST_OBJ POSTS
                     //RETRIEVE POST INFO
-                    FirebaseDatabase.getInstance().getReference().child("post").child(postID).addListenerForSingleValueEvent(new ValueEventListener() {
+                    FirebaseDatabase.getInstance().getReference().child("post").child(postID).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             requestedRide = dataSnapshot.getValue(Post.class);

@@ -132,7 +132,7 @@ public class DriverPostActivity extends AppCompatActivity implements View.OnClic
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth, mDateSetListener,
                         year, month, day);
                 Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.getDatePicker().setMinDate(System.currentTimeMillis()-1000);
+                dialog.getDatePicker().setMinDate(System.currentTimeMillis()-10000);
                 dialog.show();
             }
         });
