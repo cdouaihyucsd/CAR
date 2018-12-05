@@ -91,6 +91,8 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
         mToggle.syncState();
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
+
+
         NavigationView navigationView = findViewById(R.id.nav_view);
         View navViewWithHeader = navigationView.inflateHeaderView(R.layout.navigation_header);
         navProfile = navViewWithHeader.findViewById(R.id.nav_profile_image);

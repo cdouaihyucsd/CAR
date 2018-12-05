@@ -56,12 +56,12 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View view) {
         if (view == skipBtn) {
+            String myId = FirebaseAuth.getInstance().getUid();
+            FirebaseDatabase.getInstance().getReference().child("completed").child(myId).child(postId).removeValue();
             finish();
             startActivity(new Intent(this, MainCurrentRidesHolder.class));
         }
         else if (view == submitBtn) {
-            //TODO REMOVE YOURSELF FROM THE COMPLETED TREE
-
             //RATE DRIVER
             updateDriverRating();
 

@@ -124,6 +124,10 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                         String name = model.getFirstName() + " " + model.getLastName();
                         viewHolder.setRiderName(name);
 
+                        Double rating = model.getRiderRating();
+                        Double pts = ((double) Math.round(rating * 100)/100);
+                        viewHolder.setRiderRating(pts);
+
                         /*final String*/ riderID = model.getUserID();
 
                         //ACCEPT REQUEST
@@ -190,6 +194,12 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                     protected void populateViewHolder(DriverPostDetails.RequestViewHolder viewHolder, final User model, int position){
                         String name = model.getFirstName() + " " + model.getLastName();
                         viewHolder.setRiderName(name);
+
+
+                        Double rating = model.getRiderRating();
+                        Double pts = ((double) Math.round(rating * 100)/100);
+                        viewHolder.setRiderRating(pts);
+
                         /*final String*/ riderID = model.getUserID();
                         //MESSAGE ACCEPTED RIDER
                         viewHolder.btnMessage.setOnClickListener(new View.OnClickListener() {
@@ -310,6 +320,11 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
         public void setRiderName(String name){
             TextView rider_name = (TextView)mView.findViewById(R.id.rider_name);
             rider_name.setText(name);
+        }
+
+        public void setRiderRating(Double rating){
+            TextView rider_rating = (TextView)mView.findViewById(R.id.rider_rating);
+            rider_rating.setText(Double.toString(rating));
         }
     }
 

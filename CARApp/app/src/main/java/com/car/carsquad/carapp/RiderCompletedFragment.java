@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -56,29 +58,58 @@ public class RiderCompletedFragment extends Fragment {
 
                         final String postID = model.getPostID();
 
+                        //retrieve DRIVERID:
+                        FirebaseDatabase.getInstance().getReference().child("completed").child(myID).child(postID)
+                                .child("userID").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                final String driverID = dataSnapshot.getValue(String.class);
+                                //set driver's name
+                                FirebaseDatabase.getInstance().getReference().child("users")
+                                        .child(driverID).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        String firstName = dataSnapshot.child("firstName").getValue(String.class);
+                                        String lastName = dataSnapshot.child("lastName").getValue(String.class);
+                                        String name = firstName + " " + lastName;
+                                        Toast.makeText(getActivity(), "Name is: " + name, Toast.LENGTH_LONG).show();
+                                        viewHolder.setDriverName(name);
+                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {}
+                                });
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        });
+
                         //Go to next activity on click
                         viewHolder.mRateDriver.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                final Intent intent = new Intent(getActivity(), RatingActivity.class);
-
                                 //retrieve DRIVERID:
                                 FirebaseDatabase.getInstance().getReference().child("completed").child(myID).child(postID)
                                         .child("userID").addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        String driverID = dataSnapshot.getValue(String.class);
+                                        final String driverID = dataSnapshot.getValue(String.class);
                                         //set driver's name
-                                        viewHolder.setDriverName(FirebaseDatabase.getInstance().getReference()
-                                                .child("users").child(driverID).child("firstName") + " " +
-                                                FirebaseDatabase.getInstance().getReference()
-                                                        .child("users").child(driverID).child("lastName"));
-
-                                        //send information to next activity
-                                        intent.putExtra("driverID", driverID);
-                                        intent.putExtra("postID",postID);
-                                        getActivity().finish();
-                                        startActivity(intent);
+                                        FirebaseDatabase.getInstance().getReference().child("users")
+                                                .child(driverID).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                final Intent intent = new Intent(getActivity(), RatingActivity.class);
+                                                //send information to next activity
+                                                intent.putExtra("driverID", driverID);
+                                                intent.putExtra("postID",postID);
+                                                getActivity().finish();
+                                                startActivity(intent);
+                                            }
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {}
+                                        });
                                     }
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -95,6 +126,7 @@ public class RiderCompletedFragment extends Fragment {
     public static class PostViewHolder extends RecyclerView.ViewHolder {
         View mView;
         Button mRateDriver;
+        TextView nameTV;
 
         public PostViewHolder(View itemView) {
             super(itemView);
@@ -113,7 +145,7 @@ public class RiderCompletedFragment extends Fragment {
         }
 
         public void setDriverName(String driverName) {
-            TextView nameTV = (TextView) mView.findViewById(R.id.driver_name);
+            nameTV = (TextView) mView.findViewById(R.id.comp_driver_name);
             nameTV.setText(driverName);
         }
     }
