@@ -2,6 +2,7 @@ package com.car.carsquad.carapp;
 
 import android.content.Context;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 
 /**
@@ -13,11 +14,44 @@ public class Message {
     private static final String NOTIFICATION_ID = "MESSAGE";
 
     private String sender, recipToken, message;
+    private User senderUser;
+    private String timestamp;
 
     public Message(String sender, String recipient, String message) {
         this.sender = sender;
         this.recipToken = recipient;
         this.message = message;
+
+    }
+
+    public static String getNotificationId() {
+        return NOTIFICATION_ID;
+    }
+
+    public String getSender() {
+        return sender;
+    }
+
+    public String getRecipToken() {
+        return recipToken;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public User getSenderUser() {
+        return senderUser;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public Message(User sender, String message) {
+        senderUser = sender;
+        this.message = message;
+        timestamp = sender.time;
 
     }
 

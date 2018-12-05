@@ -8,6 +8,7 @@ public class User {
 
     //User fields
     public String userID;
+    public String time;
     public String firstName;
     public String lastName;
     public String phoneNo;
@@ -32,7 +33,7 @@ public class User {
     }
 
     public User(String userID, String firstName, String lastName, String phoneNo,
-                 String isDriver, double driverRating){
+                String isDriver, double driverRating){
         this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -81,6 +82,13 @@ public class User {
         this.driverRatingCount = driverRatingCount;
         this.riderRatingCount = riderRatingCount;
         this.riderRating = riderRating;
+    }
+
+    public User(String firstName, String lastName, String userID, String time) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userID = userID;
+        this.time = time;
     }
 
     public double getRiderRating() {

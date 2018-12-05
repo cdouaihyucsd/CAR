@@ -8,12 +8,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ScrollView;
+/*import android.widget.ScrollView;*/
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,16 +28,23 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 public class ChatRoomActivity extends AppCompatActivity {
+
+    private RecyclerView mMessageRecycler;
+    private MessageListAdapter mMessageAdapter;
     private Button btn_send_msg;
     private EditText input_msg;
     private TextView chat_conversation;
-    private ScrollView mScrollView;
+    /*private ScrollView mScrollView;*/
 
     private String user_name,room_name;
     private DatabaseReference root ;
@@ -48,19 +57,29 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     private String userId;
     private String myID;
+    private String time;
     private String driverID;
     private String startPt;
     private String endPt;
+    private ArrayList<Message> messageList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
+        messageList = new ArrayList<>();
+
+
+
+        mMessageRecycler = (RecyclerView) findViewById(R.id.reyclerview_message_list);
+        mMessageAdapter = new MessageListAdapter(this, messageList);
+        mMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
+        mMessageRecycler.setAdapter(mMessageAdapter);
+
+
 
         btn_send_msg = (Button) findViewById(R.id.btn_send);
         input_msg = (EditText) findViewById(R.id.msg_input);
-        chat_conversation = (TextView) findViewById(R.id.textView);
-        mScrollView = (ScrollView) findViewById(R.id.scrollView);
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -146,8 +165,11 @@ public class ChatRoomActivity extends AppCompatActivity {
                     DatabaseReference message_root = root.child(temp_key);
                     DatabaseReference message_root2 = root2.child(temp_key);
                     Map<String, Object> map2 = new HashMap<String, Object>();
+                    time = new SimpleDateFormat("HH:mm").format(new Timestamp(System.currentTimeMillis()));
                     map2.put("name", user_name);
                     map2.put("msg", input_msg.getText().toString());
+                    map2.put("userId", myID);
+                    map2.put("time", time);
                     input_msg.setText("");
                     message_root.updateChildren(map2);
                     message_root2.updateChildren(map2);
@@ -175,7 +197,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         });
     }
 
-    private String chat_msg,chat_user_name;
+    private String chat_msg,chat_user_name, chat_userID, chat_time;
 
     private void append_chat_conversation(DataSnapshot dataSnapshot) {
 
@@ -185,19 +207,13 @@ public class ChatRoomActivity extends AppCompatActivity {
 
             chat_msg = (String) ((DataSnapshot)i.next()).getValue();
             chat_user_name = (String) ((DataSnapshot)i.next()).getValue();
-            chat_conversation.append(Html.fromHtml("<font><b><u>" + chat_user_name + ":</u></b></font> " + chat_msg + " <br>"));
-            chat_conversation.invalidate();
-            chat_conversation.setActivated(true);
-            mScrollView.setVisibility(View.GONE);
-            mScrollView.setVisibility(View.VISIBLE);
-        }
+            chat_time = (String) ((DataSnapshot)i.next()).getValue();
+            chat_userID = (String) ((DataSnapshot)i.next()).getValue();
 
-        mScrollView.post(new Runnable() {
-            @Override
-            public void run() {
-                 mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
-            }
-        });
+            Message message = new Message(new User(chat_user_name,"", chat_userID, chat_time), chat_msg);
+            messageList.add(message);
+            mMessageAdapter.notifyItemInserted(mMessageAdapter.getItemCount());
+        }
 
     }
 
