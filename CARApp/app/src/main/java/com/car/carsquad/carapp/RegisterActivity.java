@@ -156,7 +156,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                                                 //create USER OBJECT ON FIREBASE
                                                 String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-                                                User newUser = new User(userId, firstName,lastName,"","false",0.0, "", 0);
+                                                User newUser = new User(userId, firstName,lastName,"","false",0.000, "", 0);
                                                 //databaseUsers.child(userId).setValue(newUser);
                                                 FirebaseDatabase.getInstance().getReference("users")
                                                         .child(userId).setValue(newUser)

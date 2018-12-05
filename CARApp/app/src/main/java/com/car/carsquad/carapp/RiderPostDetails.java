@@ -392,7 +392,12 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 driverRating = dataSnapshot.getValue(Double.class);
                 TextView ratingTV = (TextView) findViewById(R.id.rating_text_view);
-                ratingTV.setText(driverRating.toString());
+                if(dataSnapshot.getValue(Double.class) != null) {
+                    Double pts = ((double) Math.round(driverRating * 100)/100);
+                    ratingTV.setText(String.valueOf(pts));
+                }
+                
+                ratingTV.setText(driverRating.toString().substring(0,4));
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {

@@ -56,6 +56,7 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private RecyclerView mPostList;
+    private TextView mRating;
 
     LinearLayoutManager mLayoutManager;
 
@@ -94,6 +95,7 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
         View navViewWithHeader = navigationView.inflateHeaderView(R.layout.navigation_header);
         navProfile = navViewWithHeader.findViewById(R.id.nav_profile_image);
         profileName =  navViewWithHeader.findViewById(R.id.nav_name);
+        mRating = navViewWithHeader.findViewById(R.id.nav_ratings);
 
         userRef = FirebaseDatabase.getInstance().getReference().child("users")
                 .child(firebaseAuth.getCurrentUser().getUid());
@@ -124,6 +126,17 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
+        });
+        userRef.child("driverRating").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue(Double.class) != null) {
+                    Double pts = ((double) Math.round(dataSnapshot.getValue(Double.class) * 100)/100);
+                    mRating.setText(String.valueOf(pts));
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
