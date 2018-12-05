@@ -108,7 +108,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
 
                 //get number of available seats
                 FirebaseDatabase.getInstance().getReference().child("post").child(postID).child("availableSeats")
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                        .addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 seatsAvailable.setText(dataSnapshot.getValue(Integer.class).toString() + " seats available");

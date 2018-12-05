@@ -81,7 +81,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
 
         //TODO set CAR INFO
         FirebaseDatabase.getInstance().getReference().child("post").child(postID).child("availableSeats")
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         seatsAvailable.setText(dataSnapshot.getValue(Integer.class).toString() + " seats available");
@@ -250,12 +250,14 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
 
                                 //Toast.makeText(DriverPostDetails.this, "RiderID: "+riderID, Toast.LENGTH_LONG).show();
 
-                                databaseCar.child(myID).addListenerForSingleValueEvent(new ValueEventListener() {
+                                FirebaseDatabase.getInstance().getReference().child("post").child(postID).child("availableSeats")
+                                        .addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        int seatsAvail = dataSnapshot.child("numSeats").getValue(Integer.class);
+                                        int seatsAvail = dataSnapshot.getValue(Integer.class);
                                         seatsAvail = seatsAvail + 1;
-                                        databaseCar.child(myID).child("numSeats").setValue(seatsAvail);
+                                        FirebaseDatabase.getInstance().getReference().child("post")
+                                                .child(postID).child("availableSeats").setValue(seatsAvail);
                                     }
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {}
@@ -327,15 +329,14 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
     }
 
     private void acceptRider() {
-        databaseCar.child(myID).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("post").child(postID).child("availableSeats")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                int seatsAvail = dataSnapshot.child("numSeats").getValue(Integer.class);
+                int seatsAvail = dataSnapshot.getValue(Integer.class);
                 if(seatsAvail > 0) {
                     seatsAvail = seatsAvail - 1;
-                    //HashMap<String, Object> car = new HashMap<>();
-                    //car.put("numSeats", Integer.toString(seatsAvail));
-                    databaseCar.child(myID).child("numSeats").setValue(seatsAvail);
+                    FirebaseDatabase.getInstance().getReference().child("post").child(postID).child("availableSeats").setValue(seatsAvail);
 
                     FirebaseDatabase.getInstance().getReference().child("accepted").child(postID).child(riderID).child("accept_type")
                             .setValue("accepted_rider").addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -458,7 +459,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
         builder.setPositiveButton("Delete Post", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                databaseCar.child(myID).addListenerForSingleValueEvent(new ValueEventListener() {
+                /*databaseCar.child(myID).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         int seatsAvail = dataSnapshot.child("originalNumSeats").getValue(Integer.class);
@@ -466,7 +467,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {}
-                });
+                });*/
 
 
                 //REMOVE ALL RIDERS ASSOCIATED WITH POST
