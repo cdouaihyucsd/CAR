@@ -113,7 +113,7 @@ public class DriverActivity extends AppCompatActivity {
                     if(url != null)
                     {
                         String image = url.toString();
-                        if (image != null && !image.equals("0"))
+                        if (image != null)
                             Picasso.get().load(image).placeholder(R.drawable.profile).into(navProfile);
                         else
                             navProfile.setImageResource(R.drawable.profile);

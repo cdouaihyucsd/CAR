@@ -114,7 +114,7 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                     if(url != null)
                     {
                         String image = url.toString();
-                        if (image != null && !image.equals("0"))
+                        if (image != null)
                             Picasso.get().load(image).placeholder(R.drawable.profile).into(navProfile);
                         else
                             navProfile.setImageResource(R.drawable.profile);
@@ -123,10 +123,15 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                         navProfile.setImageResource(R.drawable.profile);
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            }
+        });
+        navProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myProfileActivity = new Intent(getApplicationContext(),UpdateUserInfoActivity.class);
+                startActivity(myProfileActivity);
             }
         });
         userRef.child("riderRating").addValueEventListener(new ValueEventListener() {
