@@ -23,12 +23,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-
 public class RiderCompletedFragment extends Fragment {
     DatabaseReference mCompletedRidesRef;
     private String myID;
     private RecyclerView mCompletedList;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,14 +43,14 @@ public class RiderCompletedFragment extends Fragment {
 
         myID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        mCompletedRidesRef = FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(myID);
+        mCompletedRidesRef = FirebaseDatabase.getInstance().getReference().child("completed").child(myID);
 
         FirebaseRecyclerAdapter<Post, RiderCompletedFragment.PostViewHolder> firebaseRecyclerAdapter =
                 //mDatabase is database of POSTS
                 new FirebaseRecyclerAdapter<Post, RiderCompletedFragment.PostViewHolder>
                         (Post.class, R.layout.ride_completed_cardview, RiderCompletedFragment.PostViewHolder.class, mCompletedRidesRef) {
                     @Override
-                    protected void populateViewHolder(RiderCompletedFragment.PostViewHolder viewHolder, final Post model, int position) {
+                    protected void populateViewHolder(final RiderCompletedFragment.PostViewHolder viewHolder, final Post model, int position) {
                         viewHolder.setDest(model.getEndPt().toUpperCase());
                         viewHolder.setDate(model.getDate());
 
@@ -70,9 +68,14 @@ public class RiderCompletedFragment extends Fragment {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         String driverID = dataSnapshot.getValue(String.class);
+                                        //set driver's name
+                                        viewHolder.setDriverName(FirebaseDatabase.getInstance().getReference()
+                                                .child("users").child(driverID).child("firstName") + " " +
+                                                FirebaseDatabase.getInstance().getReference()
+                                                        .child("users").child(driverID).child("lastName"));
+
                                         //send information to next activity
                                         intent.putExtra("driverID", driverID);
-                                        //Toast.makeText(RiderActivity.this, "DriverID: " + model.getUserID(), Toast.LENGTH_LONG).show();
                                         getActivity().finish();
                                         startActivity(intent);
                                     }
@@ -85,7 +88,6 @@ public class RiderCompletedFragment extends Fragment {
                     }
                 };
         mCompletedList.setAdapter(firebaseRecyclerAdapter);
-
     }
 
 
@@ -96,7 +98,6 @@ public class RiderCompletedFragment extends Fragment {
         public PostViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
-
             mRateDriver = (Button) itemView.findViewById(R.id.button_rateDriver);
         }
 
@@ -110,5 +111,9 @@ public class RiderCompletedFragment extends Fragment {
             post_date.setText("DATE: " + depDate);
         }
 
+        public void setDriverName(String driverName) {
+            TextView nameTV = (TextView) mView.findViewById(R.id.driver_name);
+            nameTV.setText(driverName);
+        }
     }
 }
