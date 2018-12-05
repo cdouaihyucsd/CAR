@@ -14,6 +14,7 @@ public class Post {
     String cost;
     MyLatLng startLatLgn;
     MyLatLng endLatLgn;
+    int availableSeats;
     //Location startLoc;
     //Location endLoc;
 
@@ -22,7 +23,6 @@ public class Post {
     }
 
     public Post(String userID, String postID, String startPt, String endPt, String date, String time, String cost,
-                //Location startLoc, Location endLoc){
                 MyLatLng startLatLgn, MyLatLng endLatLgn){
         this.userID = userID;
         this.postID = postID;
@@ -35,6 +35,30 @@ public class Post {
         this.endLatLgn = endLatLgn;
         //this.startLoc = startLoc;
         //this.endLoc = endLoc;
+    }
+
+    public Post(String userID, String postID, String startPt, String endPt, String date, String time, String cost,
+                MyLatLng startLatLgn, MyLatLng endLatLgn, int availableSeats){
+        this.userID = userID;
+        this.postID = postID;
+        this.startPt = startPt;
+        this.endPt = endPt;
+        this.date = date;
+        this.time = time;
+        this.cost = cost;
+        this.startLatLgn = startLatLgn;
+        this.endLatLgn = endLatLgn;
+        this.availableSeats = availableSeats;
+        //this.startLoc = startLoc;
+        //this.endLoc = endLoc;
+    }
+
+    public int getAvailableSeats() {
+        return availableSeats;
+    }
+
+    public void setAvailableSeats(int availableSeats) {
+        this.availableSeats = availableSeats;
     }
 
     public String getUserID() {

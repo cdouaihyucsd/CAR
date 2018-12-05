@@ -8,12 +8,18 @@ public class User {
 
     //User fields
     public String userID;
+    public String time;
     public String firstName;
     public String lastName;
     public String phoneNo;
     public String isDriver;
+
     public double driverRating;
+    public double riderRating;
+
     public String fcmToken;
+    public int driverRatingCount;
+    public int riderRatingCount;
 
     public String currentMode;
 
@@ -27,7 +33,7 @@ public class User {
     }
 
     public User(String userID, String firstName, String lastName, String phoneNo,
-                 String isDriver, double driverRating){
+                String isDriver, double driverRating){
         this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -49,13 +55,66 @@ public class User {
         this.fcmToken = fcmToken;
     }
 
+    public User(String userID, String firstName, String lastName, String phoneNo,
+                String isDriver, double driverRating, String fcmToken, int driverRatingCount){
+        this.userID = userID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNo = phoneNo;
+        this.isDriver = isDriver;
+        this.driverRating = driverRating;
+        this.currentMode = "rider";
+        this.fcmToken = fcmToken;
+        this.driverRatingCount = driverRatingCount;
+    }
+
+    public User(String userID, String firstName, String lastName, String phoneNo,
+                String isDriver, double driverRating, String fcmToken, int driverRatingCount, int riderRatingCount,
+                double riderRating){
+        this.userID = userID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNo = phoneNo;
+        this.isDriver = isDriver;
+        this.driverRating = driverRating;
+        this.currentMode = "rider";
+        this.fcmToken = fcmToken;
+        this.driverRatingCount = driverRatingCount;
+        this.riderRatingCount = riderRatingCount;
+        this.riderRating = riderRating;
+    }
+
+    public User(String firstName, String lastName, String userID, String time) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userID = userID;
+        this.time = time;
+    }
+
+    public double getRiderRating() {
+        return riderRating;
+    }
+    public int getRiderRatingCount() {
+        return riderRatingCount;
+    }
+    public void setRiderRating(double riderRating) {
+        this.riderRating = riderRating;
+    }
+    public void setRiderRatingCount(int riderRatingCount) {
+        this.riderRatingCount = riderRatingCount;
+    }
+    public void setDriverRatingCount(int driverRatingCount) {
+        this.driverRatingCount = driverRatingCount;
+    }
+    public int getDriverRatingCount() {
+        return driverRatingCount;
+    }
     public void setFcmToken(String fcmToken) {
         this.fcmToken = fcmToken;
     }
     public String getFcmToken() {
         return fcmToken;
     }
-
     public String getUserID() {
         return userID;
     }

@@ -78,15 +78,23 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
         myID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         databaseCar = FirebaseDatabase.getInstance().getReference("car");
+
         //TODO set CAR INFO
-        databaseCar.child(myID).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                seatsAvailable.setText(dataSnapshot.child("numSeats").getValue(Integer.class) + " seats available");
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
-        });
+        FirebaseDatabase.getInstance().getReference().child("seatsAvailable").child(postID).child("seatsAvail")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.getValue(Integer.class) != null) {
+                            seatsAvailable.setText(dataSnapshot.getValue(Integer.class).toString() + " seats available");
+                        } else {
+                            seatsAvailable.setText("Ride Canceled");
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
 
         //recycler view for user requests
         riderRequest = (RecyclerView) findViewById(R.id.request_list);
@@ -115,6 +123,10 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                     protected void populateViewHolder(DriverPostDetails.RequestViewHolder viewHolder, final User model, int position){
                         String name = model.getFirstName() + " " + model.getLastName();
                         viewHolder.setRiderName(name);
+
+                        Double rating = model.getRiderRating();
+                        Double pts = ((double) Math.round(rating * 100)/100);
+                        viewHolder.setRiderRating(pts);
 
                         /*final String*/ riderID = model.getUserID();
 
@@ -182,6 +194,12 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                     protected void populateViewHolder(DriverPostDetails.RequestViewHolder viewHolder, final User model, int position){
                         String name = model.getFirstName() + " " + model.getLastName();
                         viewHolder.setRiderName(name);
+
+
+                        Double rating = model.getRiderRating();
+                        Double pts = ((double) Math.round(rating * 100)/100);
+                        viewHolder.setRiderRating(pts);
+
                         /*final String*/ riderID = model.getUserID();
                         //MESSAGE ACCEPTED RIDER
                         viewHolder.btnMessage.setOnClickListener(new View.OnClickListener() {
@@ -226,12 +244,14 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
 
                                 //Toast.makeText(DriverPostDetails.this, "RiderID: "+riderID, Toast.LENGTH_LONG).show();
 
-                                databaseCar.child(myID).addListenerForSingleValueEvent(new ValueEventListener() {
+                                FirebaseDatabase.getInstance().getReference().child("seatsAvailable").child(postID).child("seatsAvail")
+                                        .addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        int seatsAvail = dataSnapshot.child("numSeats").getValue(Integer.class);
+                                        int seatsAvail = dataSnapshot.getValue(Integer.class);
                                         seatsAvail = seatsAvail + 1;
-                                        databaseCar.child(myID).child("numSeats").setValue(seatsAvail);
+                                        FirebaseDatabase.getInstance().getReference().child("seatsAvailable")
+                                                .child(postID).child("seatsAvail").setValue(seatsAvail);
                                     }
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {}
@@ -271,6 +291,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                     }
                 };
         riderAccepted.setAdapter(firebaseRecyclerAdapter2);
+
     }
 
     public static class RequestViewHolder extends RecyclerView.ViewHolder{
@@ -300,18 +321,22 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
             TextView rider_name = (TextView)mView.findViewById(R.id.rider_name);
             rider_name.setText(name);
         }
+
+        public void setRiderRating(Double rating){
+            TextView rider_rating = (TextView)mView.findViewById(R.id.rider_rating);
+            rider_rating.setText(Double.toString(rating));
+        }
     }
 
     private void acceptRider() {
-        databaseCar.child(myID).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("seatsAvailable").child(postID).child("seatsAvail")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                int seatsAvail = dataSnapshot.child("numSeats").getValue(Integer.class);
+                int seatsAvail = dataSnapshot.getValue(Integer.class);
                 if(seatsAvail > 0) {
                     seatsAvail = seatsAvail - 1;
-                    //HashMap<String, Object> car = new HashMap<>();
-                    //car.put("numSeats", Integer.toString(seatsAvail));
-                    databaseCar.child(myID).child("numSeats").setValue(seatsAvail);
+                    FirebaseDatabase.getInstance().getReference().child("seatsAvailable").child(postID).child("seatsAvail").setValue(seatsAvail);
 
                     FirebaseDatabase.getInstance().getReference().child("accepted").child(postID).child(riderID).child("accept_type")
                             .setValue("accepted_rider").addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -434,20 +459,13 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
         builder.setPositiveButton("Delete Post", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                databaseCar.child(myID).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        int seatsAvail = dataSnapshot.child("originalNumSeats").getValue(Integer.class);
-                        databaseCar.child(myID).child("numSeats").setValue(seatsAvail);
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {}
-                });
 
+                //TODO REMOVE POST'S SEATSAVAIL
+                FirebaseDatabase.getInstance().getReference().child("seatsAvailable")
+                        .child(postID).removeValue();
 
                 //REMOVE ALL RIDERS ASSOCIATED WITH POST
                 final DatabaseReference mReference = FirebaseDatabase.getInstance().getReference();
-
                 //TODO STEP 1: POPULATE ARRAY STORING RIDER IDS
                 mReference.child("accepted").child(postID)
                         .addValueEventListener(new ValueEventListener() {
