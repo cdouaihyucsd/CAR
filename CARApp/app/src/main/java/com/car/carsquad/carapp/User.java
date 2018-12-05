@@ -49,6 +49,12 @@ public class User {
         this.fcmToken = fcmToken;
     }
 
+    public User(String firstName, String lastName, String userID) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userID = userID;
+    }
+
     public String getFcmToken() { return fcmToken; }
     public void setFcmToken(String fcmToken) {
         this.fcmToken = fcmToken;
