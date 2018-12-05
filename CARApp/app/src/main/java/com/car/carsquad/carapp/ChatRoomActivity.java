@@ -77,6 +77,17 @@ public class ChatRoomActivity extends AppCompatActivity {
         mMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
         mMessageRecycler.setAdapter(mMessageAdapter);
 
+        mMessageRecycler.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+
+            public void onLayoutChange(View v, int left, int top, int right,int bottom, int oldLeft, int oldTop,int oldRight, int oldBottom)
+            {
+
+                mMessageRecycler.scrollToPosition(messageList.size()-1);
+
+            }
+        });
+
 
 
         btn_send_msg = (Button) findViewById(R.id.btn_send);
