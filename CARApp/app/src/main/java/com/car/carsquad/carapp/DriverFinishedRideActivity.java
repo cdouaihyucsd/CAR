@@ -53,8 +53,8 @@ public class DriverFinishedRideActivity extends AppCompatActivity implements Vie
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Post completedPost = dataSnapshot.getValue(Post.class);
-                    finishDB.child(riderId).child(postId).child("compPost").setValue(completedPost);
-                    finishDB.child(riderId).child(postId).child("paymentType").setValue("card");
+                    finishDB.child(riderId).child(postId)/*.child("compPost")*/.setValue(completedPost);
+                    //finishDB.child(riderId).child(postId).child("paymentType").setValue("card");
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {}
@@ -65,8 +65,8 @@ public class DriverFinishedRideActivity extends AppCompatActivity implements Vie
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     Post completedPost = dataSnapshot.getValue(Post.class);
-                    finishDB.child(riderId).child(postId).child("compPost").setValue(completedPost);
-                    finishDB.child(riderId).child(postId).child("paymentType").setValue("cash");
+                    finishDB.child(riderId).child(postId)./*child("compPost").*/setValue(completedPost);
+                    //finishDB.child(riderId).child(postId).child("paymentType").setValue("cash");
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {}

@@ -105,7 +105,21 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 carBrand.setText("Brand: " + dataSnapshot.child("model").getValue(String.class));
                 licenseNo.setText("License No: " + dataSnapshot.child("licensePlate").getValue(String.class));
-                seatsAvailable.setText(dataSnapshot.child("numSeats").getValue(Integer.class).toString() + " seats available");
+
+                //get number of available seats
+                FirebaseDatabase.getInstance().getReference().child("post").child(postID).child("availableSeats")
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                seatsAvailable.setText(dataSnapshot.getValue(Integer.class).toString() + " seats available");
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                //seatsAvailable.setText(dataSnapshot.child("numSeats").getValue(Integer.class).toString() + " seats available");
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
@@ -398,7 +412,22 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
 
         if (currentState == 1) {
             //RIDE IS CANCELED. ADD SEATS BACK
-            databaseCar.child(driverID).addListenerForSingleValueEvent(new ValueEventListener() {
+
+            FirebaseDatabase.getInstance().getReference().child("post").child(postID).child("availableSeats")
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            int seatsAvail = dataSnapshot.getValue(Integer.class);
+                            seatsAvail = seatsAvail + 1;
+                            FirebaseDatabase.getInstance().getReference().child("post").child(postID)
+                                    .child("availableSeats").setValue(seatsAvail);
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                        }
+                    });
+
+            /*databaseCar.child(driverID).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     int seatsAvail = dataSnapshot.child("numSeats").getValue(Integer.class);
@@ -407,7 +436,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {}
-            });
+            });*/
 
             mReference.child("request").child(postID).child(myID).removeValue()
                     .addOnCompleteListener(new OnCompleteListener<Void>() {

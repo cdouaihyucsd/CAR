@@ -78,15 +78,39 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
         myID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         databaseCar = FirebaseDatabase.getInstance().getReference("car");
+
         //TODO set CAR INFO
-        databaseCar.child(myID).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("post").child(postID).child("availableSeats")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        seatsAvailable.setText(dataSnapshot.getValue(Integer.class).toString() + " seats available");
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+        /*databaseCar.child(myID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                seatsAvailable.setText(dataSnapshot.child("numSeats").getValue(Integer.class) + " seats available");
+                //get number of available seats
+                FirebaseDatabase.getInstance().getReference().child("post").child(postID).child("availableSeats")
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                seatsAvailable.setText(dataSnapshot.getValue(Integer.class).toString() + " seats available");
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
-        });
+        });*/
 
         //recycler view for user requests
         riderRequest = (RecyclerView) findViewById(R.id.request_list);
