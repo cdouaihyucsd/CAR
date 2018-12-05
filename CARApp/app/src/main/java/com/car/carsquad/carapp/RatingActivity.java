@@ -48,69 +48,48 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
         skipBtn.setOnClickListener(this);
         submitBtn = (Button) findViewById(R.id.button_submit);
         submitBtn.setOnClickListener(this);
+
+        getIncomingIntent();
     }
 
     @Override
     public void onClick(View view) {
         if (view == skipBtn) {
             finish();
-            //START ACtIVITY
             startActivity(new Intent(this, MainCurrentRidesHolder.class));
         }
         else if (view == submitBtn) {
-            //double newRating = ratingBar.getRating();
-            //calculate new rating
-            // update in firebase - rating and ratingCount
-
             //TODO REMOVE YOURSELF FROM THE COMPLETED TREE
+
+            //RATE DRIVER
             updateDriverRating();
             finish();
             startActivity(new Intent(this, MainCurrentRidesHolder.class));
         }
     }
     private void updateDriverRating(){
-        DatabaseReference riderDB = FirebaseDatabase.getInstance().getReference().child("users");
+        final DatabaseReference riderDB = FirebaseDatabase.getInstance().getReference().child("users");
 
         riderDB.child(driverId).child("driverRating").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 rating = dataSnapshot.getValue(Double.class);
-            }
 
+                riderDB.child(driverId).child("driverRatingCount").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        ratingCount = dataSnapshot.getValue(Integer.class);
+                        double total = rating * ratingCount;
+                        double newRating = (ratingBar.getRating() + total)/(ratingCount+1);
+                        riderDB.child(driverId).child("driverRating").setValue(newRating);
+                        riderDB.child(driverId).child("driverRatingCount").setValue(ratingCount+1);
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {}
+                });
+            }
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        riderDB.child(driverId).child("driverRatingCount").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ratingCount = dataSnapshot.getValue(int.class);
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        double total = rating * ratingCount;
-        double newRating = (ratingBar.getRating() + total)/ratingCount+1;
-
-        riderDB.child(driverId).child("driverRating").setValue(newRating);
-        riderDB.child(driverId).child("driverRatingCount").setValue(ratingCount+1);
-        riderDB.child(driverId).child("driverRatingCount").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ratingCount = dataSnapshot.getValue(int.class);
-                System.out.println(ratingCount);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
     }
 
