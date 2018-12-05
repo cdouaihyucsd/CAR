@@ -2,6 +2,7 @@ package com.car.carsquad.carapp;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,8 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     public int getItemViewType(int position) {
         Message message = (Message) mMessageList.get(position);
         final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        if (message.getSenderUser().getUserID() == userId) {
+        Log.d("MessageListAdapter", "Current User Id: " + userId);
+        if (message.getSenderUser().getUserID().equals(userId)) {
             // If the current user is the sender of the message
             return VIEW_TYPE_MESSAGE_SENT;
         } else {

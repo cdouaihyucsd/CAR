@@ -84,6 +84,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         userId = Objects.requireNonNull(user).getUid();
+        Log.d("ChatRoomActivity", "Sender Id: " + userId);
         databaseUser = FirebaseDatabase.getInstance().getReference("users");
 
         // Get First Name and Last Name for the current User
@@ -209,7 +210,7 @@ public class ChatRoomActivity extends AppCompatActivity {
             chat_user_name = (String) ((DataSnapshot)i.next()).getValue();
             chat_time = (String) ((DataSnapshot)i.next()).getValue();
             chat_userID = (String) ((DataSnapshot)i.next()).getValue();
-
+            Log.d("ChatRoomActivity", "Message id: " + chat_userID);
             Message message = new Message(new User(chat_user_name,"", chat_userID, chat_time), chat_msg);
             messageList.add(message);
             mMessageAdapter.notifyItemInserted(mMessageAdapter.getItemCount());
