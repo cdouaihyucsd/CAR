@@ -64,6 +64,7 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
 
             //TODO REMOVE YOURSELF FROM THE COMPLETED TREE
             updateDriverRating();
+            finish();
             startActivity(new Intent(this, MainCurrentRidesHolder.class));
         }
     }
@@ -99,6 +100,18 @@ public class RatingActivity extends AppCompatActivity implements View.OnClickLis
 
         riderDB.child(driverId).child("driverRating").setValue(newRating);
         riderDB.child(driverId).child("driverRatingCount").setValue(ratingCount+1);
+        riderDB.child(driverId).child("driverRatingCount").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ratingCount = dataSnapshot.getValue(int.class);
+                System.out.println(ratingCount);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void getIncomingIntent(){
