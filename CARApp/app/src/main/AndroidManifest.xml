@@ -15,7 +15,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <service android:name=".FCMReceiver">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -103,14 +102,15 @@
         <activity
             android:name=".RiderAcceptedRides"
             android:label="Your Accepted Rides" />
-
-        <activity android:name=".MainCurrentRidesHolder"
-            android:parentActivityName=".RiderActivity"
-            android:label="CURRENT RIDES">
+        <activity
+            android:name=".MainCurrentRidesHolder"
+            android:label="CURRENT RIDES"
+            android:parentActivityName=".RiderActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.car.carsquad.carapp.RiderActivity" />
         </activity>
+        <activity android:name=".DriverFinishedRideActivity"></activity>
     </application>
 
 </manifest>

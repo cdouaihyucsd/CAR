@@ -31,7 +31,7 @@
 
         <Button
             android:id="@+id/button_message"
-            android:layout_width="70dp"
+            android:layout_width="50dp"
             android:layout_height="30dp"
             android:layout_marginStart="205dp"
             android:layout_marginTop="12dp"
@@ -41,24 +41,41 @@
             android:clickable="true"
             android:text="MESSAGE"
             android:textColor="#ffffff"
-            android:textSize="10sp"
+            android:textSize="8sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/button_remove"
+            app:layout_constraintHorizontal_bias="0.702"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/button_remove"
-            android:layout_width="70dp"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="60dp"
+            android:background="@color/colorGrey"
+            android:backgroundTint="#f2a242"
+            android:clickable="true"
+            android:text="REMOVE"
+            android:textColor="#000000"
+            android:textSize="8sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/button_finish"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/button_finish"
+            android:layout_width="50dp"
             android:layout_height="30dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="16dp"
             android:background="@color/colorGrey"
             android:backgroundTint="#f2a242"
             android:clickable="true"
-            android:text="REMOVE"
+            android:text="FINISH RIDE"
             android:textColor="#000000"
-            android:textSize="10sp"
+            android:textSize="8sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -495,7 +495,25 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
             }
         }
         else if (view == mMessageDriver){
-            messageDriver();
+            if(!(myID.equals(driverID))) {
+                messageDriver();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(RiderPostDetails.this);
+                builder.setCancelable(true);
+                builder.setTitle("MESSAGE FAILED");
+                builder.setMessage("You cannot message yourself");
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                        Intent intent = new Intent(RiderPostDetails.this, RiderActivity.class);
+                        finish();
+                        startActivity(intent);
+                    }
+                });
+                builder.show();
+            }
         }
     }
 
