@@ -30,6 +30,12 @@ tools:context=".MainCurrentRidesHolder">
         android:text="ACCEPTED"
         android:id="@+id/accepted_tab"/>
 
+    <android.support.design.widget.TabItem
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="COMPLETED"
+        android:id="@+id/completed_tab"/>
+
 </android.support.design.widget.TabLayout>
 
 <android.support.v4.view.ViewPager

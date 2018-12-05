@@ -111,6 +111,7 @@
                 android:value="com.car.carsquad.carapp.RiderActivity" />
         </activity>
         <activity android:name=".DriverFinishedRideActivity"></activity>
+        <activity android:name=".RatingActivity"></activity>
     </application>
 
 </manifest>

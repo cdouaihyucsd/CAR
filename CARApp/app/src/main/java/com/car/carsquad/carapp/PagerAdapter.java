@@ -22,6 +22,9 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             case 1:
                 RiderAcceptedFragment riderAcceptedFrag = new RiderAcceptedFragment();
                 return riderAcceptedFrag;
+            case 2:
+                RiderCompletedFragment riderCompletedFrag = new RiderCompletedFragment();
+                return riderCompletedFrag;
             default:
                 return null;
         }

@@ -50,7 +50,6 @@ public class DriverFinishedRideActivity extends AppCompatActivity implements Vie
 
 
 
-
             finish();
         } else if (view == mCancel) {
             finish();

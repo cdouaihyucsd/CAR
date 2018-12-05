@@ -216,6 +216,7 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
+
     }
 
     //for the side bar

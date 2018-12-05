@@ -272,6 +272,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                     }
                 };
         riderAccepted.setAdapter(firebaseRecyclerAdapter2);
+
     }
 
     public static class RequestViewHolder extends RecyclerView.ViewHolder{
