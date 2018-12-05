@@ -108,9 +108,17 @@ public class DriverActivity extends AppCompatActivity {
                     String lastName = dataSnapshot.child("lastName").getValue().toString();
                     String name = firstName + " " + lastName;
                     profileName.setText(name);
-                    String image = dataSnapshot.child("profile_image").getValue().toString();
-                    if(image != null)
-                        Picasso.get().load(image).placeholder(R.drawable.profile).into(navProfile);
+                    Object url = dataSnapshot.child("profile_image").getValue();
+                    if(url != null)
+                    {
+                        String image = url.toString();
+                        if (image != null && !image.equals("0"))
+                            Picasso.get().load(image).placeholder(R.drawable.profile).into(navProfile);
+                        else
+                            navProfile.setImageResource(R.drawable.profile);
+                    }
+                    else
+                        navProfile.setImageResource(R.drawable.profile);
                 }
             }
 
