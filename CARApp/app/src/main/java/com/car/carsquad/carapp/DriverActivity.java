@@ -42,7 +42,6 @@ import android.support.v7.widget.SearchView;
 import java.sql.Driver;
 import java.util.HashMap;
 import java.util.Objects;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DriverActivity extends AppCompatActivity {
@@ -271,6 +270,11 @@ public class DriverActivity extends AppCompatActivity {
 
     //LOGOUT of the app
     private void logout() {
+        //TODO REMOVE FCM TOKEN
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseDatabase.getInstance().getReference().child("users").child(userId)
+                .child("fcmToken").setValue("");
+
         //sign user out
         firebaseAuth.signOut();
         //end current activity and go back to main screen

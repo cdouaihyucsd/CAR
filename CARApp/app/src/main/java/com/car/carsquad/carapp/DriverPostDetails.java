@@ -215,9 +215,6 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                                 intent.putExtra("endPt", endPt);
                                 startActivity(intent);
 
-
-                                Toast.makeText(DriverPostDetails.this, "message button Clicked", Toast.LENGTH_LONG).show();
-
                             }
                         });
                         //REMOVE ACCEPTED RIDER
@@ -266,7 +263,9 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                             public void onClick(View view) {
                                 //finish();
                                 Intent intent = new Intent(DriverPostDetails.this, DriverFinishedRideActivity.class);
-                                startActivity(new Intent(DriverPostDetails.this, DriverFinishedRideActivity.class));
+                                intent.putExtra("postID", postID);
+                                intent.putExtra("riderID", model.getUserID());
+                                startActivity(intent);
                             }
                         });
                     }

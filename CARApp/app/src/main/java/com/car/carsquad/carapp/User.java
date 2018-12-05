@@ -13,6 +13,7 @@ public class User {
     public String phoneNo;
     public String isDriver;
     public double driverRating;
+    public String fcmToken;
 
     public String currentMode;
 
@@ -34,6 +35,25 @@ public class User {
         this.isDriver = isDriver;
         this.driverRating = driverRating;
         this.currentMode = "rider";
+    }
+
+    public User(String userID, String firstName, String lastName, String phoneNo,
+                String isDriver, double driverRating, String fcmToken){
+        this.userID = userID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNo = phoneNo;
+        this.isDriver = isDriver;
+        this.driverRating = driverRating;
+        this.currentMode = "rider";
+        this.fcmToken = fcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
+    }
+    public String getFcmToken() {
+        return fcmToken;
     }
 
     public String getUserID() {

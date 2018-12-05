@@ -1,6 +1,7 @@
 package com.car.carsquad.carapp;
 
 import android.content.Intent;
+import android.icu.text.StringSearch;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,7 +20,9 @@ public class DriverFinishedRideActivity extends AppCompatActivity implements Vie
     private Button payCash;
     private Button payCard;
     private Button mCancel;
-    DatabaseReference finishDB = FirebaseDatabase.getInstance().getReference();
+    private String postId;
+    private String riderId;
+    DatabaseReference finishDB = FirebaseDatabase.getInstance().getReference().child("completed");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,26 +37,29 @@ public class DriverFinishedRideActivity extends AppCompatActivity implements Vie
         payCash.setOnClickListener(this);
         mCancel = (Button) findViewById(R.id.btn_cancel_finish);
         mCancel.setOnClickListener(this);
+
+        getIncomingIntent();
     }
 
     @Override
     public void onClick(View view) {
         if(view == payCard){
-            Toast.makeText(DriverFinishedRideActivity.this, "paid by card", Toast.LENGTH_LONG).show();
-
-            finishDB.child("");
-
-
+            finishDB.child(postId).child(riderId).child("paidByCash").setValue("false");
+            finishDB.child(postId).child(riderId).child("rideStatus").setValue("completed");
             finish();
         } else if (view == payCash) {
-            Toast.makeText(DriverFinishedRideActivity.this, "paid by cash", Toast.LENGTH_LONG).show();
-
-
-
-
+            finishDB.child(postId).child(riderId).child("paidByCash").setValue("true");
+            finishDB.child(postId).child(riderId).child("rideStatus").setValue("completed");
             finish();
         } else if (view == mCancel) {
             finish();
+        }
+    }
+
+    private void getIncomingIntent(){
+        if(getIntent().hasExtra("postID") && getIntent().hasExtra("riderID")){
+            postId = getIntent().getStringExtra("postID");
+            riderId = getIntent().getStringExtra("riderID");
         }
     }
 }
