@@ -397,7 +397,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
 
                     //TODO ADD POST TO REQUEST_OBJ POSTS
                     //RETRIEVE POST INFO
-                    FirebaseDatabase.getInstance().getReference().child("post").child(postID).addValueEventListener(new ValueEventListener() {
+                    FirebaseDatabase.getInstance().getReference().child("post").child(postID).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             requestedRide = dataSnapshot.getValue(Post.class);
