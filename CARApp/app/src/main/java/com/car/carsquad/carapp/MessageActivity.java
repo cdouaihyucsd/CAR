@@ -98,9 +98,12 @@ public class MessageActivity extends AppCompatActivity {
                                 driverData.child(roomArr[2]).addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        room.setName(dataSnapshot.child("firstName").getValue().toString()
-                                        + " " + dataSnapshot.child("lastName").getValue().toString());
-                                        room.setProfileImg(dataSnapshot.child("profile_image").getValue());
+                                        if(dataSnapshot.child("firstName").getValue() != null &&
+                                                dataSnapshot.child("lastName").getValue() != null) {
+                                            room.setName(Objects.requireNonNull(dataSnapshot.child("firstName").getValue()).toString()
+                                                    + " " + Objects.requireNonNull(dataSnapshot.child("lastName").getValue()).toString());
+                                            room.setProfileImg(dataSnapshot.child("profile_image").getValue());
+                                        }
                                     }
 
                                     @Override
