@@ -136,7 +136,10 @@ public class MessageActivity extends AppCompatActivity {
                                 //Toast.makeText(MessageActivity.this, roomTitle, Toast.LENGTH_SHORT).show();
                                 String[] roomArr = roomTitle.split(" - ");
                                 final Chatroom room = new Chatroom();
-
+                                driverID = roomArr[2];
+                                chatRoom = roomTitle;
+                                room.setRideName(chatRoom);
+                                // Get other person's name and profile pic.
                                 driverData.child(roomArr[2]).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -163,6 +166,7 @@ public class MessageActivity extends AppCompatActivity {
 
                                 // String[] rTitle = roomTitle.split(" - ");
 
+                                // Get last msg and time
                                 Query lastMsg = root.child(myID).child(roomTitle).orderByKey().limitToLast(1);
 
                                 lastMsg.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -196,22 +200,6 @@ public class MessageActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {}
         });
-
-
-        /*
-        Chatroom room1 = new Chatroom();
-        room1.setName("iugjkhg");
-        room1.setLastMsg("testmsg");
-        room1.setMsgTime("11:00");
-        chatRooms.add(room1);
-
-        Chatroom room2 = new Chatroom();
-        room2.setName("asda");
-        room2.setLastMsg("asdaa");
-        room2.setMsgTime("11:00");
-        chatRooms.add(room2);
-        chatroomAdapter = new ChatroomAdapter(chatRooms);
-        */
     }
 
     private void setupRecyclerView() {
@@ -222,9 +210,12 @@ public class MessageActivity extends AppCompatActivity {
         swipeController = new SwipeController(new SwipeControllerActions() {
             @Override
             public void onRightClicked(int position) {
+                root.child(myID).child(chatroomAdapter.chatRooms.get(position).getRideName()).removeValue();
                 chatroomAdapter.chatRooms.remove(position);
                 chatroomAdapter.notifyItemRemoved(position);
                 chatroomAdapter.notifyItemRangeChanged(position, chatroomAdapter.getItemCount());
+
+
             }
         });
 
@@ -237,6 +228,8 @@ public class MessageActivity extends AppCompatActivity {
                 swipeController.onDraw(c);
             }
         });
+
+
     }
 
 }

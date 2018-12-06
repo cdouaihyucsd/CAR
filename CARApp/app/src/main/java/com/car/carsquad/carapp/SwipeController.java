@@ -11,7 +11,8 @@ import android.view.View;
 
 import static android.support.v7.widget.helper.ItemTouchHelper.*;
 
-enum ButtonsState {
+enum
+ButtonsState {
     GONE,
     //LEFT_VISIBLE,
     RIGHT_VISIBLE
