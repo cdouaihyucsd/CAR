@@ -50,7 +50,7 @@ public class RiderAcceptedFragment extends Fragment {
                         viewHolder.setDate(model.getDate());
                         viewHolder.setCost(model.getCost());
                         //TODO
-                        viewHolder.setDetours("NULL");
+                        //viewHolder.setDetours("NULL");
                         viewHolder.setTime(model.getTime());
 
                         //Go to next activity on click
@@ -116,10 +116,10 @@ public class RiderAcceptedFragment extends Fragment {
             post_dep_date.setText("$" + cost);
         }
 
-        public void setDetours(String detours) {
+        /*public void setDetours(String detours) {
             TextView post_detours = (TextView) mView.findViewById(R.id.post_detours);
             post_detours.setText(detours + " stops along the way");
-        }
+        }*/
 
         public void setTime(String depTime) {
             TextView post_dep_time = (TextView) mView.findViewById(R.id.post_time);

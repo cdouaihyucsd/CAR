@@ -120,7 +120,6 @@
             android:drawablePadding="20dp"
             android:drawableTint="@color/colorGrey"
             android:fontFamily="@font/work_sans"
-            android:text="X stops along the way"
             android:textColor="@color/colorGrey"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"

@@ -234,7 +234,7 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                         viewHolder.setDate(model.getDate());
                         viewHolder.setCost(model.getCost());
                         //TODO
-                        viewHolder.setDetours("NULL");
+                        //viewHolder.setDetours("NULL");
                         viewHolder.setTime(model.getTime());
 
                         //Go to next activity on click
@@ -334,10 +334,10 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
             TextView post_dep_date = (TextView)mView.findViewById(R.id.post_cost);
             post_dep_date.setText("$" + cost);
         }
-        public void setDetours(String detours){
+        /*public void setDetours(String detours){
             TextView post_detours = (TextView)mView.findViewById(R.id.post_detours);
             post_detours.setText(detours + " stops along the way");
-        }
+        }*/
         public void setTime(String depTime){
             TextView post_dep_time = (TextView)mView.findViewById(R.id.post_time);
             post_dep_time.setText("TIME: " + depTime);
@@ -381,7 +381,7 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                         viewHolder.setCost(model.getCost());
                         viewHolder.setTime(model.getTime());
                         //TODO
-                        viewHolder.setDetours("NULL");
+                        //viewHolder.setDetours("NULL");
 
                         //Go to next activity on click
                         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -416,7 +416,7 @@ public class RiderActivity extends AppCompatActivity implements View.OnClickList
                         viewHolder.setDate(model.getDate());
                         viewHolder.setCost(model.getCost());
                         //TODO
-                        viewHolder.setDetours("NULL");
+                        //viewHolder.setDetours("NULL");
                         viewHolder.setTime(model.getTime());
 
                         //Go to next activity on click

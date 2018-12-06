@@ -52,7 +52,7 @@ public class RiderAcceptedRides extends AppCompatActivity implements View.OnClic
                         viewHolder.setDate(model.getDate());
                         viewHolder.setCost(model.getCost());
                         //TODO
-                        viewHolder.setDetours("NULL");
+                        //viewHolder.setDetours("NULL");
                         viewHolder.setTime(model.getTime());
 
                         //Go to next activity on click
