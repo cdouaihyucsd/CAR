@@ -82,9 +82,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
             public void onLayoutChange(View v, int left, int top, int right,int bottom, int oldLeft, int oldTop,int oldRight, int oldBottom)
             {
-
-                mMessageRecycler.scrollToPosition(messageList.size()-1);
-
+                mMessageRecycler.scrollToPosition(messageList.size());
             }
         });
 
@@ -156,9 +154,9 @@ public class ChatRoomActivity extends AppCompatActivity {
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    String  sender = user_name;
-                                    String  token = dataSnapshot.getValue(String.class);
-                                    String  message_text = input_message;
+                                    String sender = user_name;
+                                    String token = dataSnapshot.getValue(String.class);
+                                    String message_text = input_message;
                                     Log.d("ChatRoomActivity", message_text);
 
                                     Message message = new Message(sender, token, message_text);

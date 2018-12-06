@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -142,6 +143,31 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                                 //TODO UPDATE RIDER_ID
                                 riderID = model.getUserID();
 
+                                FirebaseDatabase.getInstance().getReference().child("users").child(riderID).child("fcmToken")
+                                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull final DataSnapshot dataSnapshot1) {
+
+                                                final String token = dataSnapshot1.getValue(String.class);
+
+                                                FirebaseDatabase.getInstance().getReference().child("users").child(driverID)
+                                                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                String sender = dataSnapshot.child("firstName").getValue(String.class) + " "
+                                                                        + dataSnapshot.child("lastName").getValue(String.class);
+                                                                String message_text = "Your request has been accepted";
+                                                                Message message = new Message(sender, token, message_text);
+                                                                Message.sendMessage(message, DriverPostDetails.this);
+                                                            }
+                                                            @Override
+                                                            public void onCancelled(@NonNull DatabaseError databaseError) {}
+                                                        });
+                                            }
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {}
+                                        });
+
                                 //ACCEPT RIDER
                                 acceptRider();
 
@@ -168,6 +194,35 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                             @Override
                             public void onClick(View v) {
                                 riderID = model.getUserID();
+
+                                FirebaseDatabase.getInstance().getReference().child("users").child(riderID).child("fcmToken")
+                                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull final DataSnapshot dataSnapshot1) {
+
+                                                final String token = dataSnapshot1.getValue(String.class);
+
+                                                FirebaseDatabase.getInstance().getReference().child("users").child(driverID)
+                                                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                String sender = dataSnapshot.child("firstName").getValue(String.class) + " "
+                                                                        + dataSnapshot.child("lastName").getValue(String.class);
+
+                                                                String message_text = "Your request has been rejected";
+                                                                Message message = new Message(sender, token, message_text);
+                                                                Message.sendMessage(message, DriverPostDetails.this);
+                                                            }
+                                                            @Override
+                                                            public void onCancelled(@NonNull DatabaseError databaseError) {}
+                                                        });
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {}
+                                        });
+
+
                                 //REMOVE USER'S REQUEST IF DRIVER REJECTED
                                 //not myID, rather riderID
                                 FirebaseDatabase.getInstance().getReference().child("request").child(postID).child(riderID).removeValue()
@@ -245,8 +300,36 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                         viewHolder.btnRemove.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
                                 riderID = model.getUserID();
+
+
+                                FirebaseDatabase.getInstance().getReference().child("users").child(riderID).child("fcmToken")
+                                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull final DataSnapshot dataSnapshot1) {
+
+                                                final String token = dataSnapshot1.getValue(String.class);
+
+                                                FirebaseDatabase.getInstance().getReference().child("users").child(driverID)
+                                                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                String sender = dataSnapshot.child("firstName").getValue(String.class) + " "
+                                                                        + dataSnapshot.child("lastName").getValue(String.class);
+
+                                                                String message_text = "You have been removed by the driver";
+                                                                Message message = new Message(sender, token, message_text);
+                                                                Message.sendMessage(message, DriverPostDetails.this);
+                                                            }
+                                                            @Override
+                                                            public void onCancelled(@NonNull DatabaseError databaseError) {}
+                                                        });
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {}
+                                        });
+
 
                                 //Toast.makeText(DriverPostDetails.this, "RiderID: "+riderID, Toast.LENGTH_LONG).show();
 
@@ -518,10 +601,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
 
                                 for(DataSnapshot idSnapshot : dataSnapshot.getChildren()){
                                     userIdArray.add(idSnapshot.getValue(String.class));
-                                    Toast.makeText(DriverPostDetails.this, idSnapshot.getValue(String.class),Toast.LENGTH_LONG).show();
                                 }
-
-                                Toast.makeText(DriverPostDetails.this, "EMPTY ARRAY??!!",Toast.LENGTH_LONG).show();
 
                                 //Toast.makeText(DriverPostDetails.this, userIdArray.get(0), Toast.LENGTH_SHORT).show();
                                 //TODO STEP 2: DELETION LOOP
