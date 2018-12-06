@@ -477,10 +477,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
 
                                 for(DataSnapshot idSnapshot : dataSnapshot.getChildren()){
                                     userIdArray.add(idSnapshot.getValue(String.class));
-                                    Toast.makeText(DriverPostDetails.this, idSnapshot.getValue(String.class),Toast.LENGTH_LONG).show();
                                 }
-
-                                Toast.makeText(DriverPostDetails.this, "EMPTY ARRAY??!!",Toast.LENGTH_LONG).show();
 
                                 //Toast.makeText(DriverPostDetails.this, userIdArray.get(0), Toast.LENGTH_SHORT).show();
                                 //TODO STEP 2: DELETION LOOP

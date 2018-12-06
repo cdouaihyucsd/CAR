@@ -189,7 +189,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                     String request = dataSnapshot.child(myID).child("request_type").getValue().toString();
                     if(request.equals("received")) {
                         mRequestRide.setEnabled(true);
-                        mRequestRide.setText("Cancel Request");
+                        mRequestRide.setText("Cancel Ride");
                         currentState = 1;
                     }
                 }
@@ -206,7 +206,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                     String request = dataSnapshot.child(myID).child("accept_type").getValue().toString();
                     if(request.equals("accepted_rider")) {
                         mRequestRide.setEnabled(true);
-                        mRequestRide.setText("Cancel Request");
+                        mRequestRide.setText("Cancel Ride");
                         currentState = 1;
                     }
                 }
@@ -416,7 +416,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             mRequestRide.setEnabled(true);
-                            mRequestRide.setText("Cancel Request");
+                            mRequestRide.setText("Cancel Ride");
                             currentState = 1;
                         }
                     });
@@ -548,7 +548,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                 if(currentState == 0){
                     title = "Request Ride";
                 } else if (currentState == 1) {
-                    title = "Cancel Request";
+                    title = "Cancel Ride";
                 }
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(RiderPostDetails.this);
