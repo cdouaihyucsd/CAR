@@ -3,6 +3,8 @@ package com.car.carsquad.carapp;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.provider.ContactsContract;
+import android.renderscript.Sampler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -26,12 +28,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Array;
 import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DriverPostDetails extends AppCompatActivity implements View.OnClickListener{
 
@@ -53,7 +58,6 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
     private String startPt;
     private String endPt;
     private String driverID;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,6 +133,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                         viewHolder.setRiderRating(pts);
 
                         /*final String*/ riderID = model.getUserID();
+                        viewHolder.setImage(riderID,1);
 
                         //ACCEPT REQUEST
                         viewHolder.btnAccept.setOnClickListener(new View.OnClickListener() {
@@ -201,6 +206,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
                         viewHolder.setRiderRating(pts);
 
                         /*final String*/ riderID = model.getUserID();
+                        viewHolder.setImage(riderID,0);
                         //MESSAGE ACCEPTED RIDER
                         viewHolder.btnMessage.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -294,7 +300,7 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
 
     }
 
-    public static class RequestViewHolder extends RecyclerView.ViewHolder{
+    public static class RequestViewHolder extends RecyclerView.ViewHolder {
         View mView;
         Button btnAccept;
         Button btnReject;
@@ -302,8 +308,9 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
         Button btnRemove;
         Button btnFinish;
         String currentID;
+        ValueEventListener vel;
 
-        public RequestViewHolder(View itemView){
+        public RequestViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
 
@@ -317,16 +324,50 @@ public class DriverPostDetails extends AppCompatActivity implements View.OnClick
 
             //currentID = currentRiderID;
         }
-        public void setRiderName(String name){
-            TextView rider_name = (TextView)mView.findViewById(R.id.rider_name);
+
+        public void setRiderName(String name) {
+            TextView rider_name = (TextView) mView.findViewById(R.id.rider_name);
             rider_name.setText(name);
         }
 
-        public void setRiderRating(Double rating){
-            TextView rider_rating = (TextView)mView.findViewById(R.id.rider_rating);
+        public void setRiderRating(Double rating) {
+            TextView rider_rating = (TextView) mView.findViewById(R.id.rider_rating);
             rider_rating.setText(Double.toString(rating));
         }
-    }
+
+        public void setImage(String riderID,int isRequested) {
+            final CircleImageView pic;
+            if(isRequested == 1)
+                pic = mView.findViewById(R.id.request_image);
+            else
+                pic = mView.findViewById(R.id.accepted_image);
+            final DatabaseReference riderRef = FirebaseDatabase.getInstance().getReference().child("users")
+                    .child(riderID);
+            riderRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        Object url = dataSnapshot.child("profile_image").getValue();
+                        if (url != null) {
+                            String image = url.toString();
+                            if (image != null) {
+                                if (image != null)
+                                    Picasso.get().load(image).placeholder(R.drawable.profile).into(pic);
+                                }
+                                else
+                                    pic.setImageResource(R.drawable.profile);
+                        } else
+                                pic.setImageResource(R.drawable.profile);
+                    }
+                }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        }
 
     private void acceptRider() {
         FirebaseDatabase.getInstance().getReference().child("seatsAvailable").child(postID).child("seatsAvail")
