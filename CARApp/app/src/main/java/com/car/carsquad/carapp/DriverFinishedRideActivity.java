@@ -25,7 +25,6 @@ public class DriverFinishedRideActivity extends AppCompatActivity implements Vie
 
     public RatingBar ratingBar;
     private Button payCash;
-    private Button payCard;
     private Button mCancel;
     private String postId;
     private String riderId;
@@ -40,8 +39,6 @@ public class DriverFinishedRideActivity extends AppCompatActivity implements Vie
         Objects.requireNonNull(actionBar).hide();
         setContentView(R.layout.activity_driver_finished_ride);
 
-        payCard = (Button) findViewById(R.id.btn_pay_card);
-        payCard.setOnClickListener(this);
         payCash = (Button) findViewById(R.id.btn_paid_cash);
         payCash.setOnClickListener(this);
         mCancel = (Button) findViewById(R.id.btn_cancel_finish);
@@ -53,38 +50,36 @@ public class DriverFinishedRideActivity extends AppCompatActivity implements Vie
 
     @Override
     public void onClick(View view) {
-        if(view == payCard){
-
-            FirebaseDatabase.getInstance().getReference().child("post").child(postId).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    Post completedPost = dataSnapshot.getValue(Post.class);
-                    finishDB.child(riderId).child(postId).setValue(completedPost);
-                    finishDB.child(riderId).child(postId).child("paymentType").setValue("card");
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {}
-            });
-            //remove user from accepted list
-            FirebaseDatabase.getInstance().getReference().child("accepted").child(postId).child(riderId).removeValue();
-            FirebaseDatabase.getInstance().getReference().child("accepted").child(riderId).child(postId).removeValue();
-            FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(postId).child(riderId).removeValue();
-            FirebaseDatabase.getInstance().getReference().child("accepted_obj").child(riderId).child(postId).removeValue();
-            FirebaseDatabase.getInstance().getReference().child("seatsAvailable").child(postId).child("seatsAvail")
+        if (view == payCash) {
+            FirebaseDatabase.getInstance().getReference().child("users").child(riderId).child("fcmToken")
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            int seatsAvail = dataSnapshot.getValue(Integer.class);
-                            seatsAvail = seatsAvail + 1;
-                            FirebaseDatabase.getInstance().getReference().child("seatsAvailable")
-                                    .child(postId).child("seatsAvail").setValue(seatsAvail);
+                        public void onDataChange(@NonNull final DataSnapshot dataSnapshot1) {
+
+                            final String token = dataSnapshot1.getValue(String.class);
+
+                            FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getUid())
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            String sender = dataSnapshot.child("firstName").getValue(String.class) + " "
+                                                    + dataSnapshot.child("lastName").getValue(String.class);
+                                            String message_text = "Your ride is finished. Don't forget to rate " + sender;
+                                            Message message = new Message("RIDE COMPLETED", token, message_text);
+                                            Message.sendMessage(message, DriverFinishedRideActivity.this);
+                                        }
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {}
+                                    });
                         }
+
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {}
                     });
-            updateDriverRating();
-            finish();
-        } else if (view == payCash) {
+
+
+
+
             FirebaseDatabase.getInstance().getReference().child("post").child(postId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
