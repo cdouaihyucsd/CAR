@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -131,8 +132,14 @@ public class MessageActivity extends AppCompatActivity {
                                             //Chatroom room = new Chatroom();
                                             //room.setName(lastMsg.child("name").getValue().toString());
                                             room.setMsgTime(lastMsg.child("time").getValue().toString());
+                                            String displayS = lastMsg.child("msg").getValue().toString();
+                                            StringBuilder stringB = new StringBuilder();
+                                            stringB.append(displayS.substring(0, Math.min(displayS.length(),10)));
+                                            if( stringB.toString().length() > 10){
+                                                stringB.append("...");
+                                            }
                                             room.setLastMsg(lastMsg.child("name").getValue().toString()
-                                                    + ": " +lastMsg.child("msg").getValue().toString());
+                                                    + ": " + stringB.toString());
 
                                             if(!chatRooms.contains(room)) {
                                                 chatRooms.add(room);
