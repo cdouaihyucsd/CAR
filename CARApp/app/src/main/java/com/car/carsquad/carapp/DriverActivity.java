@@ -128,6 +128,13 @@ public class DriverActivity extends AppCompatActivity {
 
             }
         });
+        navProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myProfileActivity = new Intent(getApplicationContext(), UpdateUserInfoActivity.class);
+                startActivity(myProfileActivity);
+                }
+                });
         userRef.child("driverRating").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

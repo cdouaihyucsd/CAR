@@ -82,9 +82,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
             public void onLayoutChange(View v, int left, int top, int right,int bottom, int oldLeft, int oldTop,int oldRight, int oldBottom)
             {
-
-                mMessageRecycler.scrollToPosition(messageList.size()-1);
-
+                mMessageRecycler.scrollToPosition(messageList.size());
             }
         });
 
