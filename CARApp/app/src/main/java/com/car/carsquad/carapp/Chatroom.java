@@ -3,8 +3,11 @@ package com.car.carsquad.carapp;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Chatroom {
-    private String name, msgTime, lastMsg;
+    private String name, msgTime, lastMsg, rideName;
     private Object profileImg;
+
+    public String getRideName() {return  rideName; }
+    public void setRideName(String rideName) { this.rideName = rideName; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }

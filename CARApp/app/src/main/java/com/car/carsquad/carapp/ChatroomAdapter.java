@@ -17,12 +17,12 @@ public class ChatroomAdapter extends RecyclerView.Adapter<ChatroomAdapter.Chatro
     public List<Chatroom> chatRooms;
 
     public class ChatroomViewHolder extends RecyclerView.ViewHolder {
-        private TextView rideName, msgTime, lastMsg;
+        private TextView name, msgTime, lastMsg;
         private CircleImageView profileImg;
 
         public ChatroomViewHolder(View view) {
             super(view);
-            rideName = (TextView) view.findViewById(R.id.name);
+            name = (TextView) view.findViewById(R.id.name);
             msgTime = (TextView) view.findViewById(R.id.msgTime);
             lastMsg = (TextView) view.findViewById(R.id.lastMsg);
             profileImg = (CircleImageView) view.findViewById(R.id.profile_image);
@@ -46,7 +46,7 @@ public class ChatroomAdapter extends RecyclerView.Adapter<ChatroomAdapter.Chatro
     @Override
     public void onBindViewHolder(ChatroomViewHolder holder, int position) {
         Chatroom chatR = chatRooms.get(position);
-        holder.rideName.setText(chatR.getName());
+        holder.name.setText(chatR.getName());
         holder.msgTime.setText(chatR.getMsgTime());
         holder.lastMsg.setText(chatR.getLastMsg());
 
