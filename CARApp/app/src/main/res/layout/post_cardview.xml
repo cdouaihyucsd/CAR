@@ -15,16 +15,6 @@
         android:background="@color/colorPrimaryLight"
         android:orientation="vertical">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/post_image_driver"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginBottom="16dp"
-            app:civ_border_color="#FF000000"
-            app:civ_border_width="2dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/post_dest" />
-
         <TextView
             android:id="@+id/post_time"
             android:layout_width="wrap_content"
@@ -108,7 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="308dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/curved_button_primarylight"
@@ -120,8 +110,9 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.375"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/post_dest"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
         <!--
         <Button
