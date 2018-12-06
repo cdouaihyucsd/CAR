@@ -73,7 +73,6 @@ public class RiderCompletedFragment extends Fragment {
                                         String firstName = dataSnapshot.child("firstName").getValue(String.class);
                                         String lastName = dataSnapshot.child("lastName").getValue(String.class);
                                         String name = firstName + " " + lastName;
-                                        Toast.makeText(getActivity(), "Name is: " + name, Toast.LENGTH_LONG).show();
                                         viewHolder.setDriverName(name);
                                     }
                                     @Override

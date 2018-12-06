@@ -86,8 +86,6 @@ public class ChatRoomActivity extends AppCompatActivity {
             }
         });
 
-
-
         btn_send_msg = (Button) findViewById(R.id.btn_send);
         input_msg = (EditText) findViewById(R.id.msg_input);
 
