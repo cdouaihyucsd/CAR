@@ -75,6 +75,7 @@ public class ChatroomAdapter extends RecyclerView.Adapter<ChatroomAdapter.Chatro
                 intent.putExtra("startPt", chatRooms.get(position).getStartPt());
                 intent.putExtra("endPt",chatRooms.get(position).getEndPt());
                 intent.putExtra("driverID",chatRooms.get(position).getDriverID());
+                intent.putExtra("originActivity", "ChatroomAdapter");
                 context.startActivity(intent);
             }
         });

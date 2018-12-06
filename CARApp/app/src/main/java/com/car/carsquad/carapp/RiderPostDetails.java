@@ -14,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -74,6 +76,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActionBar actionBar = getSupportActionBar();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Objects.requireNonNull(actionBar).hide();
         setContentView(R.layout.activity_rider_post_details);
 
@@ -628,6 +631,20 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
         }
         // code here to show dialog
         super.onBackPressed();  // optional depending on your needs
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return true;
     }
 
 }

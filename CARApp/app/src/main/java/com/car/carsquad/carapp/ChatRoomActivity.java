@@ -2,16 +2,21 @@ package com.car.carsquad.carapp;
 
 
 import android.bluetooth.BluetoothClass;
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -64,14 +69,15 @@ public class ChatRoomActivity extends AppCompatActivity {
     private String endPt;
     private ArrayList<Message> messageList;
 
+    private String activityOrigin = "";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         messageList = new ArrayList<>();
-
-
-
         mMessageRecycler = (RecyclerView) findViewById(R.id.reyclerview_message_list);
         mMessageAdapter = new MessageListAdapter(this, messageList);
         LinearLayoutManager layout = new LinearLayoutManager(this);
@@ -207,7 +213,7 @@ public class ChatRoomActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {}
         });
 
-        //mMessageRecycler.setStac
+
     }
 
     private String chat_msg,chat_user_name, chat_userID, chat_time;
@@ -234,5 +240,22 @@ public class ChatRoomActivity extends AppCompatActivity {
         driverID = getIntent().getStringExtra("driverID");
         startPt = getIntent().getStringExtra("startPt");
         endPt = getIntent().getStringExtra("endPt");
+        if(getIntent().hasExtra("originActivity")){
+            activityOrigin = getIntent().getStringExtra("originActivity");
+        }
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return true;
     }
 }

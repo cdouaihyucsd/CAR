@@ -12,6 +12,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,7 +22,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -62,6 +63,7 @@ public class MessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         myID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         chatroomAdapter = new ChatroomAdapter(this, chatRooms);
@@ -98,12 +100,9 @@ public class MessageActivity extends AppCompatActivity {
                                 driverData.child(roomArr[2]).addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        if(dataSnapshot.child("firstName").getValue() != null &&
-                                                dataSnapshot.child("lastName").getValue() != null) {
-                                            room.setName(Objects.requireNonNull(dataSnapshot.child("firstName").getValue()).toString()
-                                                    + " " + Objects.requireNonNull(dataSnapshot.child("lastName").getValue()).toString());
-                                            room.setProfileImg(dataSnapshot.child("profile_image").getValue());
-                                        }
+                                        room.setName(dataSnapshot.child("firstName").getValue().toString()
+                                                + " " + dataSnapshot.child("lastName").getValue().toString());
+                                        room.setProfileImg(dataSnapshot.child("profile_image").getValue());
                                     }
 
                                     @Override
@@ -135,14 +134,8 @@ public class MessageActivity extends AppCompatActivity {
                                             //Chatroom room = new Chatroom();
                                             //room.setName(lastMsg.child("name").getValue().toString());
                                             room.setMsgTime(lastMsg.child("time").getValue().toString());
-                                            String displayS = lastMsg.child("msg").getValue().toString();
-                                            StringBuilder stringB = new StringBuilder();
-                                            stringB.append(displayS.substring(0, Math.min(displayS.length(),10)));
-                                            if( stringB.toString().length() > 10){
-                                                stringB.append("...");
-                                            }
                                             room.setLastMsg(lastMsg.child("name").getValue().toString()
-                                                    + ": " + stringB.toString());
+                                                    + ": " +lastMsg.child("msg").getValue().toString());
 
                                             if(!chatRooms.contains(room)) {
                                                 chatRooms.add(room);
@@ -174,7 +167,7 @@ public class MessageActivity extends AppCompatActivity {
         RecyclerView recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(chatroomAdapter);
-        
+
         swipeController = new SwipeController(new SwipeControllerActions() {
             @Override
             public void onRightClicked(int position) {
@@ -198,6 +191,20 @@ public class MessageActivity extends AppCompatActivity {
         });
 
 
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return true;
     }
 
 }
