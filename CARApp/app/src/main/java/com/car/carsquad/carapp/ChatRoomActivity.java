@@ -74,7 +74,9 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         mMessageRecycler = (RecyclerView) findViewById(R.id.reyclerview_message_list);
         mMessageAdapter = new MessageListAdapter(this, messageList);
-        mMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager layout = new LinearLayoutManager(this);
+        layout.setStackFromEnd(true);
+        mMessageRecycler.setLayoutManager(layout);
         mMessageRecycler.setAdapter(mMessageAdapter);
 
         mMessageRecycler.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
@@ -204,6 +206,8 @@ public class ChatRoomActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
+
+        //mMessageRecycler.setStac
     }
 
     private String chat_msg,chat_user_name, chat_userID, chat_time;

@@ -62,73 +62,25 @@ public class MessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
 
-
         myID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         chatroomAdapter = new ChatroomAdapter(this, chatRooms);
         setupRecyclerView();
         setChatroomDataAdapter();
-
-
-
-        /*
-        chatList = (ListView) findViewById(R.id.listView);
-        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, chatArr);
-        chatList.setAdapter(arrayAdapter);
-        myID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-
-        root.child(myID).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                Set<String> set = new HashSet<String>();
-                Iterator i = dataSnapshot.getChildren().iterator();
-
-                while (i.hasNext()){
-                    set.add(((DataSnapshot)i.next()).getKey());
-                }
-
-                chatArr.clear();
-                chatArr.addAll(set);
-
-                arrayAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-        chatList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                Intent intent = new Intent(getApplicationContext(),ChatRoomActivity.class);
-                //intent.putExtra("room_name",((TextView)view).getText().toString() );
-
-                //TextView chatRoom = (TextView) view.findViewById(R.id.listView);
-                String ride = (String) adapterView.getItemAtPosition(i);
-                String[] rideArr = ride.split(" - ");
-                startPt = rideArr[0];
-                endPt = rideArr[1];
-                driverID = rideArr[2];
-                intent.putExtra("startPt", startPt);
-                intent.putExtra("endPt", endPt);
-                intent.putExtra("driverID", driverID);
-                //intent.putExtra("user_name",Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
-                startActivity(intent);
-            }
-        });
-        */
     }
+
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        //setChatroomDataAdapter();
+    }
+
     private void setChatroomDataAdapter() {
         root.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.hasChild(myID)){
-                    root.child(myID).addListenerForSingleValueEvent(new ValueEventListener() {
+                    root.child(myID).addListenerForSingleValueEvent(new ValueEventListener() {      //CAREFUL addValueEventListener
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             for(DataSnapshot roomName: dataSnapshot.getChildren()){
@@ -142,7 +94,7 @@ public class MessageActivity extends AppCompatActivity {
                                 chatRoom = roomTitle;
                                 room.setRideName(chatRoom);
                                 // Get other person's name and profile pic.
-                                driverData.child(roomArr[2]).addListenerForSingleValueEvent(new ValueEventListener() {
+                                driverData.child(roomArr[2]).addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         room.setName(dataSnapshot.child("firstName").getValue().toString()
@@ -155,6 +107,7 @@ public class MessageActivity extends AppCompatActivity {
 
                                     }
                                 });
+
 
                                 /*
                                 Toast.makeText(MessageActivity.this, roomTitle, Toast.LENGTH_SHORT).show();
@@ -171,7 +124,7 @@ public class MessageActivity extends AppCompatActivity {
                                 // Get last msg and time
                                 Query lastMsg = root.child(myID).child(roomTitle).orderByKey().limitToLast(1);
 
-                                lastMsg.addListenerForSingleValueEvent(new ValueEventListener() {
+                                lastMsg.addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         for(DataSnapshot lastMsg: dataSnapshot.getChildren()){
@@ -180,7 +133,10 @@ public class MessageActivity extends AppCompatActivity {
                                             room.setMsgTime(lastMsg.child("time").getValue().toString());
                                             room.setLastMsg(lastMsg.child("name").getValue().toString()
                                                     + ": " +lastMsg.child("msg").getValue().toString());
-                                            chatRooms.add(room);
+
+                                            if(!chatRooms.contains(room)) {
+                                                chatRooms.add(room);
+                                            }
                                             chatroomAdapter.notifyDataSetChanged();
                                         }
                                     }
