@@ -1,5 +1,8 @@
 package com.car.carsquad.carapp;
 
+import android.content.Context;
+import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +18,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ChatroomAdapter extends RecyclerView.Adapter<ChatroomAdapter.ChatroomViewHolder> {
 
     public List<Chatroom> chatRooms;
+    private Context context;
 
     public class ChatroomViewHolder extends RecyclerView.ViewHolder {
         private TextView name, msgTime, lastMsg;
         private CircleImageView profileImg;
+        private ConstraintLayout parentLayout;
 
         public ChatroomViewHolder(View view) {
             super(view);
@@ -26,10 +31,12 @@ public class ChatroomAdapter extends RecyclerView.Adapter<ChatroomAdapter.Chatro
             msgTime = (TextView) view.findViewById(R.id.msgTime);
             lastMsg = (TextView) view.findViewById(R.id.lastMsg);
             profileImg = (CircleImageView) view.findViewById(R.id.profile_image);
+            parentLayout = (ConstraintLayout) view.findViewById(R.id.parentLayout);
         }
     }
 
-    public ChatroomAdapter(List<Chatroom> chatRooms) {
+    public ChatroomAdapter(Context context, List<Chatroom> chatRooms) {
+        this.context = context;
         this.chatRooms = chatRooms;
     }
 
@@ -44,7 +51,7 @@ public class ChatroomAdapter extends RecyclerView.Adapter<ChatroomAdapter.Chatro
     }
 
     @Override
-    public void onBindViewHolder(ChatroomViewHolder holder, int position) {
+    public void onBindViewHolder(ChatroomViewHolder holder, final int position) {
         Chatroom chatR = chatRooms.get(position);
         holder.name.setText(chatR.getName());
         holder.msgTime.setText(chatR.getMsgTime());
@@ -60,7 +67,17 @@ public class ChatroomAdapter extends RecyclerView.Adapter<ChatroomAdapter.Chatro
         } else
             holder.profileImg.setImageResource(R.drawable.profile);
 
-
+        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ChatRoomActivity.class);
+                MessageActivity variables = new MessageActivity();
+                intent.putExtra("startPt", chatRooms.get(position).getStartPt());
+                intent.putExtra("endPt",chatRooms.get(position).getEndPt());
+                intent.putExtra("driverID",chatRooms.get(position).getDriverID());
+                context.startActivity(intent);
+            }
+        });
 
     }
 

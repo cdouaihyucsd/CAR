@@ -64,7 +64,7 @@ public class MessageActivity extends AppCompatActivity {
 
 
         myID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        chatroomAdapter = new ChatroomAdapter(chatRooms);
+        chatroomAdapter = new ChatroomAdapter(this, chatRooms);
         setupRecyclerView();
         setChatroomDataAdapter();
 
@@ -136,7 +136,9 @@ public class MessageActivity extends AppCompatActivity {
                                 //Toast.makeText(MessageActivity.this, roomTitle, Toast.LENGTH_SHORT).show();
                                 String[] roomArr = roomTitle.split(" - ");
                                 final Chatroom room = new Chatroom();
-                                driverID = roomArr[2];
+                                room.setStartPt(roomArr[0]);
+                                room.setEndPt(roomArr[1]);
+                                room.setDriverID(roomArr[2]);
                                 chatRoom = roomTitle;
                                 room.setRideName(chatRoom);
                                 // Get other person's name and profile pic.
