@@ -4,7 +4,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Chatroom {
     private String name, msgTime, lastMsg;
-    private CircleImageView profileImg;
+    private String profileImg;
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -16,8 +16,8 @@ public class Chatroom {
     public void setLastMsg(String lastMsg) { this.lastMsg = lastMsg; }
 
     /*
-    public CircleImageView getProfileImg() { return profileImg; }
-    public void setProfileImg(CircleImageView profileImg) {
+    public String getProfileImg() { return profileImg; }
+    public void setProfileImg(String profileImg) {
         this.profileImg = profileImg; }
     */
 

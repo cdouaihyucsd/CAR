@@ -4,6 +4,7 @@ package com.car.carsquad.carapp;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -45,6 +46,7 @@ public class MessageActivity extends AppCompatActivity {
     private ArrayAdapter<String> arrayAdapter;
     private ArrayList<String> chatArr = new ArrayList<>();
     private DatabaseReference root = FirebaseDatabase.getInstance().getReference("chatroom");
+    private DatabaseReference driverData = FirebaseDatabase.getInstance().getReference("users");
 
     private String driverID;
     private String startPt;
@@ -130,7 +132,25 @@ public class MessageActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             for(DataSnapshot roomName: dataSnapshot.getChildren()){
-                                String roomTitle = roomName.getKey();
+                                final String roomTitle = roomName.getKey();
+                                //Toast.makeText(MessageActivity.this, roomTitle, Toast.LENGTH_SHORT).show();
+                                String[] roomArr = roomTitle.split(" - ");
+                                final Chatroom room = new Chatroom();
+
+                                driverData.child(roomArr[2]).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        room.setName(dataSnapshot.child("firstName").getValue().toString()
+                                        + " " + dataSnapshot.child("lastName").getValue().toString());
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+
+                                /*
                                 Toast.makeText(MessageActivity.this, roomTitle, Toast.LENGTH_SHORT).show();
                                 Chatroom room = new Chatroom();
                                 room.setName(roomTitle);
@@ -138,35 +158,33 @@ public class MessageActivity extends AppCompatActivity {
                                 room.setMsgTime("asd");
                                 chatRooms.add(room);
                                 chatroomAdapter.notifyDataSetChanged();
-                                //chatroomAdapter = new ChatroomAdapter(chatRooms);
-                                //chatroomAdapter.notifyDataSetChanged();
+                                */
+
                                 // String[] rTitle = roomTitle.split(" - ");
 
-                                /*
-                                root.child(myID).child(roomTitle).orderByKey().limitToLast(1)
-                                        .addValueEventListener(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                Chatroom room = new Chatroom();
-                                                room.setName(dataSnapshot.child("name").getValue().toString());
-                                                room.setMsgTime(dataSnapshot.child("time").getValue().toString());
-                                                room.setLastMsg(dataSnapshot.child("msg").getValue().toString());
-                                                chatRooms.add(room);
-                                                chatroomAdapter.notifyDataSetChanged();
-                                            }
+                                Query lastMsg = root.child(myID).child(roomTitle).orderByKey().limitToLast(1);
 
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                lastMsg.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        for(DataSnapshot lastMsg: dataSnapshot.getChildren()){
+                                            //Chatroom room = new Chatroom();
+                                            //room.setName(lastMsg.child("name").getValue().toString());
+                                            room.setMsgTime(lastMsg.child("time").getValue().toString());
+                                            room.setLastMsg(lastMsg.child("name").getValue().toString()
+                                                    + ": " +lastMsg.child("msg").getValue().toString());
+                                            chatRooms.add(room);
+                                            chatroomAdapter.notifyDataSetChanged();
+                                        }
+                                    }
 
-                                            }
-                                        });
-                                */
-                                //String roomTitle = roomName.getKey();
-                                //Toast.makeText(MessageActivity.this, roomTitle, Toast.LENGTH_SHORT).show();
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                //chatRooms.add(room);
-                                //chatroomAdapter = new ChatroomAdapter(chatRooms);
-                                //chatroomAdapter.notifyDataSetChanged();
+                                    }
+                                });
+
+
                             }
                         }
                         @Override
