@@ -5,6 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -46,8 +49,19 @@ public class ChatroomAdapter extends RecyclerView.Adapter<ChatroomAdapter.Chatro
         holder.rideName.setText(chatR.getName());
         holder.msgTime.setText(chatR.getMsgTime());
         holder.lastMsg.setText(chatR.getLastMsg());
-        // Change and fix the setter and getter for the profile image
-        holder.profileImg.setImageResource(R.drawable.arrow);
+
+        // Get profile image
+        if (chatR.getProfileImg() != null) {
+            String image = chatR.getProfileImg().toString();
+            if (image != null)
+                Picasso.get().load(image).placeholder(R.drawable.profile).into(holder.profileImg);
+            else
+                holder.profileImg.setImageResource(R.drawable.profile);
+        } else
+            holder.profileImg.setImageResource(R.drawable.profile);
+
+
+
     }
 
     @Override

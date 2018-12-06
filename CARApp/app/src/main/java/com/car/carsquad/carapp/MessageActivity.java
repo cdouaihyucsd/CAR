@@ -142,6 +142,7 @@ public class MessageActivity extends AppCompatActivity {
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         room.setName(dataSnapshot.child("firstName").getValue().toString()
                                         + " " + dataSnapshot.child("lastName").getValue().toString());
+                                        room.setProfileImg(dataSnapshot.child("profile_image").getValue());
                                     }
 
                                     @Override
