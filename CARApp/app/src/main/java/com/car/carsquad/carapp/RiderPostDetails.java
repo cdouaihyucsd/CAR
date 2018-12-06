@@ -140,7 +140,7 @@ public class RiderPostDetails extends AppCompatActivity implements View.OnClickL
                     if(url != null)
                     {
                         String image = url.toString();
-                        if (image != null && !image.equals("0"))
+                        if (image != null)
                             Picasso.get().load(image).placeholder(R.drawable.profile).into(pic);
                         else
                             pic.setImageResource(R.drawable.profile);

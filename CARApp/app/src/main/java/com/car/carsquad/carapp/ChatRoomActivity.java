@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -75,6 +76,17 @@ public class ChatRoomActivity extends AppCompatActivity {
         mMessageAdapter = new MessageListAdapter(this, messageList);
         mMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
         mMessageRecycler.setAdapter(mMessageAdapter);
+
+        mMessageRecycler.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+
+            public void onLayoutChange(View v, int left, int top, int right,int bottom, int oldLeft, int oldTop,int oldRight, int oldBottom)
+            {
+
+                mMessageRecycler.scrollToPosition(messageList.size()-1);
+
+            }
+        });
 
 
 
@@ -138,7 +150,7 @@ public class ChatRoomActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                final String input_message = input_msg.getText().toString();
+                final String input_message = input_msg.getText().toString().trim();
                 if(input_message.length() > 0) {
                     FirebaseDatabase.getInstance().getReference().child("users").child(driverID).child("fcmToken")
                             .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -168,7 +180,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                     Map<String, Object> map2 = new HashMap<String, Object>();
                     time = new SimpleDateFormat("HH:mm").format(new Timestamp(System.currentTimeMillis()));
                     map2.put("name", user_name);
-                    map2.put("msg", input_msg.getText().toString());
+                    map2.put("msg", input_message);
                     map2.put("userId", myID);
                     map2.put("time", time);
                     input_msg.setText("");
