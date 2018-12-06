@@ -115,7 +115,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="5dp"
             android:drawableLeft="@drawable/material_more"
             android:drawablePadding="20dp"
             android:drawableTint="@color/colorGrey"
@@ -130,7 +130,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="5dp"
             android:layout_marginBottom="68dp"
             android:drawableLeft="@drawable/material_place"
             android:drawablePadding="20dp"
@@ -169,7 +169,9 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="#ffffff">
+        android:background="#ffffff"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
 
         <TextView
@@ -181,9 +183,10 @@
             android:layout_marginEnd="8dp"
             android:fontFamily="@font/work_sans"
             android:text="Car Information"
+            android:textAlignment="viewStart"
             android:textColor="#74a6e0"
             android:textSize="25dp"
-            android:textStyle="bold"
+            android:textStyle="bold|italic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.05"
             app:layout_constraintStart_toStartOf="parent"
