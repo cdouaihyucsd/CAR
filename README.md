@@ -10,12 +10,14 @@ Login Credentials:
 
 Pre-populated accounts:
 
-   Account 1 (Driver): tkb001@ucsd.edu   	  Password: 123456 
+   - Account 1 (Driver): tkb001@ucsd.edu   	  Password: 123456 
    
-   Account 2 (Rider):  cdouaihy@ucsd.edu    Password: firebase
+   - Account 2 (Rider):  cdouaihy@ucsd.edu    Password: firebase
       
 Unpopulated account: To test registration/verification,etc..., please use your own UCSD email to register for an account.       
+     
      ***************************************************************************************************************************
+
 Requirements: 
    - Two Android devices running on Android KitKat 4.4 and above.
    - Minimum APK 19.
@@ -23,21 +25,30 @@ Requirements:
    - Stable internet connection.
    
 ***************************************************************************************************************************
+
 Installation Instruction: 
    Way 1: Using Android devices:
+   
       1. Navigate to https://github.com/joshydotpoo/CAR/releases from the phone
+      
       2. Download app-debug.apk under CAR PRE-RELEASE (v1.0.1)
+      
       3. Launch the app
 
    Way 2: Using Android studio emulator:
+      
       1. Navigate to https://github.com/joshydotpoo/CAR from a computer with Android studio installed
+      
       2. Clone the repository
+      
       3. Open the project using Android Studio and hit Run
      ***************************************************************************************************************************
+
 How to Run: 
    After downloading app-debug.apk on the Android devices, look for the CAR application and launch it.
    
 ***************************************************************************************************************************
+
 Known Bugs: 
    Splash screen loop: the app may get stuck on the splash screen if the wifi/cellular connection is unstable. 
       - Work-around: connect to a stable wifi/cellular connection and restart the app.
