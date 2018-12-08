@@ -2,6 +2,46 @@
 Android application to help students catch a ride with other students. 
 Created for CSE-110 project.
 
+Introduction: 
+Owning a car while attending UC San Diego is a luxury that many students are unable to enjoy. However, one thing that all students do enjoy is having the ability to visit home or some places outside of La Jolla that have significance to them. The only issue is that without a car, the cost of doing so is quite unappealing and often deters students from going where they want to go. Catch a Ride (CAR) is a phone application designed by students, for students, with the motivation to simplify commuting to and from UC San Diego, all at a significantly cheaper cost compared to Uber, public transit, and plane rides. CAR’s vision is to allow students that do own a car to have the ability to assist those that do not, in a mutually beneficial way that promotes a sense of community within the university.
+
+***************************************************************************************************************************
+Login Credentials: 
+   Pre-populated accounts:
+      Account 1 (Driver):   tkb001@ucsd.edu   	    Password: 123456 
+      Account 2 (Rider):    cdouaihy@ucsd.edu       Password: firebase
+      
+   Unpopulated account:
+      To test registration/verification,etc..., please use your own UCSD email to register for an account.       
+     ***************************************************************************************************************************
+Requirements: 
+   Two Android devices running on Android KitKat 4.4 and above.
+   Minimum APK 19.
+   UCSD emails (credentials provided above).
+   Stable internet connection.
+   
+***************************************************************************************************************************
+Installation Instruction: 
+   Way 1: Using Android devices:
+      Navigate to https://github.com/joshydotpoo/CAR/releases from the phone
+      Download app-debug.apk under CAR PRE-RELEASE (v1.0.1)
+      Launch the app
+
+   Way 2: Using Android studio emulator:
+      Navigate to https://github.com/joshydotpoo/CAR from a computer with Android studio installed
+      Clone the repository
+      Open the project using Android Studio and hit Run
+     ***************************************************************************************************************************
+How to Run: 
+   After downloading app-debug.apk on the Android devices, look for the CAR application and launch it.
+   
+***************************************************************************************************************************
+Known Bugs: 
+   Splash screen loop: the app may get stuck on the splash screen if the wifi/cellular connection is unstable. 
+      Work-around: connect to a stable wifi/cellular connection and restart the app.
+
+***************************************************************************************************************************
+
 ## Git commands:
 1. Use `git clone https://github.com/joshydotpoo/CAR.git` to copy the entire repo.
 2. Use `cd CAR` to go inside the repo!
