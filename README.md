@@ -18,8 +18,7 @@ Unpopulated account: To test registration/verification,etc..., please use your o
      
      
 Requirements: 
-   - Two Android devices running on Android KitKat 4.4 and above.
-   - Minimum APK 19.
+   - Two Android devices running on Android KitKat 4.4 and above (Minimum API 19)
    - UCSD emails (credentials provided above).
    - Stable internet connection.
    
