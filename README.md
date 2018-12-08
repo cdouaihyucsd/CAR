@@ -17,7 +17,6 @@ Pre-populated accounts:
 Unpopulated account: To test registration/verification,etc..., please use your own UCSD email to register for an account.       
      
      ***************************************************************************************************************************
-
 Requirements: 
    - Two Android devices running on Android KitKat 4.4 and above.
    - Minimum APK 19.
@@ -25,7 +24,6 @@ Requirements:
    - Stable internet connection.
    
 ***************************************************************************************************************************
-
 Installation Instruction: 
    Way 1: Using Android devices:
    
@@ -43,18 +41,15 @@ Installation Instruction:
       
       3. Open the project using Android Studio and hit Run
      ***************************************************************************************************************************
-
 How to Run: 
    After downloading app-debug.apk on the Android devices, look for the CAR application and launch it.
    
 ***************************************************************************************************************************
-
 Known Bugs: 
    Splash screen loop: the app may get stuck on the splash screen if the wifi/cellular connection is unstable. 
       - Work-around: connect to a stable wifi/cellular connection and restart the app.
 
 ***************************************************************************************************************************
-
 ## Git commands:
 1. Use `git clone https://github.com/joshydotpoo/CAR.git` to copy the entire repo.
 2. Use `cd CAR` to go inside the repo!
