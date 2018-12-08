@@ -25,6 +25,7 @@ Requirements:
    
 
 Installation Instruction: 
+
    Way 1: Using Android devices:
    
       1. Navigate to https://github.com/joshydotpoo/CAR/releases from the phone
