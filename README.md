@@ -5,7 +5,7 @@ Created for CSE-110 project.
 Introduction: 
 Owning a car while attending UC San Diego is a luxury that many students are unable to enjoy. However, one thing that all students do enjoy is having the ability to visit home or some places outside of La Jolla that have significance to them. The only issue is that without a car, the cost of doing so is quite unappealing and often deters students from going where they want to go. Catch a Ride (CAR) is a phone application designed by students, for students, with the motivation to simplify commuting to and from UC San Diego, all at a significantly cheaper cost compared to Uber, public transit, and plane rides. CAR’s vision is to allow students that do own a car to have the ability to assist those that do not, in a mutually beneficial way that promotes a sense of community within the university.
 
-***************************************************************************************************************************
+
 Login Credentials: 
 
 Pre-populated accounts:
@@ -16,14 +16,14 @@ Pre-populated accounts:
       
 Unpopulated account: To test registration/verification,etc..., please use your own UCSD email to register for an account.       
      
-     ***************************************************************************************************************************
+     
 Requirements: 
    - Two Android devices running on Android KitKat 4.4 and above.
    - Minimum APK 19.
    - UCSD emails (credentials provided above).
    - Stable internet connection.
    
-***************************************************************************************************************************
+
 Installation Instruction: 
    Way 1: Using Android devices:
    
@@ -40,11 +40,12 @@ Installation Instruction:
       2. Clone the repository
       
       3. Open the project using Android Studio and hit Run
-     ***************************************************************************************************************************
+     
+     
 How to Run: 
-   After downloading app-debug.apk on the Android devices, look for the CAR application and launch it.
+   - After downloading app-debug.apk on the Android devices, look for the CAR application and launch it.
    
-***************************************************************************************************************************
+
 Known Bugs: 
    Splash screen loop: the app may get stuck on the splash screen if the wifi/cellular connection is unstable. 
       - Work-around: connect to a stable wifi/cellular connection and restart the app.
