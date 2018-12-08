@@ -9,6 +9,7 @@ Owning a car while attending UC San Diego is a luxury that many students are una
 Login Credentials: 
 Pre-populated accounts:
    Account 1 (Driver): tkb001@ucsd.edu   	  Password: 123456 
+   
    Account 2 (Rider):  cdouaihy@ucsd.edu    Password: firebase
       
 Unpopulated account: To test registration/verification,etc..., please use your own UCSD email to register for an account.       
