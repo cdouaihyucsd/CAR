@@ -7,7 +7,9 @@ Owning a car while attending UC San Diego is a luxury that many students are una
 
 ***************************************************************************************************************************
 Login Credentials: 
+
 Pre-populated accounts:
+
    Account 1 (Driver): tkb001@ucsd.edu   	  Password: 123456 
    
    Account 2 (Rider):  cdouaihy@ucsd.edu    Password: firebase
@@ -15,10 +17,10 @@ Pre-populated accounts:
 Unpopulated account: To test registration/verification,etc..., please use your own UCSD email to register for an account.       
      ***************************************************************************************************************************
 Requirements: 
-   Two Android devices running on Android KitKat 4.4 and above.
-   Minimum APK 19.
-   UCSD emails (credentials provided above).
-   Stable internet connection.
+   - Two Android devices running on Android KitKat 4.4 and above.
+   - Minimum APK 19.
+   - UCSD emails (credentials provided above).
+   - Stable internet connection.
    
 ***************************************************************************************************************************
 Installation Instruction: 
@@ -38,7 +40,7 @@ How to Run:
 ***************************************************************************************************************************
 Known Bugs: 
    Splash screen loop: the app may get stuck on the splash screen if the wifi/cellular connection is unstable. 
-      Work-around: connect to a stable wifi/cellular connection and restart the app.
+      - Work-around: connect to a stable wifi/cellular connection and restart the app.
 
 ***************************************************************************************************************************
 
